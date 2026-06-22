@@ -47,10 +47,3 @@ ip_bans.yaml
 .exports
 .timeline
 .vacuum
-
-# Editor swap files
-*.swp
-*.swo
-
-# Claude Code
-CLAUDE.md
