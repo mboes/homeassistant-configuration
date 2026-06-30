@@ -7,7 +7,7 @@
         let pkgs = import nixpkgs { inherit system; }; in
         let python3 = pkgs.python3.withPackages (ps: [ps.pyyaml]); in
         pkgs.mkShell {
-          packages = [ python3 ];
+          packages = [ python3 pkgs.nickel ];
       };
     });
 }
