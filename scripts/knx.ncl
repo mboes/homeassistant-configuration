@@ -46,6 +46,7 @@ fun cfg =>
     |> std.array.filter pred
     |> std.array.map (fun f => mk f & default_name f)
     |> std.array.map (std.record.filter (fun _ v => v != null))
+    | std.contract.from_predicate (fun xs => std.array.length xs > 0)
   in
   let select_flatten = fun pred mk =>
     cfg.functions
@@ -53,6 +54,7 @@ fun cfg =>
     |> std.array.map (fun f => mk f |> std.array.map (fun r => r & default_name f))
     |> std.array.flatten
     |> std.array.map (std.record.filter (fun _ v => v != null))
+    | std.contract.from_predicate (fun xs => std.array.length xs > 0)
   in
   knx.merge [
     # Lights
