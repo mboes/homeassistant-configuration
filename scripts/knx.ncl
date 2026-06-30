@@ -274,11 +274,11 @@ fun cfg =>
             [
               {
                 name = "UPS battery",
-                state_address = f.group_addresses."UPS battery status",
+                state_address = f.group_addresses."Battery status",
               },
               {
                 name = "UPS alarm",
-                state_address = f.group_addresses."UPS alarm status",
+                state_address = f.group_addresses."Alarm status",
               },
             ]
           ),
