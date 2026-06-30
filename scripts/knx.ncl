@@ -162,7 +162,7 @@ fun cfg =>
     {
       climate =
         select
-          (knx.name_is "floor heating")
+          (knx.name_is "Floor heating")
           (fun f =>
             {
               temperature_address = f.group_addresses."Current temperature",
