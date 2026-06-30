@@ -1,33 +1,19 @@
-fun cfg =>
-  let default_name = fun f => { name | default = "%{f.location} - %{f.name}" } in
-  let select = fun pred mk =>
-    cfg.functions
-    |> std.array.filter pred
-    |> std.array.map (fun f => mk f & default_name f)
-    |> std.array.map (std.record.filter (fun _ v => v != null))
-  in
-  let select_flatten = fun pred mk =>
-    cfg.functions
-    |> std.array.filter pred
-    |> std.array.map (fun f => mk f |> std.array.map (fun r => r & default_name f))
-    |> std.array.flatten
-    |> std.array.map (std.record.filter (fun _ v => v != null))
-  in
-  let type_is = fun type f => f.type == type in
-  let name_is = fun name f => f.name == name in
-  let location_is = fun location f => f.location == location in
-  let and = fun p1 p2 f => p1 f && p2 f in
-  let name_matches = fun pat =>
+let knx =
+{
+  type_is = fun type f => f.type == type,
+  name_is = fun name f => f.name == name,
+  location_is = fun loc f => f.location == loc,
+  and = fun p1 p2 f => p1 f && p2 f,
+  name_matches = fun pat =>
     # Share compilation of regex.
     let find = std.string.find (std.string.lowercase pat) in
     fun f =>
       f.name
       |> std.string.lowercase
       |> find
-      |> (fun m => 0 <= m.index)
-  in
-  let name_matches_word = fun word => name_matches "\\b%{word}s?\\b" in
-  let knx_merge =
+      |> (fun m => 0 <= m.index),
+  name_contains = fun word => name_matches "\\b%{word}s?\\b",
+  merge =
     let f = fun r1 r2 =>
       {
         binary_sensor = std.record.get_or "binary_sensor" [] r1 @ std.record.get_or "binary_sensor" [] r2,
@@ -50,14 +36,31 @@ fun cfg =>
       }
       |> std.record.filter (fun k v => v != [])
     in std.array.reduce_left f
+}
+in
+
+fun cfg =>
+  let default_name = fun f => { name | default = "%{f.location} - %{f.name}" } in
+  let select = fun pred mk =>
+    cfg.functions
+    |> std.array.filter pred
+    |> std.array.map (fun f => mk f & default_name f)
+    |> std.array.map (std.record.filter (fun _ v => v != null))
   in
-  knx_merge [
+  let select_flatten = fun pred mk =>
+    cfg.functions
+    |> std.array.filter pred
+    |> std.array.map (fun f => mk f |> std.array.map (fun r => r & default_name f))
+    |> std.array.flatten
+    |> std.array.map (std.record.filter (fun _ v => v != null))
+  in
+  knx.merge [
     # Lights
     {
       light =
         std.array.flatten [
           select
-            (type_is "dimmable light")
+            (knx.type_is "dimmable light")
             (fun f =>
               {
                 address = f.group_addresses.Switching,
@@ -67,7 +70,7 @@ fun cfg =>
               }
             ),
           select
-            (type_is "switchable light")
+            (knx.type_is "switchable light")
             (fun f =>
               {
                 address = f.group_addresses.Switching,
@@ -81,7 +84,7 @@ fun cfg =>
     {
       cover =
         select
-          (and (type_is "sun protection") (name_matches_word "roller"))
+          (knx.and (knx.type_is "sun protection") (knx.name_contains "roller"))
           (fun f =>
             {
               move_long_address = f.group_addresses.Movement,
@@ -95,7 +98,7 @@ fun cfg =>
     {
       cover =
         select
-          (and (type_is "sun protection") (name_matches_word "blind"))
+          (knx.and (knx.type_is "sun protection") (knx.name_contains "blind"))
           (fun f =>
             {
               move_long_address = f.group_addresses.Movement,
@@ -110,7 +113,7 @@ fun cfg =>
     {
       cover =
         select
-          (name_matches_word "net")
+          (knx.name_contains "net")
           (fun f =>
             {
               move_long_address = f.group_addresses.Movement,
@@ -124,7 +127,7 @@ fun cfg =>
     {
       switch =
         select_flatten
-          (name_is "Climate control mode")
+          (knx.name_is "Climate control mode")
           (fun f =>
             [
               {
@@ -139,7 +142,7 @@ fun cfg =>
           ),
       select =
         select_flatten
-          (name_is "Climate control mode")
+          (knx.name_is "Climate control mode")
           (fun f =>
             [
               {
@@ -159,7 +162,7 @@ fun cfg =>
     {
       climate =
         select
-          (name_is "floor heating")
+          (knx.name_is "floor heating")
           (fun f =>
             {
               temperature_address = f.group_addresses."Current temperature",
@@ -175,7 +178,7 @@ fun cfg =>
     {
       climate =
         select
-          (name_matches_word "air conditioning")
+          (knx.name_contains "air conditioning")
           (fun f =>
             {
               temperature_address = f.group_addresses."Current temperature",
@@ -193,7 +196,7 @@ fun cfg =>
     {
       switch =
         select
-          (name_matches_word "lock")
+          (knx.name_contains "lock")
           (fun f =>
             {
               address = f.group_addresses.Switching,
@@ -206,7 +209,7 @@ fun cfg =>
     {
       switch =
         select
-          (name_matches_word "towel heater")
+          (knx.name_contains "towel heater")
           (fun f =>
             {
               address = f.group_addresses.Switching,
@@ -219,7 +222,7 @@ fun cfg =>
     {
       switch =
         select_flatten
-          (name_is "Alarm")
+          (knx.name_is "Alarm")
           (fun f =>
             [
               {
@@ -241,7 +244,7 @@ fun cfg =>
           ),
       binary_sensor =
         select_flatten
-          (name_is "Alarm")
+          (knx.name_is "Alarm")
           (fun f =>
             [
               {
@@ -264,7 +267,7 @@ fun cfg =>
     {
       binary_sensor =
         select_flatten
-          (name_is "UPS")
+          (knx.name_is "UPS")
           (fun f =>
             [
               {
@@ -283,7 +286,7 @@ fun cfg =>
     {
       binary_sensor =
         select
-          (name_matches_word "motion detection")
+          (knx.name_contains "motion detection")
           (fun f =>
             {
               state_address = f.group_addresses.Status,
@@ -295,7 +298,7 @@ fun cfg =>
     {
       binary_sensor =
         select
-          (name_matches_word "water leak detection")
+          (knx.name_contains "water leak detection")
           (fun f =>
             {
               state_address = f.group_addresses.Status,
@@ -307,7 +310,7 @@ fun cfg =>
     {
       switch =
         select
-          (name_matches_word "Ventilation")
+          (knx.name_is "Ventilation")
           (fun f =>
             {
               address = f.group_addresses.Switching,
@@ -320,7 +323,7 @@ fun cfg =>
     {
       switch =
         select
-          (and (location_is "Garage") (name_is "Door"))
+          (knx.and (knx.location_is "Garage") (knx.name_is "Door"))
           (fun f =>
             {
               address = f.group_addresses.Switching,
@@ -333,7 +336,7 @@ fun cfg =>
     {
       switch =
         select
-          (and (location_is "Garage") (name_is "Gate"))
+          (knx.and (knx.location_is "Garage") (knx.name_is "Gate"))
           (fun f =>
             {
               address = f.group_addresses.Switching,
@@ -346,7 +349,7 @@ fun cfg =>
     {
       weather =
         select
-          (name_is "Weather")
+          (knx.name_is "Weather")
           (fun f =>
             {
               name = "Weather station",
