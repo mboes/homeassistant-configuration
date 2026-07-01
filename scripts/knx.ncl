@@ -35,18 +35,28 @@ let knx = {
 in
 
 fun cfg =>
-  let default_name = fun f => { name | default = "%{f.location} - %{f.name}" } in
+  # The names of generated entities have a special form, to
+  # distinguish them from automatically or manually created entities.
+  let GeneratedEntityName = std.contract.from_predicate (std.string.is_match "^//") in
+  let HasName = fun f =>
+    {
+      name
+        | GeneratedEntityName
+        | default
+        = "//%{f.location}/%{f.name}"
+    }
+  in
   let select = fun pred mk =>
     cfg.functions
     |> std.array.filter pred
-    |> std.array.map (fun f => mk f & default_name f)
+    |> std.array.map (fun f => mk f & HasName f)
     |> std.array.map (std.record.filter (fun _ v => v != null))
       | std.array.NonEmpty
   in
   let select_flatten = fun pred mk =>
     cfg.functions
     |> std.array.filter pred
-    |> std.array.map (fun f => mk f |> std.array.map (fun r => r & default_name f))
+    |> std.array.map (fun f => mk f |> std.array.map (fun r => r & HasName f))
     |> std.array.flatten
     |> std.array.map (std.record.filter (fun _ v => v != null))
       | std.array.NonEmpty
@@ -128,11 +138,11 @@ fun cfg =>
           (fun f =>
             [
               {
-                name = "Climate control",
+                name = "//Climate control",
                 address = f.group_addresses.Switching,
               },
               {
-                name = "Domestic hot water",
+                name = "//Domestic hot water",
                 address = f.group_addresses."Domestic hot water",
               },
             ]
@@ -143,7 +153,7 @@ fun cfg =>
           (fun f =>
             [
               {
-                name = "Climate control mode",
+                name = "//Climate control mode",
                 address = f.group_addresses.Heating,
                 payload_length = 0,
                 options = [
@@ -223,17 +233,17 @@ fun cfg =>
           (fun f =>
             [
               {
-                name = "Intrusion alarm - Arm",
+                name = "//Intrusion alarm/Arm",
                 address = f.group_addresses.Arm,
                 state_address = f.group_addresses."Arm status",
               },
               {
-                name = "Intrusion alarm - Partial arm",
+                name = "//Intrusion alarm/Partial arm",
                 address = f.group_addresses."Partial arm",
                 state_address = f.group_addresses."Partial arm status",
               },
               {
-                name = "Intrusion alarm - Disarm",
+                name = "//Intrusion alarm/Disarm",
                 address = f.group_addresses.Disarm,
                 state_address = f.group_addresses."Disarm status",
               },
@@ -245,15 +255,15 @@ fun cfg =>
           (fun f =>
             [
               {
-                name = "Intrusion alarm",
+                name = "//Intrusion alarm",
                 state_address = f.group_addresses."Intrusion alarm status",
               },
               {
-                name = "Fire alarm",
+                name = "//Fire alarm",
                 state_address = f.group_addresses."Fire alarm status",
               },
               {
-                name = "Panic alarm",
+                name = "//Panic alarm",
                 state_address = f.group_addresses."Panic alarm status",
               },
             ]
@@ -268,11 +278,11 @@ fun cfg =>
           (fun f =>
             [
               {
-                name = "UPS battery",
+                name = "//UPS battery",
                 state_address = f.group_addresses."Battery status",
               },
               {
-                name = "UPS alarm",
+                name = "//UPS alarm",
                 state_address = f.group_addresses."Alarm status",
               },
             ]
@@ -349,7 +359,7 @@ fun cfg =>
           (knx.name_is "Weather")
           (fun f =>
             {
-              name = "Weather station",
+              name = "//Weather station",
               address_temperature = f.group_addresses.Temp,
               address_wind_speed = f.group_addresses.Wind,
               address_rain_alarm = f.group_addresses.Rain,
