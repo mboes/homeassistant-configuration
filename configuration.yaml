@@ -13,3 +13,15 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 
 knx: !include knx.yaml
+
+lovelace:
+  resource_mode: yaml
+  resources: !include dashboards/resources.yaml
+  dashboards:
+    lovelace:
+      mode: yaml
+      title: Overview
+      icon: mdi:view-dashboard
+      show_in_sidebar: true
+      require_admin: false
+      filename: dashboards/home/dashboard.yaml
