@@ -1,17 +1,12 @@
-let knx =
-{
+let knx = {
   type_is = fun type f => f.type == type,
   name_is = fun name f => f.name == name,
   location_is = fun loc f => f.location == loc,
   and = fun p1 p2 f => p1 f && p2 f,
   name_matches = fun pat =>
     # Share compilation of regex.
-    let find = std.string.find (std.string.lowercase pat) in
-    fun f =>
-      f.name
-      |> std.string.lowercase
-      |> find
-      |> (fun m => 0 <= m.index),
+    let is_match = std.string.is_match (std.string.lowercase pat) in
+    fun f => f.name |> std.string.lowercase |> is_match,
   name_contains = fun word => name_matches "\\b%{word}s?\\b",
   merge =
     let f = fun r1 r2 =>
