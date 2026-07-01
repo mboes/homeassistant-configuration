@@ -11,4 +11,3 @@ shift
 nickel export -fyaml "$@" <<EOF
   (import "$ncl_file") (import "$input_file") 
 EOF
-
