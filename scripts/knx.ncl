@@ -157,7 +157,7 @@ fun cfg =>
                 address = f.group_addresses.Heating,
                 payload_length = 0,
                 options = [
-                  { option = "Heat", payload = 0 },
+                  { option = "Heat", payload = 1 },
                   { option = "Cool", payload = 0 },
                 ],
               },
