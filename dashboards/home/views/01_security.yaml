@@ -1,0 +1,6 @@
+title: Alarm
+path: alarm
+cards:
+  - type: alarm-panel
+    entity: alarm_control_panel.intrusion_alarm
+    name: Intrusion alarm
