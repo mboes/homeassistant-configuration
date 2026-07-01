@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+# Check that file conforms to schema.
+#
+# Usage: nickel-validate <schema file> <data file>
+
+schema_file=$(dirname $0)/$1
+data_file=$2
+
+nickel export --apply-contract $schema_file $data_file >/dev/null
