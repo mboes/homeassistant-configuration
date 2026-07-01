@@ -1,5 +1,6 @@
-# git-ha-ppens: Auto-generated .gitignore for Home Assistant
-# Sensitive files
+/knx-model.yaml
+
+# Home Assistant sensitive files
 secrets.yaml
 .storage/
 .cloud/
@@ -19,31 +20,3 @@ OZW_Log.txt
 # System files
 .HA_VERSION
 known_devices.yaml
-
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-
-# Other
-.git/
-deps/
-tts/
-.venv/
-custom_components/
-www/snapshots/
-
-# Zigbee2MQTT
-zigbee2mqtt/state.json
-zigbee2mqtt/coordinator_backup.json
-
-# Sensitive/runtime files
-.jwt_secret
-SERVICE_ACCOUNT.json
-.cache/
-.claude/
-ip_bans.yaml
-.ha_run.lock
-.exports
-.timeline
-.vacuum
