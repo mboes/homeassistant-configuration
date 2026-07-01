@@ -33,337 +33,336 @@ let knx = {
     in std.array.reduce_left f
 }
 in
-
-fun cfg =>
-  # The names of generated entities have a special form, to
-  # distinguish them from automatically or manually created entities.
-  let GeneratedEntityName = std.contract.from_predicate (std.string.is_match "^//") in
-  let HasName = fun f =>
-    {
-      name
-        | GeneratedEntityName
-        | default
-        = "//%{f.location}/%{f.name}"
-    }
-  in
-  let select = fun pred mk =>
-    cfg.functions
-    |> std.array.filter pred
-    |> std.array.map (fun f => mk f & HasName f)
-    |> std.array.map (std.record.filter (fun _ v => v != null))
-      | std.array.NonEmpty
-  in
-  let select_flatten = fun pred mk =>
-    cfg.functions
-    |> std.array.filter pred
-    |> std.array.map (fun f => mk f |> std.array.map (fun r => r & HasName f))
-    |> std.array.flatten
-    |> std.array.map (std.record.filter (fun _ v => v != null))
-      | std.array.NonEmpty
-  in
-  knx.merge [
-    # Lights
-    {
-      light =
-        std.array.flatten [
-          select
-            (knx.type_is "dimmable light")
-            (fun f =>
-              {
-                address = f.group_addresses.Switching,
-                state_address = std.record.get_or "Status" null f.group_addresses,
-                brightness_address = f.group_addresses."dimming value",
-                brightness_state_address = std.record.get_or "Value" null f.group_addresses,
-              }
-            ),
-          select
-            (knx.type_is "switchable light")
-            (fun f =>
-              {
-                address = f.group_addresses.Switching,
-                state_address = std.record.get_or "Status" null f.group_addresses,
-              }
-            ),
-        ],
-    },
-
-    # Rollers
-    {
-      cover =
+let cfg = import "knx-model.yaml" in
+# The names of generated entities have a special form, to
+# distinguish them from automatically or manually created entities.
+let GeneratedEntityName = std.contract.from_predicate (std.string.is_match "^//") in
+let HasName = fun f =>
+  {
+    name
+      | GeneratedEntityName
+      | default
+      = "//%{f.location}/%{f.name}"
+  }
+in
+let select = fun pred mk =>
+  cfg.functions
+  |> std.array.filter pred
+  |> std.array.map (fun f => mk f & HasName f)
+  |> std.array.map (std.record.filter (fun _ v => v != null))
+    | std.array.NonEmpty
+in
+let select_flatten = fun pred mk =>
+  cfg.functions
+  |> std.array.filter pred
+  |> std.array.map (fun f => mk f |> std.array.map (fun r => r & HasName f))
+  |> std.array.flatten
+  |> std.array.map (std.record.filter (fun _ v => v != null))
+    | std.array.NonEmpty
+in
+knx.merge [
+  # Lights
+  {
+    light =
+      std.array.flatten [
         select
-          (knx.and (knx.type_is "sun protection") (knx.name_contains "roller"))
+          (knx.type_is "dimmable light")
           (fun f =>
             {
-              move_long_address = f.group_addresses.Movement,
-              move_short_address = f.group_addresses."Step/Stop",
-              position_address = f.group_addresses."blinds position",
+              address = f.group_addresses.Switching,
+              state_address = std.record.get_or "Status" null f.group_addresses,
+              brightness_address = f.group_addresses."dimming value",
+              brightness_state_address = std.record.get_or "Value" null f.group_addresses,
             }
           ),
-    },
-
-    # Blinds
-    {
-      cover =
         select
-          (knx.and (knx.type_is "sun protection") (knx.name_contains "blind"))
-          (fun f =>
-            {
-              move_long_address = f.group_addresses.Movement,
-              move_short_address = f.group_addresses."Step/Stop",
-              position_address = f.group_addresses."blinds position",
-              angle_address = f.group_addresses."slat position",
-            }
-          ),
-    },
-
-    # Nets
-    {
-      cover =
-        select
-          (knx.name_contains "net")
-          (fun f =>
-            {
-              move_long_address = f.group_addresses.Movement,
-              move_short_address = f.group_addresses."Step/Stop",
-              position_address = f.group_addresses.Position,
-            }
-          ),
-    },
-
-    # Climate control mode
-    {
-      switch =
-        select_flatten
-          (knx.name_is "Climate control mode")
-          (fun f =>
-            [
-              {
-                name = "//Climate control",
-                address = f.group_addresses.Switching,
-              },
-              {
-                name = "//Domestic hot water",
-                address = f.group_addresses."Domestic hot water",
-              },
-            ]
-          ),
-      select =
-        select_flatten
-          (knx.name_is "Climate control mode")
-          (fun f =>
-            [
-              {
-                name = "//Climate control mode",
-                address = f.group_addresses.Heating,
-                payload_length = 0,
-                options = [
-                  { option = "Heat", payload = 1 },
-                  { option = "Cool", payload = 0 },
-                ],
-              },
-            ]
-          ),
-    },
-
-    # Floor heating
-    {
-      climate =
-        select
-          (knx.name_is "Floor heating")
-          (fun f =>
-            {
-              temperature_address = f.group_addresses."Current temperature",
-              target_temperature_address = f.group_addresses."Setpoint temperature",
-              target_temperature_state_address = f.group_addresses."Setpoint temperature status",
-              on_off_address = f.group_addresses.Switching,
-              on_off_state_address = f.group_addresses.Status,
-            }
-          ),
-    },
-
-    # Air conditioning
-    {
-      climate =
-        select
-          (knx.name_contains "air conditioning")
-          (fun f =>
-            {
-              temperature_address = f.group_addresses."Current temperature",
-              target_temperature_address = f.group_addresses."Setpoint temperature",
-              target_temperature_state_address = f.group_addresses."Setpoint temperature status",
-              on_off_address = f.group_addresses.Switching,
-              on_off_state_address = f.group_addresses.Status,
-              fan_speed_address = f.group_addresses."Fan speed",
-              fan_speed_state_address = f.group_addresses."Fan speed status",
-            }
-          ),
-    },
-
-    # Sliding window locks
-    {
-      switch =
-        select
-          (knx.name_contains "lock")
+          (knx.type_is "switchable light")
           (fun f =>
             {
               address = f.group_addresses.Switching,
               state_address = std.record.get_or "Status" null f.group_addresses,
             }
           ),
-    },
+      ],
+  },
 
-    # Towel heaters
-    {
-      switch =
-        select
-          (knx.name_contains "towel heater")
-          (fun f =>
+  # Rollers
+  {
+    cover =
+      select
+        (knx.and (knx.type_is "sun protection") (knx.name_contains "roller"))
+        (fun f =>
+          {
+            move_long_address = f.group_addresses.Movement,
+            move_short_address = f.group_addresses."Step/Stop",
+            position_address = f.group_addresses."blinds position",
+          }
+        ),
+  },
+
+  # Blinds
+  {
+    cover =
+      select
+        (knx.and (knx.type_is "sun protection") (knx.name_contains "blind"))
+        (fun f =>
+          {
+            move_long_address = f.group_addresses.Movement,
+            move_short_address = f.group_addresses."Step/Stop",
+            position_address = f.group_addresses."blinds position",
+            angle_address = f.group_addresses."slat position",
+          }
+        ),
+  },
+
+  # Nets
+  {
+    cover =
+      select
+        (knx.name_contains "net")
+        (fun f =>
+          {
+            move_long_address = f.group_addresses.Movement,
+            move_short_address = f.group_addresses."Step/Stop",
+            position_address = f.group_addresses.Position,
+          }
+        ),
+  },
+
+  # Climate control mode
+  {
+    switch =
+      select_flatten
+        (knx.name_is "Climate control mode")
+        (fun f =>
+          [
             {
+              name = "//Climate control",
               address = f.group_addresses.Switching,
-              state_address = std.record.get_or "Status" null f.group_addresses,
-            }
-          ),
-    },
-
-    # Alarm
-    {
-      switch =
-        select_flatten
-          (knx.name_is "Alarm")
-          (fun f =>
-            [
-              {
-                name = "//Intrusion alarm/Arm",
-                address = f.group_addresses.Arm,
-                state_address = f.group_addresses."Arm status",
-              },
-              {
-                name = "//Intrusion alarm/Partial arm",
-                address = f.group_addresses."Partial arm",
-                state_address = f.group_addresses."Partial arm status",
-              },
-              {
-                name = "//Intrusion alarm/Disarm",
-                address = f.group_addresses.Disarm,
-                state_address = f.group_addresses."Disarm status",
-              },
-            ]
-          ),
-      binary_sensor =
-        select_flatten
-          (knx.name_is "Alarm")
-          (fun f =>
-            [
-              {
-                name = "//Intrusion alarm",
-                state_address = f.group_addresses."Intrusion alarm status",
-              },
-              {
-                name = "//Fire alarm",
-                state_address = f.group_addresses."Fire alarm status",
-              },
-              {
-                name = "//Panic alarm",
-                state_address = f.group_addresses."Panic alarm status",
-              },
-            ]
-          ),
-    },
-
-    # UPS
-    {
-      binary_sensor =
-        select_flatten
-          (knx.name_is "UPS")
-          (fun f =>
-            [
-              {
-                name = "//UPS battery",
-                state_address = f.group_addresses."Battery status",
-              },
-              {
-                name = "//UPS alarm",
-                state_address = f.group_addresses."Alarm status",
-              },
-            ]
-          ),
-    },
-
-    # Motion detection
-    {
-      binary_sensor =
-        select
-          (knx.name_contains "motion detection")
-          (fun f =>
+            },
             {
-              state_address = f.group_addresses.Status,
-            }
-          ),
-    },
-
-    # Water leak detection
-    {
-      binary_sensor =
-        select
-          (knx.name_contains "water leak detection")
-          (fun f =>
+              name = "//Domestic hot water",
+              address = f.group_addresses."Domestic hot water",
+            },
+          ]
+        ),
+    select =
+      select_flatten
+        (knx.name_is "Climate control mode")
+        (fun f =>
+          [
             {
-              state_address = f.group_addresses.Status,
-            }
-          ),
-    },
+              name = "//Climate control mode",
+              address = f.group_addresses.Heating,
+              payload_length = 0,
+              options = [
+                { option = "Heat", payload = 1 },
+                { option = "Cool", payload = 0 },
+              ],
+            },
+          ]
+        ),
+  },
 
-    # Ventilation
-    {
-      switch =
-        select
-          (knx.name_is "Ventilation")
-          (fun f =>
-            {
-              address = f.group_addresses.Switching,
-              state_address = f.group_addresses.Status,
-            }
-          ),
-    },
+  # Floor heating
+  {
+    climate =
+      select
+        (knx.name_is "Floor heating")
+        (fun f =>
+          {
+            temperature_address = f.group_addresses."Current temperature",
+            target_temperature_address = f.group_addresses."Setpoint temperature",
+            target_temperature_state_address = f.group_addresses."Setpoint temperature status",
+            on_off_address = f.group_addresses.Switching,
+            on_off_state_address = f.group_addresses.Status,
+          }
+        ),
+  },
 
-    # Garage door
-    {
-      switch =
-        select
-          (knx.and (knx.location_is "Garage") (knx.name_is "Door"))
-          (fun f =>
-            {
-              address = f.group_addresses.Switching,
-              state_address = f.group_addresses.Status,
-            }
-          ),
-    },
+  # Air conditioning
+  {
+    climate =
+      select
+        (knx.name_contains "air conditioning")
+        (fun f =>
+          {
+            temperature_address = f.group_addresses."Current temperature",
+            target_temperature_address = f.group_addresses."Setpoint temperature",
+            target_temperature_state_address = f.group_addresses."Setpoint temperature status",
+            on_off_address = f.group_addresses.Switching,
+            on_off_state_address = f.group_addresses.Status,
+            fan_speed_address = f.group_addresses."Fan speed",
+            fan_speed_state_address = f.group_addresses."Fan speed status",
+          }
+        ),
+  },
 
-    # Garage gate
-    {
-      switch =
-        select
-          (knx.and (knx.location_is "Garage") (knx.name_is "Gate"))
-          (fun f =>
-            {
-              address = f.group_addresses.Switching,
-              state_address = f.group_addresses.Status,
-            }
-          ),
-    },
+  # Sliding window locks
+  {
+    switch =
+      select
+        (knx.name_contains "lock")
+        (fun f =>
+          {
+            address = f.group_addresses.Switching,
+            state_address = std.record.get_or "Status" null f.group_addresses,
+          }
+        ),
+  },
 
-    # Weather station
-    {
-      weather =
-        select
-          (knx.name_is "Weather")
-          (fun f =>
+  # Towel heaters
+  {
+    switch =
+      select
+        (knx.name_contains "towel heater")
+        (fun f =>
+          {
+            address = f.group_addresses.Switching,
+            state_address = std.record.get_or "Status" null f.group_addresses,
+          }
+        ),
+  },
+
+  # Alarm
+  {
+    switch =
+      select_flatten
+        (knx.name_is "Alarm")
+        (fun f =>
+          [
             {
-              name = "//Weather station",
-              address_temperature = f.group_addresses.Temp,
-              address_wind_speed = f.group_addresses.Wind,
-              address_rain_alarm = f.group_addresses.Rain,
-            }
-          ),
-    },
-  ]
+              name = "//Intrusion alarm/Arm",
+              address = f.group_addresses.Arm,
+              state_address = f.group_addresses."Arm status",
+            },
+            {
+              name = "//Intrusion alarm/Partial arm",
+              address = f.group_addresses."Partial arm",
+              state_address = f.group_addresses."Partial arm status",
+            },
+            {
+              name = "//Intrusion alarm/Disarm",
+              address = f.group_addresses.Disarm,
+              state_address = f.group_addresses."Disarm status",
+            },
+          ]
+        ),
+    binary_sensor =
+      select_flatten
+        (knx.name_is "Alarm")
+        (fun f =>
+          [
+            {
+              name = "//Intrusion alarm",
+              state_address = f.group_addresses."Intrusion alarm status",
+            },
+            {
+              name = "//Fire alarm",
+              state_address = f.group_addresses."Fire alarm status",
+            },
+            {
+              name = "//Panic alarm",
+              state_address = f.group_addresses."Panic alarm status",
+            },
+          ]
+        ),
+  },
+
+  # UPS
+  {
+    binary_sensor =
+      select_flatten
+        (knx.name_is "UPS")
+        (fun f =>
+          [
+            {
+              name = "//UPS battery",
+              state_address = f.group_addresses."Battery status",
+            },
+            {
+              name = "//UPS alarm",
+              state_address = f.group_addresses."Alarm status",
+            },
+          ]
+        ),
+  },
+
+  # Motion detection
+  {
+    binary_sensor =
+      select
+        (knx.name_contains "motion detection")
+        (fun f =>
+          {
+            state_address = f.group_addresses.Status,
+          }
+        ),
+  },
+
+  # Water leak detection
+  {
+    binary_sensor =
+      select
+        (knx.name_contains "water leak detection")
+        (fun f =>
+          {
+            state_address = f.group_addresses.Status,
+          }
+        ),
+  },
+
+  # Ventilation
+  {
+    switch =
+      select
+        (knx.name_is "Ventilation")
+        (fun f =>
+          {
+            address = f.group_addresses.Switching,
+            state_address = f.group_addresses.Status,
+          }
+        ),
+  },
+
+  # Garage door
+  {
+    switch =
+      select
+        (knx.and (knx.location_is "Garage") (knx.name_is "Door"))
+        (fun f =>
+          {
+            address = f.group_addresses.Switching,
+            state_address = f.group_addresses.Status,
+          }
+        ),
+  },
+
+  # Garage gate
+  {
+    switch =
+      select
+        (knx.and (knx.location_is "Garage") (knx.name_is "Gate"))
+        (fun f =>
+          {
+            address = f.group_addresses.Switching,
+            state_address = f.group_addresses.Status,
+          }
+        ),
+  },
+
+  # Weather station
+  {
+    weather =
+      select
+        (knx.name_is "Weather")
+        (fun f =>
+          {
+            name = "//Weather station",
+            address_temperature = f.group_addresses.Temp,
+            address_wind_speed = f.group_addresses.Wind,
+            address_rain_alarm = f.group_addresses.Rain,
+          }
+        ),
+  },
+]

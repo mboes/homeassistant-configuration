@@ -147,7 +147,8 @@ def build_model(root: ET.Element, exclude_all: bool) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("input", help="path to the ETS 0.xml file")
+    parser.add_argument("input", nargs="?", default="0.xml",
+                        help="path to the ETS 0.xml file (default: 0.xml)")
     parser.add_argument("-o", "--output", default="ets_model.yaml",
                         help="output YAML file (default: ets_model.yaml)")
     parser.add_argument("--exclude-all", action="store_true",

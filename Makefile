@@ -1,8 +1,11 @@
 all: knx.yaml
 
-knx-model.yaml: 0.xml scripts/knx-model.py schemas/knx-model.ncl
-	./scripts/knx-model.py $< -o $@
-	./schemas/nickel-validate knx-model.ncl $@
+%.yaml: %.yaml.ncl
+	nickel export -fyaml -o $@ $<
 
-knx.yaml: knx-model.yaml scripts/knx.ncl
-	./scripts/nickel-yaml knx.ncl $< -o $@
+%.yaml: %.yaml.py
+	python3 $< -o $@
+
+knx.yaml: knx-model.yaml
+
+knx-model.yaml: 0.xml
