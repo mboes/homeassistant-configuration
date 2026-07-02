@@ -180,6 +180,19 @@ knx.merge [
         ),
   },
 
+  # Window contacts
+  {
+    binary_sensor =
+      select
+        (knx.name_is "Floor heating")
+        (fun f =>
+          {
+            name = "//%{f.location}/Window contact",
+            state_address = f.group_addresses."Window contact",
+          }
+        ),
+  },
+
   # Air conditioning
   {
     climate =
