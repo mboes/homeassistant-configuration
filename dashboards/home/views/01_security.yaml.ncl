@@ -1,15 +1,5 @@
 let knx = import "../../../knx.yaml.ncl" in
-let entity_id = fun domain name =>
-  let slug =
-    name
-    |> std.string.replace_regex "[^a-zA-Z0-9]" " "
-    |> std.string.replace_regex "\\s+" "_"
-    |> std.string.replace_regex "^_" ""
-    |> std.string.replace_regex "_$" ""
-    |> std.string.lowercase
-  in
-  "%{domain}.%{slug}"
-in
+let lib = import "../../../lib.ncl" in
 {
   title = "Security",
   path = "security",
@@ -37,12 +27,12 @@ in
         let tiles = [
           {
             type = "tile",
-            entity = entity_id "switch" "//Garage/Door",
+            entity = lib.entity_id "switch" "//Garage/Door",
             name = "Garage door",
           },
           {
             type = "tile",
-            entity = entity_id "switch" "//Garage/Gate",
+            entity = lib.entity_id "switch" "//Garage/Gate",
             name = "Garage gate",
           },
         ]
@@ -68,7 +58,7 @@ in
               { groups = [room, contact], .. } =>
                 'Some {
                   type = "tile",
-                  entity = entity_id "binary_sensor" e.name,
+                  entity = lib.entity_id "binary_sensor" e.name,
                   name = "%{room} - %{contact}",
                 },
             }
@@ -95,7 +85,7 @@ in
               { groups = [room], .. } =>
                 'Some {
                   type = "tile",
-                  entity = entity_id "switch" e.name,
+                  entity = lib.entity_id "switch" e.name,
                   name = room,
                 },
             }
