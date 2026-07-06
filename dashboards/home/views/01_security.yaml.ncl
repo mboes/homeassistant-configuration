@@ -85,7 +85,7 @@ let lib = import "../../../lib.ncl" in
               { groups = [room], .. } =>
                 'Some {
                   type = "tile",
-                  entity = lib.entity_id "switch" e.name,
+                  entity = lib.entity_id "lock" e.name,
                   name = room,
                 },
             }
