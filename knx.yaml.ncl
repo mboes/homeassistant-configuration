@@ -187,6 +187,7 @@ knx.merge [
         (knx.name_contains "casement window")
         (fun f =>
           {
+            name = "//%{f.location}/%{f.name}/Contact",
             state_address = f.group_addresses.Status,
           }
         ),
@@ -199,6 +200,7 @@ knx.merge [
         (knx.name_matches "^door")
         (fun f =>
           {
+            name = "//%{f.location}/%{f.name}/Contact",
             state_address = f.group_addresses.Status,
           }
         ),
@@ -211,6 +213,7 @@ knx.merge [
         (knx.name_contains "motorized window")
         (fun f =>
           {
+            name = "//%{f.location}/%{f.name}/Contact",
             state_address = f.group_addresses.Status,
           }
         ),
