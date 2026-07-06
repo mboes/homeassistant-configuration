@@ -404,6 +404,19 @@ knx.merge [
         ),
   },
 
+  # Garage door
+  {
+    switch =
+      select
+        (knx.and (knx.location_is "Garage") (knx.name_is "Door"))
+        (fun f =>
+          {
+            address = f.group_addresses.Switching,
+            state_address = f.group_addresses.Status,
+          }
+        ),
+  },
+
   # Garage gate
   {
     switch =

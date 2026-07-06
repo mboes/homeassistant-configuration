@@ -30,6 +30,30 @@ in
       cards =
         let heading = {
           type = "heading",
+          heading = "Garage",
+          heading_style = "title",
+        }
+        in
+        let tiles = [
+          {
+            type = "tile",
+            entity = entity_id "switch" "//Garage/Door",
+            name = "Garage door",
+          },
+          {
+            type = "tile",
+            entity = entity_id "switch" "//Garage/Gate",
+            name = "Garage gate",
+          },
+        ]
+        in
+        [heading] @ tiles
+    },
+    {
+      type = "grid",
+      cards =
+        let heading = {
+          type = "heading",
           heading = "Open windows & doors",
           heading_style = "title",
         }
