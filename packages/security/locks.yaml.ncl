@@ -4,19 +4,20 @@ let locks =
   knx.switch
   |> std.array.filter (fun r => std.string.is_match "/Lock$" r.name)
   |> std.array.map (fun r =>
+    let switch_id = lib.entity_id "switch" r.name in
     {
       name = r.name,
-      state = "{{ 'locked' if is_state('switch.front_door_lock_switch', 'on') else 'unlocked' }}",
+      state = "{{ is_state('%{switch_id}', 'on') }}",
       lock = [
         {
           action = "switch.turn_on",
-          target = { entity_id = lib.entity_id "switch" r.name }
+          target = { entity_id = switch_id }
         }
       ],
       unlock = [
         {
           action = "switch.turn_off",
-          target = { entity_id = lib.entity_id "switch" r.name }
+          target = { entity_id = switch_id }
         }
       ],
     }
