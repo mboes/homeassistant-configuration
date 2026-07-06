@@ -44,27 +44,32 @@ in
 # The names of generated entities have a special form, to
 # distinguish them from automatically or manually created entities.
 let GeneratedEntityName = std.contract.from_predicate (std.string.is_match "^//") in
-let HasName = fun f =>
+let base_entity = fun f =>
   {
+    function | not_exported = f,
     name
       | GeneratedEntityName
       | default
-      = "//%{f.location}/%{f.name}"
+      = "//%{f.location}/%{f.name}",
   }
 in
 let select = fun pred mk =>
   cfg.functions
   |> std.array.filter pred
-  |> std.array.map (fun f => mk f & HasName f)
+  |> std.array.map (fun f => mk f & base_entity f)
   |> std.array.map (std.record.filter (fun _ v => v != null))
+  # XXX Workaround https://github.com/nickel-lang/nickel/issues/2633
+  |> std.array.map (fun r => r & base_entity r.function)
     | std.array.NonEmpty
 in
 let select_flatten = fun pred mk =>
   cfg.functions
   |> std.array.filter pred
-  |> std.array.map (fun f => mk f |> std.array.map (fun r => r & HasName f))
+  |> std.array.map (fun f => mk f |> std.array.map (fun r => r & base_entity f))
   |> std.array.flatten
   |> std.array.map (std.record.filter (fun _ v => v != null))
+  # XXX Workaround https://github.com/nickel-lang/nickel/issues/2633
+  |> std.array.map (fun r => r & base_entity r.function)
     | std.array.NonEmpty
 in
 knx.merge [
@@ -445,3 +450,39 @@ knx.merge [
         ),
   },
 ]
+
+# Sort the entities by floor. The output order determines the order of
+# dashboard entries.
+|> (
+  let floor_index = {
+    "Basement" = -1,
+    "Ground floor" = 0,
+    "1st floor" = 1,
+    "2nd floor" = 2,
+  }
+  in
+  let location_floors =
+    cfg.locations
+    |> std.array.map (fun r =>
+      {
+        field = r.name,
+        value = std.record.get_or (std.string.from r.location) 99 floor_index
+      }
+    )
+    |> std.record.from_array
+  in
+
+  let compare_locations = fun e1 e2 =>
+    std.string.compare e1.function.location e2.function.location
+  in
+  let compare_floors = fun e1 e2 =>
+    std.number.compare
+      location_floors."%{e1.function.location}"
+      location_floors."%{e2.function.location}"
+  in
+  std.record.map_values (
+    std.function.compose
+      (std.array.sort compare_floors)
+      (std.array.sort compare_locations)
+  )
+)
