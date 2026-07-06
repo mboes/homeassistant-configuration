@@ -1,7 +1,15 @@
+let cfg = import "knx-model.yaml" in
 let knx = {
   type_is = fun type f => f.type == type,
   name_is = fun name f => f.name == name,
   location_is = fun loc f => f.location == loc,
+  location_type_is =
+    let location_types =
+      cfg.locations
+      |> std.array.map (fun r => { field = r.name, value = r.type })
+      |> std.record.from_array
+    in
+    fun type f => std.record.get f.location location_types == type,
   and = fun p1 p2 f => p1 f && p2 f,
   name_matches = fun pat =>
     # Share compilation of regex.
@@ -33,7 +41,6 @@ let knx = {
     in std.array.reduce_left f
 }
 in
-let cfg = import "knx-model.yaml" in
 # The names of generated entities have a special form, to
 # distinguish them from automatically or manually created entities.
 let GeneratedEntityName = std.contract.from_predicate (std.string.is_match "^//") in
@@ -242,7 +249,7 @@ knx.merge [
         ),
     switch =
       select
-        (knx.name_is "All sliding windows")
+        (knx.and (knx.name_is "All sliding windows") (knx.location_type_is "room"))
         (fun f =>
           {
             name = "//%{f.location}/Sliding windows/Lock",
