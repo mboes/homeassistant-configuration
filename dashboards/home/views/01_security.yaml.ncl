@@ -10,8 +10,8 @@ let entity_id = fun domain name =>
   "%{domain}.%{slug}"
 in
 {
-  title = "Alarm",
-  path = "alarm",
+  title = "Security",
+  path = "security",
   type = "sections",
   sections = [
     {
