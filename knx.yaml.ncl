@@ -325,6 +325,19 @@ knx.merge [
         ),
   },
 
+  # BMS
+  {
+    binary_sensor =
+      select
+        (knx.name_is "BMS")
+        (fun f =>
+          {
+            name = "//BMS Alarm",
+            state_address = f.group_addresses."Alarm status",
+          }
+        ),
+  },
+
   # UPS
   {
     binary_sensor =
