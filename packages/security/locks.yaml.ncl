@@ -7,16 +7,16 @@ let locks =
     let switch_id = lib.entity_id "switch" r.name in
     {
       name = r.name,
-      state = "{{ is_state('%{switch_id}', 'on') }}",
+      state = "{{ is_state('%{switch_id}', 'off') }}",
       lock = [
         {
-          action = "switch.turn_on",
+          action = "switch.turn_off",
           target = { entity_id = switch_id }
         }
       ],
       unlock = [
         {
-          action = "switch.turn_off",
+          action = "switch.turn_on",
           target = { entity_id = switch_id }
         }
       ],
