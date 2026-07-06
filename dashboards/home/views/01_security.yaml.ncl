@@ -36,6 +36,7 @@ in
         in
         let tiles =
           knx.binary_sensor
+	  |> std.array.sort (std.record.apply_on "name" std.string.compare)
           |> std.array.filter_map (fun e =>
             std.string.find "//(.*)/(.*)/Contact" e.name
             |> match {
