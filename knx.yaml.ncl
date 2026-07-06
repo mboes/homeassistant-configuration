@@ -180,15 +180,71 @@ knx.merge [
         ),
   },
 
-  # Window contacts
+  # Casement windows
   {
     binary_sensor =
       select
-        (knx.name_is "Floor heating")
+        (knx.name_contains "casement window")
         (fun f =>
           {
-            name = "//%{f.location}/Window contact",
-            state_address = f.group_addresses."Window contact",
+            state_address = f.group_addresses.Status,
+          }
+        ),
+  },
+
+  # Doors
+  {
+    binary_sensor =
+      select
+        (knx.name_matches "^door")
+        (fun f =>
+          {
+            state_address = f.group_addresses.Status,
+          }
+        ),
+  },
+
+  # Motorized windows
+  {
+    binary_sensor =
+      select
+        (knx.name_contains "motorized window")
+        (fun f =>
+          {
+            state_address = f.group_addresses.Status,
+          }
+        ),
+    cover =
+      select
+        (knx.name_contains "motorized window")
+        (fun f =>
+          {
+            move_long_address = f.group_addresses.Movement,
+            move_short_address = f.group_addresses."Step/Stop",
+            position_address = f.group_addresses."Position",
+          }
+        ),
+  },
+
+  # Sliding windows
+  {
+    binary_sensor =
+      select
+        (knx.name_matches "^sliding windows")
+        (fun f =>
+          {
+            name = "//%{f.location}/%{f.name}/Contact",
+            state_address = f.group_addresses.Status,
+          }
+        ),
+    switch =
+      select
+        (knx.name_is "All sliding windows")
+        (fun f =>
+          {
+            name = "//%{f.location}/Sliding windows/Lock",
+            address = f.group_addresses.Lock,
+            state_address = std.record.get_or "Lock status" null f.group_addresses,
           }
         ),
   },
@@ -207,19 +263,6 @@ knx.merge [
             on_off_state_address = f.group_addresses.Status,
             fan_speed_address = f.group_addresses."Fan speed",
             fan_speed_state_address = f.group_addresses."Fan speed status",
-          }
-        ),
-  },
-
-  # Sliding window locks
-  {
-    switch =
-      select
-        (knx.name_contains "lock")
-        (fun f =>
-          {
-            address = f.group_addresses.Switching,
-            state_address = std.record.get_or "Status" null f.group_addresses,
           }
         ),
   },
@@ -330,19 +373,6 @@ knx.merge [
     switch =
       select
         (knx.name_is "Ventilation")
-        (fun f =>
-          {
-            address = f.group_addresses.Switching,
-            state_address = f.group_addresses.Status,
-          }
-        ),
-  },
-
-  # Garage door
-  {
-    switch =
-      select
-        (knx.and (knx.location_is "Garage") (knx.name_is "Door"))
         (fun f =>
           {
             address = f.group_addresses.Switching,

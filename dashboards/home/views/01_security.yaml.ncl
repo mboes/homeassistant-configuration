@@ -37,17 +37,17 @@ in
         let tiles =
           knx.binary_sensor
           |> std.array.filter_map (fun e =>
-            std.string.find "//(.*)/Window contact" e.name
+            std.string.find "//(.*)/(.*)/Contact" e.name
             |> match {
               { index, .. } if index < 0 => 'None,
-              { groups = [room], .. } =>
+              { groups = [room, contact], .. } =>
                 'Some {
                   type = "tile",
                   entity = entity_id "binary_sensor" e.name,
-                  name = room,
+                  name = "%{room} - %{contact}",
                 },
             }
-          )
+          ) | std.array.NonEmpty
         in
         [heading] @ tiles
     },
