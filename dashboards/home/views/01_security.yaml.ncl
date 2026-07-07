@@ -51,29 +51,21 @@ let lib = import "../../../lib.ncl" in
         let tiles =
           knx.binary_sensor
           |> std.array.filter (fun e => std.string.is_match "/Contact$" e.name)
-          |> std.array.map_with_index (std.record.insert "key")
-          |> lib.group (fun e => if e.key < 10 then "0%{e.key}" else "%{e.key}")
-          |> std.record.map (fun _ contacts =>
+          |> lib.chunk (fun e => e.function.location)
+          |> std.array.map (fun contacts =>
             {
               type = "custom:bubble-card",
               card_type = "button",
               button_type = "name",
               name = (std.array.first contacts).function.location,
-              tap_action = {
-                action = "more-info",
-              },
-              button_action = {
-                tap_action = {
-                  action = "more-info",
-                },
-              },
+	      show_icon = false,
               sub_button =
                 contacts
                 |> std.array.map (fun e =>
                   {
                     name = e.function.name,
                     icon = "mdi:window-closed-variant",
-                    entity = lib.entity_id "switch" e.name,
+                    entity = lib.entity_id "binary_sensor" e.name,
                     tap_action = {
                       action = "more-info",
                     },
@@ -81,7 +73,6 @@ let lib = import "../../../lib.ncl" in
                 ),
             }
           )
-          |> std.record.values
             | std.array.NonEmpty
         in
         [heading] @ tiles
