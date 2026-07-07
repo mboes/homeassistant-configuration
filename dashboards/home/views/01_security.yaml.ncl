@@ -58,13 +58,17 @@ let lib = import "../../../lib.ncl" in
               card_type = "button",
               button_type = "name",
               name = (std.array.first contacts).function.location,
-	      show_icon = false,
+              show_icon = false,
               sub_button =
                 contacts
                 |> std.array.map (fun e =>
                   {
                     name = e.function.name,
-                    icon = "mdi:window-closed-variant",
+                    icon =
+                      if std.string.contains "Sliding" e.function.name then
+                        "mdi:door-sliding-lock"
+                      else
+                        "mdi:window-closed-variant",
                     entity = lib.entity_id "binary_sensor" e.name,
                     tap_action = {
                       action = "more-info",
