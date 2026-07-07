@@ -57,7 +57,7 @@ let lib = import "../../../lib.ncl" in
             {
               type = "custom:bubble-card",
               card_type = "button",
-              button_type = "switch",
+              button_type = "name",
               name = (std.array.first contacts).function.location,
               tap_action = {
                 action = "more-info",
