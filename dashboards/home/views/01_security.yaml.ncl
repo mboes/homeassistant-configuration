@@ -67,6 +67,8 @@ let lib = import "../../../lib.ncl" in
                     icon =
                       if std.string.contains "Sliding" e.function.name then
                         "mdi:door-sliding-lock"
+                      else if std.string.contains "Door" e.function.name then
+                        "mdi:door"
                       else
                         "mdi:window-closed-variant",
                     entity = lib.entity_id "binary_sensor" e.name,
