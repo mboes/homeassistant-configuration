@@ -50,16 +50,12 @@ let lib = import "../../../lib.ncl" in
         in
         let tiles =
           knx.binary_sensor
-          |> std.array.filter_map (fun e =>
-            std.string.find "//(.*)/(.*)/Contact" e.name
-            |> match {
-              { index, .. } if index < 0 => 'None,
-              { groups = [room, contact], .. } =>
-                'Some {
-                  type = "tile",
-                  entity = lib.entity_id "binary_sensor" e.name,
-                  name = "%{room} - %{contact}",
-                },
+          |> std.array.filter (fun e => std.string.is_match "/Contact$" e.name)
+          |> std.array.map (fun e =>
+            {
+              type = "tile",
+              entity = lib.entity_id "binary_sensor" e.name,
+              name = "%{e.function.location} - %{e.function.name}",
             }
           ) | std.array.NonEmpty
         in
@@ -76,16 +72,12 @@ let lib = import "../../../lib.ncl" in
         in
         let tiles =
           knx.switch
-          |> std.array.filter_map (fun e =>
-            std.string.find "//(.*)/Sliding windows/Lock" e.name
-            |> match {
-              { index, .. } if index < 0 => 'None,
-              { groups = [room], .. } =>
-                'Some {
-                  type = "tile",
-                  entity = lib.entity_id "lock" e.name,
-                  name = room,
-                },
+          |> std.array.filter (fun e => std.string.is_match "/Lock$" e.name)
+          |> std.array.map (fun e =>
+            {
+              type = "tile",
+              entity = lib.entity_id "lock" e.name,
+              name = e.function.location,
             }
           ) | std.array.NonEmpty
         in
