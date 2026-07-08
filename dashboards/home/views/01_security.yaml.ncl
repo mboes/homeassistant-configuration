@@ -35,6 +35,8 @@ let lib = import "../../../lib.ncl" in
       cards =
         (knx.binary_sensor @ knx.switch)
         |> lib.sort_by_floor
+	# Already accounted for in garage section.
+	|> std.array.filter (fun e => e.name != "//Garage/Door/Contact")
         |> lib.chunk (fun e => e.function.location)
         |> std.array.filter_map (fun entities =>
           let
