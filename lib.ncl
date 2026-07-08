@@ -17,15 +17,15 @@
         [] => [],
         _ =>
           std.array.fold_left
-            (fun {chunks, current_chunk, current_key} x =>
-	      let x_key = f x in
+            (fun { chunks, current_chunk, current_key } x =>
+              let x_key = f x in
               if x_key == current_key then
-	        let current_chunk = std.array.append x current_chunk in
+                let current_chunk = std.array.append x current_chunk in
                 { include [chunks, current_chunk, current_key] }
               else
-	        let chunks = std.array.append current_chunk chunks in
-		let current_chunk = [x] in
-		let current_key = x_key in
+                let chunks = std.array.append current_chunk chunks in
+                let current_chunk = [x] in
+                let current_key = x_key in
                 { include [chunks, current_chunk, current_key] }
             )
             { chunks = [], current_chunk = [], current_key = f (std.array.first xs) }
