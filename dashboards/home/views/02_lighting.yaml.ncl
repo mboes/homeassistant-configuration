@@ -22,12 +22,14 @@ let lib = import "../../../lib.ncl" in
             name = location,
             entity = lib.entity_id "light" group_id,
             show_icon = false,
-            sub_button = {
-              name = "Number of ON lights",
-              entity = lib.entity_id "sensor" "%{group_id}/Summary",
-              show_background = false,
-              show_state = true,
-            },
+            sub_button = [
+              {
+                name = "Number of ON lights",
+                entity = lib.entity_id "sensor" "%{group_id}/Summary",
+                show_background = false,
+                show_state = true,
+              }
+            ],
           }
         )
           | std.array.NonEmpty
