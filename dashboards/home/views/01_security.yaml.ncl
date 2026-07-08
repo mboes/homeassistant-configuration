@@ -16,10 +16,6 @@ let lib = import "../../../lib.ncl" in
       ],
     },
     {
-      type = "custom:bubble-card",
-      card_type = "separator",
-    },
-    {
       type = "grid",
       cards = [
         {
@@ -33,10 +29,6 @@ let lib = import "../../../lib.ncl" in
           name = "Garage gate",
         },
       ]
-    },
-    {
-      type = "custom:bubble-card",
-      card_type = "separator",
     },
     {
       type = "grid",
