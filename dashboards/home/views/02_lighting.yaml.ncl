@@ -27,7 +27,10 @@ let lib = import "../../../lib.ncl" in
                 name = "Number of ON lights",
                 entity = lib.entity_id "sensor" "%{group_id}/Summary",
                 show_background = false,
+		show_icon = false,
                 show_state = true,
+		show_attribute = true,
+		attribute = "total",
               }
             ],
           }
