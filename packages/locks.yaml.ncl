@@ -1,5 +1,5 @@
-let knx = import "../../knx.yaml.ncl" in
-let lib = import "../../lib.ncl" in
+let knx = import "../knx.yaml.ncl" in
+let lib = import "../lib.ncl" in
 let locks =
   knx.switch
   |> std.array.filter (fun r => std.string.is_match "/Lock$" r.name)
