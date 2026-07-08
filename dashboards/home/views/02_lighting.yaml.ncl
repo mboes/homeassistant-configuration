@@ -9,6 +9,7 @@ let lib = import "../../../lib.ncl" in
       type = "grid",
       cards =
         knx.light
+	|> std.array.filter (fun e => ! std.string.is_match "^All lights" e.function.name)
         |> lib.sort_by_floor
         |> lib.chunk (fun e => e.function.location)
         |> std.array.map (fun lights =>
