@@ -450,39 +450,3 @@ knx.merge [
         ),
   },
 ]
-
-# Sort the entities by floor. The output order determines the order of
-# dashboard entries.
-|> (
-  let floor_index = {
-    "Basement" = -1,
-    "Ground floor" = 0,
-    "1st floor" = 1,
-    "2nd floor" = 2,
-  }
-  in
-  let location_floors =
-    cfg.locations
-    |> std.array.map (fun r =>
-      {
-        field = r.name,
-        value = std.record.get_or (std.string.from r.location) 99 floor_index
-      }
-    )
-    |> std.record.from_array
-  in
-
-  let compare_locations = fun e1 e2 =>
-    std.string.compare e1.function.location e2.function.location
-  in
-  let compare_floors = fun e1 e2 =>
-    std.number.compare
-      location_floors."%{e1.function.location}"
-      location_floors."%{e2.function.location}"
-  in
-  std.record.map_values (
-    std.function.compose
-      (std.array.sort compare_floors)
-      (std.array.sort compare_locations)
-  )
-)
