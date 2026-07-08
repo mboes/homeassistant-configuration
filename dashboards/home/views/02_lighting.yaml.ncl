@@ -9,30 +9,25 @@ let lib = import "../../../lib.ncl" in
       type = "grid",
       cards =
         knx.light
-	|> std.array.filter (fun e => ! std.string.is_match "^All lights" e.function.name)
+        |> std.array.filter (fun e => !std.string.is_match "^All lights" e.function.name)
         |> lib.sort_by_floor
         |> lib.chunk (fun e => e.function.location)
         |> std.array.map (fun lights =>
+          let location = (std.array.first lights).function.location in
+          let group_id = "//%{location}/Lights" in
           {
             type = "custom:bubble-card",
             card_type = "button",
             button_type = "name",
-            name = (std.array.first lights).function.location,
+            name = location,
+            entity = lib.entity_id "light" group_id,
             show_icon = false,
-            sub_button =
-              let
-                light_buttons =
-                  lights
-                  |> std.array.map (fun e =>
-                    {
-                      name = e.function.name,
-                      entity = lib.entity_id "light" e.name,
-                      tap_action = {
-                        action = "more-info",
-                      },
-                    }
-                  ),
-              in light_buttons,
+            sub_button = {
+              name = "Number of ON lights",
+              entity = lib.entity_id "sensor" "%{group_id}/Summary",
+              show_background = false,
+              show_state = true,
+            },
           }
         )
           | std.array.NonEmpty
