@@ -80,7 +80,7 @@ let lib = import "../../../lib.ncl" in
                     locks
                     |> std.array.map (fun e =>
                       {
-                        name = e.function.name,
+                        name = "Lock button",
                         entity = lib.entity_id "lock" e.name,
                         tap_action = {
                           action = "more-info",
@@ -88,6 +88,15 @@ let lib = import "../../../lib.ncl" in
                       }
                     ),
                 in contact_buttons @ lock_buttons,
+              styles =
+                if locks == [] then
+                  ""
+                else
+                  m%"
+                .lock-button {
+                  background: ${hass.states['%{lib.entity_id "lock" (std.array.first locks).name}'].state === 'locked' ? 'var(--card-background-color)' : 'var(--error-color)'} !important;
+                }
+              "%,
             }
         )
           | std.array.NonEmpty
