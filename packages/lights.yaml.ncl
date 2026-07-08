@@ -30,7 +30,7 @@ let lib = import "../lib.ncl" in
           "%,
           attributes = {
             total = m%"
-	      {{ state_attr('%{lib.entity_id "light" group_id}', 'entity_id') | default([], true) | count }}
+	      /{{ state_attr('%{lib.entity_id "light" group_id}', 'entity_id') | default([], true) | count }} lights on
 	    "%,
           },
         }
