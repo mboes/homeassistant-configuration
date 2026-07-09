@@ -10,12 +10,12 @@ let lib = import "../../../lib.ncl" in
       cards = [
         {
           type = "tile",
-          name = "House",
+          name = "House OFF",
           entity = lib.entity_id "button" "//House/All lights",
         },
         {
           type = "tile",
-          name = "Exterior",
+          name = "Exterior OFF",
           entity = lib.entity_id "button" "//House/All lights exterior",
         },
       ]
@@ -27,7 +27,7 @@ let lib = import "../../../lib.ncl" in
         |> std.array.map (fun floor =>
           {
             type = "tile",
-            name = "%{floor}",
+            name = "%{floor} OFF",
             entity = lib.entity_id "button" "//%{floor}/All lights",
           }
         )
