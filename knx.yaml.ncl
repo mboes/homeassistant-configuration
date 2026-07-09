@@ -53,15 +53,6 @@ let base_entity = fun f =>
       = "//%{f.location}/%{f.name}",
   }
 in
-let select = fun pred mk =>
-  cfg.functions
-  |> std.array.filter pred
-  |> std.array.map (fun f => mk f & base_entity f)
-  |> std.array.map (std.record.filter (fun _ v => v != null))
-  # XXX Workaround https://github.com/nickel-lang/nickel/issues/2633
-  |> std.array.map (fun r => r & base_entity r.function)
-    | std.array.NonEmpty
-in
 let select_flatten = fun pred mk =>
   cfg.functions
   |> std.array.filter pred
@@ -72,6 +63,7 @@ let select_flatten = fun pred mk =>
   |> std.array.map (fun r => r & base_entity r.function)
     | std.array.NonEmpty
 in
+let select = fun pred mk => select_flatten pred (fun f => [mk f]) in
 knx.merge [
   # Lights
   {
