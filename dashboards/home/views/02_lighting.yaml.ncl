@@ -7,6 +7,21 @@ let lib = import "../../../lib.ncl" in
   sections = [
     {
       type = "grid",
+      cards = [
+        {
+          type = "tile",
+          name = "House",
+          entity = lib.entity_id "light" "//House/All lights",
+        },
+        {
+          type = "tile",
+          name = "Exterior",
+          entity = lib.entity_id "light" "//House/All lights exterior",
+        },
+      ]
+    },
+    {
+      type = "grid",
       cards =
         ["Basement", "Ground floor", "1st floor", "2nd floor"]
         |> std.array.map (fun floor =>
