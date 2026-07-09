@@ -30,6 +30,7 @@ let lib = import "../../../lib.ncl" in
           {
             type = "custom:bubble-card",
             card_type = "button",
+            button_type = "slider",
             name = location,
             entity = lib.entity_id "light" group_name,
             show_icon = false,
