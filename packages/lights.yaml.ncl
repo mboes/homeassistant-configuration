@@ -23,14 +23,14 @@ let lib = import "../lib.ncl" in
       |> std.array.map (fun e =>
         let location = e.function.location in
         let group_name = "//%{location}/Lights" in
-          {
-            name = "%{group_name}/Summary",
-            state = m%"
+        {
+          name = "%{group_name}/Summary",
+          state = m%"
               {% set on = state_attr('%{lib.entity_id "light" group_name}', 'entity_id')  | default([], true) | select('is_state','on') | list | count %}
               {% set total = state_attr('%{lib.entity_id "light" group_name}', 'entity_id')  | default([], true) | list | count %}
 	      {{ on ~ '/' ~ total if on else 'OFF' }}
             "%,
-          }
+        }
       ),
   },
 }

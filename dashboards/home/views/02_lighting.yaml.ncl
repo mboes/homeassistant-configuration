@@ -28,10 +28,9 @@ let lib = import "../../../lib.ncl" in
                 show_background = false,
                 show_icon = true,
                 show_state = true,
-		styles =
-                  "${subButtonIcon[0].setAttribute('icon', state === 'on' ? 'mdi:lightbulb-multiple' : 'mdi:lightbulb-off-outline')}",
               },
             ],
+            styles = "${subButtonIcon[0].setAttribute('icon', state === 'on' ? 'mdi:lightbulb-multiple' : 'mdi:lightbulb-off-outline')}",
           }
         )
           | std.array.NonEmpty
