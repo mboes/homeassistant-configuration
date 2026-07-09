@@ -26,10 +26,11 @@ let lib = import "../../../lib.ncl" in
               {
                 name = "Lights summary",
                 entity = lib.entity_id "sensor" "%{group_name}/Summary",
-		icon = "mdi:lightbulb-group",
                 show_background = false,
                 show_icon = true,
                 show_state = true,
+		styles =
+                  "${subButtonIcon[0].setAttribute('icon', state === 'on' ? 'mdi:lightbulb-multiple' : 'mdi:lightbulb-off-outline')}",
               },
             ],
           }
