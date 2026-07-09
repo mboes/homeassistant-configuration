@@ -88,6 +88,28 @@ knx.merge [
             }
           ),
       ],
+
+    # Central functions don't have a state address, so buttons are the
+    # better abstraction than lights. They only turn off.
+    button =
+      std.array.flatten [
+        select
+          (knx.and (knx.type_is "dimmable light") (knx.name_matches "^All "))
+          (fun f =>
+            {
+              address = f.group_addresses.Switching,
+              payload = 0,
+            }
+          ),
+        select
+          (knx.and (knx.type_is "switchable light") (knx.name_matches "^All "))
+          (fun f =>
+            {
+              address = f.group_addresses.Switching,
+              payload = 0,
+            }
+          ),
+      ],
   },
 
   # Rollers
