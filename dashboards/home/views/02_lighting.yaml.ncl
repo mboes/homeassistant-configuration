@@ -1,7 +1,7 @@
 let knx = import "../../../knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
 {
-  title = "Lighting",
+  title = "Lights",
   path = "lights",
   type = "sections",
   sections = [
