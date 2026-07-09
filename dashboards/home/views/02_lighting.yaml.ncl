@@ -26,6 +26,7 @@ let lib = import "../../../lib.ncl" in
               {
                 name = "Lights ON",
                 entity = lib.entity_id "sensor" "%{group_name}/On",
+		icon = "mdi:lightbulb-on",
                 show_background = false,
                 show_icon = true,
                 show_state = true,
@@ -33,6 +34,7 @@ let lib = import "../../../lib.ncl" in
               {
                 name = "Lights OFF",
                 entity = lib.entity_id "sensor" "%{group_name}/Off",
+		icon = "mdi:lightbulb-outline",
                 show_background = false,
                 show_icon = true,
                 show_state = true,
