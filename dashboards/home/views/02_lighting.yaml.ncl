@@ -24,21 +24,13 @@ let lib = import "../../../lib.ncl" in
             show_icon = false,
             sub_button = [
               {
-                name = "Lights ON",
-                entity = lib.entity_id "sensor" "%{group_name}/On",
-		icon = "mdi:lightbulb-on",
+                name = "Lights summary",
+                entity = lib.entity_id "sensor" "%{group_name}/Summary",
+		icon = "mdi:lightbulb-group",
                 show_background = false,
                 show_icon = true,
                 show_state = true,
               },
-              {
-                name = "Lights OFF",
-                entity = lib.entity_id "sensor" "%{group_name}/Off",
-		icon = "mdi:lightbulb-outline",
-                show_background = false,
-                show_icon = true,
-                show_state = true,
-              }
             ],
           }
         )
