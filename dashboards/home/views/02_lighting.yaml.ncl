@@ -8,6 +8,18 @@ let lib = import "../../../lib.ncl" in
     {
       type = "grid",
       cards =
+        ["Basement", "Ground floor", "1st floor", "2nd floor"]
+        |> std.array.map (fun floor =>
+          {
+            type = "tile",
+            name = "%{floor}",
+            entity = lib.entity_id "light" "//%{floor}/Lights",
+          }
+        )
+    },
+    {
+      type = "grid",
+      cards =
         knx.light
         |> std.array.filter (fun e => !std.string.is_match "^All lights" e.function.name)
         |> lib.sort_by_floor
