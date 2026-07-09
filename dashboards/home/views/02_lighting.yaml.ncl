@@ -14,23 +14,28 @@ let lib = import "../../../lib.ncl" in
         |> lib.chunk (fun e => e.function.location)
         |> std.array.map (fun lights =>
           let location = (std.array.first lights).function.location in
-          let group_id = "//%{location}/Lights" in
+          let group_name = "//%{location}/Lights" in
           {
             type = "custom:bubble-card",
             card_type = "button",
             button_type = "name",
             name = location,
-            entity = lib.entity_id "light" group_id,
+            entity = lib.entity_id "light" group_name,
             show_icon = false,
             sub_button = [
               {
-                name = "Number of ON lights",
-                entity = lib.entity_id "sensor" "%{group_id}/Summary",
+                name = "Lights ON",
+                entity = lib.entity_id "sensor" "%{group_name}/On",
                 show_background = false,
-		show_icon = false,
+                show_icon = true,
                 show_state = true,
-		show_attribute = true,
-		attribute = "total",
+              },
+              {
+                name = "Lights OFF",
+                entity = lib.entity_id "sensor" "%{group_name}/Off",
+                show_background = false,
+                show_icon = true,
+                show_state = true,
               }
             ],
           }
