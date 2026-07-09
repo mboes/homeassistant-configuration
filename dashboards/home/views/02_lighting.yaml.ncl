@@ -13,7 +13,7 @@ let lib = import "../../../lib.ncl" in
           {
             type = "tile",
             name = "%{floor}",
-            entity = lib.entity_id "light" "//%{floor}/Lights",
+            entity = lib.entity_id "light" "//%{floor}/All lights",
           }
         )
     },
