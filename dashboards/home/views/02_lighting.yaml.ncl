@@ -11,12 +11,12 @@ let lib = import "../../../lib.ncl" in
         {
           type = "tile",
           name = "House",
-          entity = lib.entity_id "light" "//House/All lights",
+          entity = lib.entity_id "button" "//House/All lights",
         },
         {
           type = "tile",
           name = "Exterior",
-          entity = lib.entity_id "light" "//House/All lights exterior",
+          entity = lib.entity_id "button" "//House/All lights exterior",
         },
       ]
     },
@@ -28,7 +28,7 @@ let lib = import "../../../lib.ncl" in
           {
             type = "tile",
             name = "%{floor}",
-            entity = lib.entity_id "light" "//%{floor}/All lights",
+            entity = lib.entity_id "button" "//%{floor}/All lights",
           }
         )
     },
