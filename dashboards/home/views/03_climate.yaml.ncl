@@ -35,7 +35,7 @@ let lib = import "../../../lib.ncl" in
                 |> std.array.map (fun e =>
                   {
                     name = "Floor heating",
-                    icon = "mdi:heat-coil",
+                    icon = "mdi:heating-coil",
                     entity = lib.entity_id "climate" e.name,
                   }
                 )
