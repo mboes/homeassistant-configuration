@@ -9,6 +9,7 @@
       |> std.string.lowercase
     in
     "%{domain}.%{slug}",
+
   chunk
     : forall a k. (a -> k) -> Array a -> Array (Array a)
     = fun f xs =>
@@ -34,6 +35,7 @@
             { chunks, current_chunk, .. } => std.array.append current_chunk chunks,
           }
       },
+
   sort_by_floor =
     let cfg = import "knx-model.yaml" in
     let floor_index = {
@@ -53,7 +55,6 @@
       )
       |> std.record.from_array
     in
-
     let compare_locations = fun e1 e2 =>
       std.string.compare e1.function.location e2.function.location
     in
