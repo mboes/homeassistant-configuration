@@ -80,7 +80,7 @@ let lib = import "../../../lib.ncl" in
                     locks
                     |> std.array.map (fun e =>
                       {
-                        name = "Lock button",
+                        name = "Lock",
                         entity = lib.entity_id "lock" e.name,
                         tap_action = {
                           action = "more-info",
