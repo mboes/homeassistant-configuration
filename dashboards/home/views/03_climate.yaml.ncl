@@ -50,7 +50,7 @@ let lib = import "../../../lib.ncl" in
                   }
                 )
               in
-              floor_heating_buttons @ fcus_buttons,
+              fcus_buttons @ floor_heating_buttons,
           }
         )
           | std.array.NonEmpty
