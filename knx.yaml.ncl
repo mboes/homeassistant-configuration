@@ -292,6 +292,8 @@ knx.merge [
             on_off_state_address = f.group_addresses.Status,
             fan_speed_address = f.group_addresses."Fan speed",
             fan_speed_state_address = f.group_addresses."Fan speed status",
+            fan_zero_mode = "auto",
+            controller_modes = ["off", "cool"],
           }
         ),
   },
