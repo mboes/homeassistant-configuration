@@ -9,16 +9,17 @@ let lib = import "../../../lib.ncl" in
       type = "grid",
       cards =
         knx.cover
+        |> std.array.filter (fun e => std.string.is_match "/(Blinds?|Rollers?)\\b" e.name)
         |> lib.sort_by_floor
         |> lib.chunk (fun e => e.function.location)
         |> std.array.map (fun covers =>
           let blinds =
             covers
-            |> std.array.filter (fun e => std.string.is_match "/Blind" e.name)
+            |> std.array.filter (fun e => std.string.is_match "/Blinds?\\b" e.name)
           in
           let rollers =
             covers
-            |> std.array.filter (fun e => std.string.is_match "/Roller" e.name)
+            |> std.array.filter (fun e => std.string.is_match "/Rollers?\\b" e.name)
           in
           let location = (std.array.first covers).function.location in
           {
