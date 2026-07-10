@@ -13,10 +13,7 @@ all: $(YAML_FILES)
 
 knx-model.yaml: 0.xml
 
-# Sometimes JSON is a safer serialization format, to avoid the Norway
-# problem of YAML.
-knx.yaml: knx.yaml.ncl knx-model.yaml
-	nickel export -fjson -o $@ $<
+knx.yaml: knx-model.yaml
 
 $(DASHBOARD_YAML_FILES): knx.yaml
 
