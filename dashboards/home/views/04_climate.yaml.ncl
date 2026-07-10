@@ -21,13 +21,11 @@ let lib = import "../../../lib.ncl" in
             |> std.array.filter (fun e => std.string.is_match "/Air conditioning" e.name)
           in
           let location = (std.array.first controllers).function.location in
-          let group_name = "//%{location}/Climate" in
           {
             type = "custom:bubble-card",
             card_type = "button",
             button_type = "name",
             name = location,
-            entity = lib.entity_id "climate" group_name,
             show_icon = false,
             sub_button =
               let floor_heating_buttons =
@@ -40,7 +38,7 @@ let lib = import "../../../lib.ncl" in
                   }
                 )
               in
-              let fcus_buttons =
+              let fcu_buttons =
                 fcus
                 |> std.array.map (fun e =>
                   {
@@ -50,7 +48,7 @@ let lib = import "../../../lib.ncl" in
                   }
                 )
               in
-              fcus_buttons @ floor_heating_buttons,
+              fcu_buttons @ floor_heating_buttons,
           }
         )
           | std.array.NonEmpty
