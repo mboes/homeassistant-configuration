@@ -44,6 +44,16 @@
           }
       },
 
+  group
+    : forall a. (a -> String) -> Array a -> { _ : Array a }
+    | Dyn -> Dyn -> { _ | std.array.NonEmpty }
+    = fun f xs =>
+      xs
+      |> std.array.sort (fun x y => std.string.compare (f x) (f y))
+      |> chunk f
+      |> std.array.map (fun ys => { field = f (std.array.first ys), value = ys })
+      |> std.record.from_array,
+
   sort_by_floor =
     let cfg = import "knx-model.yaml" in
     let floor_index = {
