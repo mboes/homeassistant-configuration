@@ -7,6 +7,7 @@ let lib = import "../../../lib.ncl" in
   sections = [
     {
       type = "grid",
+      columns = 2,
       cards =
         knx.climate
         |> lib.sort_by_floor
@@ -27,6 +28,7 @@ let lib = import "../../../lib.ncl" in
             button_type = "name",
             name = location,
             show_icon = false,
+	    card_layout = if std.array.length controllers < 4 then "normal" else "large",
             sub_button =
               let floor_heating_buttons =
                 floor_heating
