@@ -32,6 +32,7 @@ let lib = import "../../../lib.ncl" in
     },
     {
       type = "grid",
+      columns = 2,
       cards =
         (knx.binary_sensor @ knx.switch)
         |> lib.sort_by_floor
@@ -56,6 +57,7 @@ let lib = import "../../../lib.ncl" in
               button_type = "name",
               name = (std.array.first contacts).function.location,
               show_icon = false,
+	      card_layout = if std.array.length contacts < 4 then "normal" else "large",
               sub_button =
                 let
                   contact_buttons =
