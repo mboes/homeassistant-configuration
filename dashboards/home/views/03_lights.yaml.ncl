@@ -48,6 +48,7 @@ let lib = import "../../../lib.ncl" in
             name = location,
             entity = lib.entity_id "light" group_name,
             show_icon = false,
+	    grid_options.columns = 6,
             sub_button = [
               {
                 name = "Lights summary",
