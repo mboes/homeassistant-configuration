@@ -28,7 +28,11 @@ let lib = import "../../../lib.ncl" in
             button_type = "name",
             name = location,
             show_icon = false,
-	    card_layout = if std.array.length controllers < 4 then "normal" else "large",
+            card_layout = if std.array.length controllers < 4 then "normal" else "large",
+            grid_options = {
+              columns =
+                if std.array.length controllers < 4 then 6 else "full",
+            },
             sub_button =
               let floor_heating_buttons =
                 floor_heating

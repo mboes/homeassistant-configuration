@@ -57,7 +57,7 @@ let lib = import "../../../lib.ncl" in
               button_type = "name",
               name = (std.array.first contacts).function.location,
               show_icon = false,
-	      card_layout = if std.array.length contacts < 4 then "normal" else "large",
+              card_layout = if std.array.length contacts < 4 then "normal" else "large",
               sub_button =
                 let
                   contact_buttons =
