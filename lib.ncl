@@ -81,7 +81,11 @@
         location_floors."%{e1.function.location}"
         location_floors."%{e2.function.location}"
     in
-    std.function.compose
-      (std.array.sort compare_floors)
-      (std.array.sort compare_locations)
+    std.array.reduce_right
+      std.function.compose
+      [
+        std.array.sort compare_floors,
+        std.array.sort compare_locations,
+        std.array.map (fun e => e & { function.floor = location_floors."%{e.function.location}" }),
+      ]
 }
