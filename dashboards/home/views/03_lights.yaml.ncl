@@ -41,14 +41,16 @@ let lib = import "../../../lib.ncl" in
         |> lib.chunk (fun e => e.function.location)
         |> std.array.map (fun lights =>
           let location = (std.array.first lights).function.location in
+          let floor = (std.array.first lights).function.floor in
           let group_name = "//%{location}/Lights" in
           {
             type = "custom:bubble-card",
             card_type = "button",
             name = location,
+            include floor | not_exported,
             entity = lib.entity_id "light" group_name,
             show_icon = false,
-	    grid_options.columns = 6,
+            grid_options.columns = 6,
             sub_button = [
               {
                 name = "Lights summary",
@@ -61,6 +63,16 @@ let lib = import "../../../lib.ncl" in
             styles = "${subButtonIcon[0].setAttribute('icon', state === 'on' ? 'mdi:lightbulb-multiple' : 'mdi:lightbulb-off-outline')}",
           }
         )
+        |> lib.chunk (fun card => card.floor)
+        |> std.array.map (fun cards =>
+          cards
+          |> std.array.prepend {
+            type = "custom:bubble-card",
+            card_type = "separator",
+            name = (std.array.first cards).floor,
+          }
+        )
+        |> std.array.flatten
           | std.array.NonEmpty
     },
   ],
