@@ -1,4 +1,5 @@
 /knx-model.yaml
+.direnv/
 
 # Home Assistant sensitive files
 secrets.yaml
