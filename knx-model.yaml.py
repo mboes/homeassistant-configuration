@@ -34,7 +34,7 @@ EXCLUDED_NAME_PREFIX = "All "
 
 # ETS space Type -> location type recorded in the model. Only these space types
 # become locations; others (BuildingPart, Corridor, ...) are passed through.
-SPACE_TYPES = {"Building": "building", "Floor": "floor", "Room": "room"}
+SPACE_TYPES = {"Building": "building", "Floor": "floor", "Room": "room", "Stairway": "stairway"}
 
 # ETS function type code -> descriptive type name. Extend as needed; unmapped
 # codes pass through unchanged so they stay visible in the output.
