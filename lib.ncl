@@ -63,29 +63,28 @@
       "2nd floor" = 2,
     }
     in
-    let location_floors =
+    let location_to_floor =
       cfg.locations
-      |> std.array.map (fun r =>
-        {
-          field = r.name,
-          value = std.record.get_or (std.string.from r.location) 99 floor_index
-        }
-      )
+      |> std.array.map (fun r => { field = r.name, value = r.location })
       |> std.record.from_array
+    in
+    let location_to_floor_index =
+      location_to_floor
+      |> std.record.map_values (fun r => std.record.get_or (std.to_string r) 99 floor_index)
     in
     let compare_locations = fun e1 e2 =>
       std.string.compare e1.function.location e2.function.location
     in
     let compare_floors = fun e1 e2 =>
       std.number.compare
-        location_floors."%{e1.function.location}"
-        location_floors."%{e2.function.location}"
+        location_to_floor_index."%{e1.function.location}"
+        location_to_floor_index."%{e2.function.location}"
     in
     std.array.reduce_right
       std.function.compose
       [
         std.array.sort compare_floors,
         std.array.sort compare_locations,
-        std.array.map (fun e => e & { function.floor = location_floors."%{e.function.location}" }),
+        std.array.map (fun e => e & { function.floor = location_to_floor."%{e.function.location}" }),
       ]
 }
