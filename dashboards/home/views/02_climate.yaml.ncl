@@ -22,11 +22,13 @@ let lib = import "../../../lib.ncl" in
             |> std.array.filter (fun e => std.string.is_match "/Air conditioning" e.name)
           in
           let location = (std.array.first controllers).function.location in
+          let floor = (std.array.first controllers).function.floor in
           {
             type = "custom:bubble-card",
             card_type = "button",
             button_type = "name",
             name = location,
+            include floor | not_exported,
             show_icon = false,
             sub_button =
               let floor_heating_buttons =
@@ -52,6 +54,16 @@ let lib = import "../../../lib.ncl" in
               fcu_buttons @ floor_heating_buttons,
           }
         )
+        |> lib.chunk (fun card => card.floor)
+        |> std.array.map (fun cards =>
+          cards
+          |> std.array.prepend {
+            type = "custom:bubble-card",
+            card_type = "separator",
+            name = (std.array.first cards).floor,
+          }
+        )
+        |> std.array.flatten
           | std.array.NonEmpty
     },
   ],

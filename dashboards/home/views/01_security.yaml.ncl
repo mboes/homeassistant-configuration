@@ -56,6 +56,7 @@ let lib = import "../../../lib.ncl" in
               card_type = "button",
               button_type = "name",
               name = (std.array.first contacts).function.location,
+              floor | not_exported = (std.array.first contacts).function.floor,
               show_icon = false,
               sub_button =
                 let
@@ -100,6 +101,16 @@ let lib = import "../../../lib.ncl" in
               "%,
             }
         )
+        |> lib.chunk (fun card => card.floor)
+        |> std.array.map (fun cards =>
+          cards
+          |> std.array.prepend {
+            type = "custom:bubble-card",
+            card_type = "separator",
+            name = (std.array.first cards).floor,
+          }
+        )
+        |> std.array.flatten
           | std.array.NonEmpty
     },
   ],
