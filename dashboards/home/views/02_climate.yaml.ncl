@@ -33,7 +33,7 @@ let lib = import "../../../lib.ncl" in
               show_icon = false,
               button_action.tap_action = {
                 action = "navigate",
-                navigation_path = "#%{location}",
+                navigation_path = "#%{std.string.replace_regex "\\s+" "_" location}",
               },
               sub_button =
                 let floor_heating_buttons =
@@ -61,7 +61,7 @@ let lib = import "../../../lib.ncl" in
             {
               type = "custom:bubble-card",
               card_type = "pop-up",
-              hash = "#%{location}",
+              hash = "#%{std.string.replace_regex "\\s+" "_" location}",
               name = location,
               include floor | not_exported,
               icon = "mdi:home-thermometer",
