@@ -12,7 +12,7 @@ let lib = import "../../../lib.ncl" in
         knx.climate
         |> lib.sort_by_floor
         |> lib.chunk (fun e => e.function.location)
-        |> std.array.map (fun controllers =>
+        |> std.array.flat_map (fun controllers =>
           let floor_heating =
             controllers
             |> std.array.filter (fun e => std.string.is_match "/Floor heating$" e.name)
@@ -23,36 +23,76 @@ let lib = import "../../../lib.ncl" in
           in
           let location = (std.array.first controllers).function.location in
           let floor = (std.array.first controllers).function.floor in
-          {
-            type = "custom:bubble-card",
-            card_type = "button",
-            button_type = "name",
-            name = location,
-            include floor | not_exported,
-            show_icon = false,
-            sub_button =
-              let floor_heating_buttons =
-                floor_heating
-                |> std.array.map (fun e =>
-                  {
-                    name = "Floor heating",
-                    icon = "mdi:heating-coil",
-                    entity = lib.entity_id "climate" e.name,
-                  }
-                )
-              in
-              let fcu_buttons =
-                fcus
-                |> std.array.map (fun e =>
-                  {
-                    name = e.function.name,
-                    icon = "mdi:air-conditioner",
-                    entity = lib.entity_id "climate" e.name,
-                  }
-                )
-              in
-              fcu_buttons @ floor_heating_buttons,
-          }
+          [
+            {
+              type = "custom:bubble-card",
+              card_type = "button",
+              button_type = "name",
+              name = location,
+              include floor | not_exported,
+              show_icon = false,
+              button_action.tap_action = {
+                action = "navigate",
+                navigation_path = "#%{location}",
+              },
+              sub_button =
+                let floor_heating_buttons =
+                  floor_heating
+                  |> std.array.map (fun e =>
+                    {
+                      name = "Floor heating",
+                      icon = "mdi:heating-coil",
+                      entity = lib.entity_id "climate" e.name,
+                    }
+                  )
+                in
+                let fcu_buttons =
+                  fcus
+                  |> std.array.map (fun e =>
+                    {
+                      name = e.function.name,
+                      icon = "mdi:air-conditioner",
+                      entity = lib.entity_id "climate" e.name,
+                    }
+                  )
+                in
+                fcu_buttons @ floor_heating_buttons,
+            },
+            {
+              type = "custom:bubble-card",
+              card_type = "pop-up",
+              hash = "#%{location}",
+              name = location,
+              include floor | not_exported,
+              icon = "mdi:home-thermometer",
+              cards =
+                let fcus_buttons =
+                  fcus
+                  |> std.array.map (fun e =>
+                    {
+                      type = "custom:bubble-card",
+                      card_type = "button",
+                      name = e.function.name,
+                      icon = "mdi:air-conditioner",
+                      entity = lib.entity_id "climate" e.name,
+                    }
+                  )
+                in
+                let floor_heating_buttons =
+                  floor_heating
+                  |> std.array.map (fun e =>
+                    {
+                      type = "custom:bubble-card",
+                      card_type = "button",
+                      name = e.function.name,
+                      icon = "mdi:heating-coil",
+                      entity = lib.entity_id "climate" e.name,
+                    }
+                  )
+                in
+                fcus_buttons @ floor_heating_buttons,
+            },
+          ]
         )
         |> lib.chunk (fun card => card.floor)
         |> std.array.map (fun cards =>
