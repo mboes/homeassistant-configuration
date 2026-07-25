@@ -2,7 +2,7 @@
   type: module
 - url: /hacsfiles/clock-weather-card/clock-weather-card.js
   type: module
-- url: /hacsfiles/lovelace-hourly-weather/lovelace-hourly-weather.js
+- url: /hacsfiles/lovelace-hourly-weather/hourly-weather.js
   type: module
 - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
   type: module
