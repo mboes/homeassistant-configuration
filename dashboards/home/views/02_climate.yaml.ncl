@@ -24,6 +24,7 @@ let lib = import "../../../lib.ncl" in
           type = "custom:hourly-weather",
 	  name = "Next 12 hours",
           entity = lib.entity_id "weather" "forecast_home",
+	  icons = true,
 	  round_temperatures = true,
         },
       ],
