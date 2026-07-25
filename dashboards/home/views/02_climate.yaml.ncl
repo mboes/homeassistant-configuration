@@ -16,7 +16,7 @@ let lib = import "../../../lib.ncl" in
           hide_clock = true,
           hide_date = true,
           forecast_rows = 3,
-          show_decimal = false,
+          show_decimal = true,
           hide_forecast_section = true,
         },
         {
