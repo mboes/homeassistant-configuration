@@ -21,7 +21,7 @@ let lib = import "../../../lib.ncl" in
           hide_forecast_section = true,
         },
         {
-          type = "custom:hourly-weather-card",
+          type = "custom:hourly-weather",
 	  name = "Next 12 hours",
           entity = lib.entity_id "weather" "forecast_home",
 	  round_temperatures = true,
