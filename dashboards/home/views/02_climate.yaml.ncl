@@ -23,7 +23,7 @@ let lib = import "../../../lib.ncl" in
         {
           type = "weather-forecast",
           show_current = false,
-          show_forecast = false,
+          show_forecast = true,
           entity = lib.entity_id "weather" "forecast_home",
           forecast_type = "hourly",
           forecast_slots = 6,
