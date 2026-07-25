@@ -6,6 +6,31 @@ let lib = import "../../../lib.ncl" in
   type = "sections",
   sections = [
     {
+      type = "custom:vertical-stack-in-card",
+      cards = [
+        {
+          type = "custom:clock-weather-card",
+          entity = lib.entity_id "weather" "forecast_home",
+          temperature_sensor = lib.entity_id "weather" "//Weather station",
+          locale = "gb",
+          weather_icon_type = "fill",
+          hide_clock = true,
+          hide_date = true,
+          forecast_rows = 3,
+          show_decimal = true,
+          hide_forecast_section = true,
+        },
+        {
+          type = "weather-forecast",
+          show_current = false,
+          show_forecast = false,
+          entity = lib.entity_id "weather" "forecast_home",
+          forecast_type = "hourly",
+          forecast_slots = 6,
+        },
+      ],
+    },
+    {
       type = "grid",
       columns = 2,
       cards =
