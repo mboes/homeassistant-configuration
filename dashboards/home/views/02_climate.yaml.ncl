@@ -92,10 +92,12 @@ let lib = import "../../../lib.ncl" in
                       {
                         type = "custom:mini-graph-card",
                         name = "Thermostat temperature",
-                        entities = {
-                          entity = lib.entity_id "climate" e.name,
-                          attribute = "current_temperature",
-                        },
+                        entities = [
+                          {
+                            entity = lib.entity_id "climate" e.name,
+                            attribute = "current_temperature",
+                          }
+                        ],
                         hours_to_show = 24,
                         points_per_hour = 4,
                         line_color = "#ff6b35",
