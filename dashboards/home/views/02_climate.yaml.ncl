@@ -11,7 +11,7 @@ let lib = import "../../../lib.ncl" in
         {
           type = "custom:clock-weather-card",
           entity = lib.entity_id "weather" "forecast_home",
-          temperature_sensor = lib.entity_id "sensor" "//Outside temperature",
+          temperature_sensor = lib.entity_id "sensor" "//Outdoor temperature",
           weather_icon_type = "fill",
           hide_clock = true,
           hide_date = true,
