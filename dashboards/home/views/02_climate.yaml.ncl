@@ -80,38 +80,45 @@ let lib = import "../../../lib.ncl" in
                 in
                 let floor_heating_buttons =
                   floor_heating
-                  |> std.array.flat_map (fun e =>
-                    [
-                      {
-                        type = "custom:bubble-card",
-                        card_type = "button",
-                        name = e.function.name,
-                        icon = "mdi:heating-coil",
-                        entity = lib.entity_id "climate" e.name,
-                      },
-                      {
-                        type = "custom:mini-graph-card",
-                        name = "Thermostat temperature",
-                        entities = [
-                          {
-                            entity = lib.entity_id "climate" e.name,
-                            attribute = "current_temperature",
-                          }
-                        ],
-                        hours_to_show = 48,
-                        points_per_hour = 4,
-                        hour24 = true,
-                        min_bound_range = 6.0,
-                        line_color = "#ff6b35",
-                        line_width = 3,
-                        show = {
-                          fill = "fade",
-                        },
-                      },
-                    ]
+                  |> std.array.map (fun e =>
+                    {
+                      type = "custom:bubble-card",
+                      card_type = "button",
+                      name = e.function.name,
+                      icon = "mdi:heating-coil",
+                      entity = lib.entity_id "climate" e.name,
+                    }
                   )
                 in
-                fcus_buttons @ floor_heating_buttons,
+                let graph = {
+                  type = "custom:mini-graph-card",
+                  name =
+                    if floor_heating == [] then
+                      "AC temperature"
+                    else
+                      "Thermostat temperature",
+                  entities = [
+                    {
+                      entity =
+                        floor_heating
+                        |> std.array.at_or 0 (std.array.first fcus)
+                        |> std.record.get "name"
+                        |> lib.entity_id "climate",
+                      attribute = "current_temperature",
+                    }
+                  ],
+                  hours_to_show = 48,
+                  points_per_hour = 4,
+                  hour24 = true,
+                  min_bound_range = 6.0,
+                  line_color = "#ff6b35",
+                  line_width = 3,
+                  show = {
+                    fill = "fade",
+                  },
+                }
+                in
+                fcus_buttons @ floor_heating_buttons @ [graph],
             },
           ]
         )
