@@ -98,7 +98,7 @@ let lib = import "../../../lib.ncl" in
                             attribute = "current_temperature",
                           }
                         ],
-                        hours_to_show = 24,
+                        hours_to_show = 48,
                         points_per_hour = 4,
                         hour24 = true,
                         min_bound_range = 6.0,
