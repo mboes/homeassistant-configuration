@@ -100,6 +100,8 @@ let lib = import "../../../lib.ncl" in
                         ],
                         hours_to_show = 24,
                         points_per_hour = 4,
+                        hour24 = true,
+                        min_bound_range = 10.0,
                         line_color = "#ff6b35",
                         line_width = 3,
                         show = {
