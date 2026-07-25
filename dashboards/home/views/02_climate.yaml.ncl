@@ -80,14 +80,32 @@ let lib = import "../../../lib.ncl" in
                 in
                 let floor_heating_buttons =
                   floor_heating
-                  |> std.array.map (fun e =>
-                    {
-                      type = "custom:bubble-card",
-                      card_type = "button",
-                      name = e.function.name,
-                      icon = "mdi:heating-coil",
-                      entity = lib.entity_id "climate" e.name,
-                    }
+                  |> std.array.flat_map (fun e =>
+                    [
+                      {
+                        type = "custom:bubble-card",
+                        card_type = "button",
+                        name = e.function.name,
+                        icon = "mdi:heating-coil",
+                        entity = lib.entity_id "climate" e.name,
+                      },
+                      {
+                        type = "custom:mini-graph-card",
+                        name = "Thermostat temperature",
+                        entities = {
+                          entity = lib.entity_id "climate" e.name,
+                          attribute = "current_temperature",
+                        },
+                        hours_to_show = 24,
+                        points_per_hour = 4,
+                        line_color = "#ff6b35",
+                        line_width = 3,
+                        show = {
+                          fill = "fade",
+                          labels = true,
+                        },
+                      },
+                    ]
                   )
                 in
                 fcus_buttons @ floor_heating_buttons,
