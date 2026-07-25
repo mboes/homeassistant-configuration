@@ -56,7 +56,22 @@ let lib = import "../../../lib.ncl" in
                     }
                   )
                 in
-                fcu_buttons @ floor_heating_buttons,
+                let current_temperature = {
+                  name = "Current temperature",
+                  icon = "mdi:home-thermometer",
+                  entity =
+                    floor_heating
+                    |> std.array.at_or 0 (std.array.first fcus)
+                    |> std.record.get "name"
+                    |> lib.entity_id "climate",
+                  show_name = false,
+                  show_icon = true,
+                  show_background = false,
+                  show_attribute = true,
+                  attribute = "current_temperature",
+                }
+                in
+                fcu_buttons @ floor_heating_buttons @ [current_temperature],
             },
             {
               type = "custom:bubble-card",
