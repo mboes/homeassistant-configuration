@@ -58,7 +58,7 @@ let lib = import "../../../lib.ncl" in
                 in
                 let current_temperature = {
                   name = "Current temperature",
-                  icon = "mdi:home-thermometer",
+                  icon = "mdi:thermometer",
                   entity =
                     floor_heating
                     |> std.array.at_or 0 (std.array.first fcus)
