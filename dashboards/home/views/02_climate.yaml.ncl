@@ -90,7 +90,7 @@ let lib = import "../../../lib.ncl" in
                       name = e.function.name,
                       icon = "mdi:air-conditioner",
                       entity = lib.entity_id "climate" e.name,
-		      button_action.tap_action.action = "more-info",
+                      button_action.tap_action.action = "more-info",
                     }
                   )
                 in
@@ -103,7 +103,7 @@ let lib = import "../../../lib.ncl" in
                       name = e.function.name,
                       icon = "mdi:heating-coil",
                       entity = lib.entity_id "climate" e.name,
-		      button_action.tap_action.action = "more-info",
+                      button_action.tap_action.action = "more-info",
                     }
                   )
                 in
