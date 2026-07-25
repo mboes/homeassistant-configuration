@@ -71,7 +71,7 @@ let lib = import "../../../lib.ncl" in
                   |> std.array.map (fun e =>
                     {
                       type = "custom:bubble-card",
-                      card_type = "button",
+                      card_type = "climate",
                       name = e.function.name,
                       icon = "mdi:air-conditioner",
                       entity = lib.entity_id "climate" e.name,
@@ -83,7 +83,7 @@ let lib = import "../../../lib.ncl" in
                   |> std.array.map (fun e =>
                     {
                       type = "custom:bubble-card",
-                      card_type = "button",
+                      card_type = "climate",
                       name = e.function.name,
                       icon = "mdi:heating-coil",
                       entity = lib.entity_id "climate" e.name,
