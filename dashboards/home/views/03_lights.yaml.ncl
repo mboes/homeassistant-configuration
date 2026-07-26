@@ -2,6 +2,7 @@ let knx = import "../../../knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
 {
   title = "Lights",
+  icon = "mdi:lightbulb-variant",
   path = "lights",
   type = "sections",
   max_columns = 2,

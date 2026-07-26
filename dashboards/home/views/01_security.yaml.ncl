@@ -2,6 +2,7 @@ let knx = import "../../../knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
 {
   title = "Security",
+  icon = "mdi:shield",
   path = "security",
   type = "sections",
   max_columns = 2,

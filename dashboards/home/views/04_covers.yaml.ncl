@@ -2,6 +2,7 @@ let knx = import "../../../knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
 {
   title = "Covers",
+  icon = "mdi:weather-sunny",
   path = "covers",
   type = "sections",
   max_columns = 2,

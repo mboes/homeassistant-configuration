@@ -2,6 +2,7 @@ let knx = import "../../../knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
 {
   title = "Climate",
+  icon = "mdi:home-thermometer",
   path = "climate",
   type = "sections",
   max_columns = 2,

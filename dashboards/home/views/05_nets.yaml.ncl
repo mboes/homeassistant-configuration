@@ -2,6 +2,7 @@ let knx = import "../../../knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
 {
   title = "Nets",
+  icon = "mdi:bug",
   path = "nets",
   type = "sections",
   max_columns = 2,
