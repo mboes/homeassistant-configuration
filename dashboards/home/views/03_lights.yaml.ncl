@@ -6,39 +6,34 @@ let lib = import "../../../lib.ncl" in
   type = "sections",
   sections = [
     {
-      type = "vertical-stack",
+      type = "grid",
       cards = [
         {
-          type = "grid",
-          cards = [
-            {
-              type = "tile",
-              name = "House OFF",
-              entity = lib.entity_id "button" "//House/All lights",
-              icon = "mdi:lightbulb-multiple-off",
-            },
-            {
-              type = "tile",
-              name = "Exterior OFF",
-              entity = lib.entity_id "button" "//House/All lights exterior",
-              icon = "mdi:lightbulb-multiple-off",
-            },
-          ]
+          type = "tile",
+          name = "House OFF",
+          entity = lib.entity_id "button" "//House/All lights",
+          icon = "mdi:lightbulb-multiple-off",
         },
         {
-          type = "grid",
-          cards =
-            ["Basement", "Ground floor", "1st floor", "2nd floor"]
-            |> std.array.map (fun floor =>
-              {
-                type = "tile",
-                name = "%{floor} OFF",
-                entity = lib.entity_id "button" "//%{floor}/All lights",
-                icon = "mdi:lightbulb-multiple-off",
-              }
-            )
+          type = "tile",
+          name = "Exterior OFF",
+          entity = lib.entity_id "button" "//House/All lights exterior",
+          icon = "mdi:lightbulb-multiple-off",
         },
-      ],
+      ]
+    },
+    {
+      type = "grid",
+      cards =
+        ["Basement", "Ground floor", "1st floor", "2nd floor"]
+        |> std.array.map (fun floor =>
+          {
+            type = "tile",
+            name = "%{floor} OFF",
+            entity = lib.entity_id "button" "//%{floor}/All lights",
+            icon = "mdi:lightbulb-multiple-off",
+          }
+        )
     },
     {
       type = "grid",
