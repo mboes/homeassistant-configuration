@@ -2,9 +2,9 @@ template:
   - select:
       - name: "HVAC controller mode"
         icon: >
-          {{ {'Off': 'mdi:power',
-              'Heating': 'mdi:fire',
-              'Cooling': 'mdi:snowflake'}.get(this.state, 'mdi:hvac') }}
+          {{ {'Off': 'mdi:hvac-off',
+              'Heat': 'mdi:fire',
+              'Cool': 'mdi:snowflake'}.get(this.state, 'mdi:hvac') }}
         state: >
           {{ 'Off' if is_state('switch.hvac', 'off') else states('select.hvac_heat_cool') }}
         options: "{{ ['Off', 'Heat', 'Cool'] }}"
