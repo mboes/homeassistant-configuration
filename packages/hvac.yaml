@@ -7,6 +7,8 @@ template:
               'Cool': 'mdi:snowflake'}.get(this.state, 'mdi:hvac') }}
         state: >
           {{ 'Off' if is_state('switch.hvac', 'off') else states('select.hvac_heat_cool') }}
+        availability: >
+          {{ has_value('switch.hvac') and has_value('select.hvac_heat_cool') }}
         options: "{{ ['Off', 'Heat', 'Cool'] }}"
         select_option:
           - if: "{{ option == 'Off' }}"
