@@ -12,11 +12,13 @@ let lib = import "../../../lib.ncl" in
           type = "tile",
           name = "House OFF",
           entity = lib.entity_id "button" "//House/All lights",
+          icon = "mdi:lightbulb-multiple-off",
         },
         {
           type = "tile",
           name = "Exterior OFF",
           entity = lib.entity_id "button" "//House/All lights exterior",
+          icon = "mdi:lightbulb-multiple-off",
         },
       ]
     },
@@ -29,6 +31,7 @@ let lib = import "../../../lib.ncl" in
             type = "tile",
             name = "%{floor} OFF",
             entity = lib.entity_id "button" "//%{floor}/All lights",
+            icon = "mdi:lightbulb-multiple-off",
           }
         )
     },
