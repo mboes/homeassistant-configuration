@@ -440,14 +440,22 @@ knx.merge [
 
   # Garage gate
   {
-    switch =
-      select
+    button =
+      select_flatten
         (knx.and (knx.location_is "Garage") (knx.name_is "Gate"))
-        (fun f =>
-          {
-            address = f.group_addresses.Switching,
-            state_address = f.group_addresses.Status,
-          }
+        (fun f => # Can't sense the state so have two buttons instead of a switch.
+          [
+            {
+              name = "//Garage/Gate/CLOSED",
+              address = f.group_addresses.Switching,
+              payload = 0,
+            },
+            {
+              name = "//Garage/Gate/OPEN",
+              address = f.group_addresses.Switching,
+              payload = 1,
+            },
+          ]
         ),
   },
 

@@ -11,8 +11,8 @@ let lib = import "../../../lib.ncl" in
       cards = [
         {
           type = "alarm-panel",
-          entity = "alarm_control_panel.intrusion_alarm",
           name = "Intrusion alarm",
+          entity = "alarm_control_panel.intrusion_alarm",
         }
       ],
     },
@@ -21,13 +21,21 @@ let lib = import "../../../lib.ncl" in
       cards = [
         {
           type = "tile",
-          entity = lib.entity_id "switch" "//Garage/Door",
-          name = "Garage door",
+          name = "Garage gate CLOSED",
+          entity = lib.entity_id "button" "//Garage/Gate/CLOSED",
+          icon = "mdi:gate",
         },
         {
           type = "tile",
-          entity = lib.entity_id "switch" "//Garage/Gate",
-          name = "Garage gate",
+          name = "Garage gate OPEN",
+          entity = lib.entity_id "button" "//Garage/Gate/OPEN",
+          icon = "mdi:gate-open",
+        },
+        {
+          type = "tile",
+          name = "Garage door",
+          entity = lib.entity_id "switch" "//Garage/Door",
+          icon = "mdi:garage-variant",
         },
       ]
     },
