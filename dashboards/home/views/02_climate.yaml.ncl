@@ -41,7 +41,7 @@ let lib = import "../../../lib.ncl" in
           type = "tile",
           name = "Domestic hot water",
           entity = lib.entity_id "switch" "//Domestic hot water",
-          icon = "mdi:drop",
+          icon = "mdi:water-thermometer",
         },
       ]
     },
