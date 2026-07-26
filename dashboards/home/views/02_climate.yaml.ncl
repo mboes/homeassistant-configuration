@@ -4,6 +4,7 @@ let lib = import "../../../lib.ncl" in
   title = "Climate",
   path = "climate",
   type = "sections",
+  max_columns = 2,
   sections = [
     {
       type = "custom:vertical-stack-in-card",

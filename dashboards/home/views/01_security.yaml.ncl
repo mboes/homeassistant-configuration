@@ -4,6 +4,7 @@ let lib = import "../../../lib.ncl" in
   title = "Security",
   path = "security",
   type = "sections",
+  max_columns = 2,
   sections = [
     {
       type = "grid",
