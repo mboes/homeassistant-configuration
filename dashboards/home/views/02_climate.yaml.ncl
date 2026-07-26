@@ -31,6 +31,22 @@ let lib = import "../../../lib.ncl" in
     },
     {
       type = "grid",
+      cards = [
+        {
+          type = "tile",
+          name = "HVAC controller mode",
+          entity = lib.entity_id "select" "//HVAC controller mode",
+        },
+        {
+          type = "tile",
+          name = "Domestic hot water",
+          entity = lib.entity_id "switch" "//Domestic hot water",
+          icon = "mdi:drop",
+        },
+      ]
+    },
+    {
+      type = "grid",
       columns = 2,
       cards =
         knx.climate

@@ -163,7 +163,7 @@ knx.merge [
         (fun f =>
           [
             {
-              name = "//Climate control",
+              name = "//HVAC",
               address = f.group_addresses.Switching,
             },
             {
@@ -178,7 +178,7 @@ knx.merge [
         (fun f =>
           [
             {
-              name = "//Climate control mode",
+              name = "//HVAC heat cool",
               address = f.group_addresses.Heating,
               payload_length = 0,
               options = [
