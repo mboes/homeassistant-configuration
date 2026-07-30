@@ -1,12 +1,17 @@
 let knx = import "../knx.yaml.ncl" in
 let lib = import "../lib.ncl" in
+let contacts_by_location =
+  knx.binary_sensor
+  |> std.array.filter (fun e => std.string.is_match "/Contact$" e.name)
+  |> lib.group (fun e => e.function.location)
+in
 let locks =
   knx.switch
-  |> std.array.filter (fun r => std.string.is_match "/Lock$" r.name)
-  |> std.array.map (fun r =>
-    let switch_id = lib.entity_id "switch" r.name in
+  |> std.array.filter (fun e => std.string.is_match "/Lock$" e.name)
+  |> std.array.map (fun e =>
+    let switch_id = lib.entity_id "switch" e.name in
     {
-      name = r.name,
+      name = e.name,
       state = "{{ is_state('%{switch_id}', 'off') }}",
       lock = [
         {
@@ -20,9 +25,38 @@ let locks =
           target = { entity_id = switch_id }
         }
       ],
+      function | not_exported = e.function,
     }
   )
 in
 {
   template = [{ lock = locks }],
+  automation =
+    locks
+    |> std.array.map (fun e =>
+      {
+        alias = "Unlock if open - %{e.name}",
+        triggers = {
+          trigger = "state",
+          entity_id =
+            contacts_by_location."%{e.function.location}"
+            |> std.array.map (fun e => lib.entity_id "lock" e.name),
+          to = "on",
+          for.minutes = 1,
+        },
+        conditions = [
+          {
+            condition = "state",
+            entity_id = lib.entity_id "lock" e.name,
+            state = "locked",
+          },
+        ],
+        actions = [
+          {
+            action = "lock.unlock",
+            target.entity_id = lib.entity_id "lock" e.name,
+          },
+        ]
+      }
+    )
 }
