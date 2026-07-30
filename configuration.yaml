@@ -24,3 +24,10 @@ lovelace:
       show_in_sidebar: true
       require_admin: false
       filename: dashboards/home/dashboard.yaml
+    analytics:
+      mode: yaml
+      title: Analytics
+      icon: mdi:view-dashboard
+      show_in_sidebar: true
+      require_admin: true
+      filename: dashboards/analytics/dashboard.yaml
