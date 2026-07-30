@@ -4,7 +4,7 @@ let with_separator = fun name =>
   std.array.prepend {
     type = "custom:bubble-card",
     card_type = "separator",
-    name = "Contacts",
+    include name,
   }
 in
 {

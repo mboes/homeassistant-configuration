@@ -27,7 +27,7 @@ lovelace:
     house-analytics:
       mode: yaml
       title: Analytics
-      icon: mdi:view-dashboard
+      icon: mdi:chart-line
       show_in_sidebar: true
       require_admin: true
       filename: dashboards/analytics/dashboard.yaml
