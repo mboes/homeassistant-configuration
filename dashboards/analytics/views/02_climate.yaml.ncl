@@ -1,0 +1,47 @@
+let knx = import "../../../knx.yaml.ncl" in
+let lib = import "../../../lib.ncl" in
+let with_separator = fun name =>
+  std.array.prepend {
+    type = "custom:bubble-card",
+    card_type = "separator",
+    include name,
+  }
+in
+{
+  title = "Climate",
+  icon = "mdi:home-thermometer",
+  show_icon_and_title = true,
+  sections = [
+    {
+      type = "grid",
+      cards =
+        with_separator
+          "Temperature probes"
+          (
+            knx.climate
+            |> lib.sort_by_floor
+            |> std.array.map (fun e =>
+              {
+                type = "custom:mini-graph-card",
+                name = e.name,
+                entities = [
+                  {
+                    entity = lib.entity_id "climate" e.name,
+                    attribute = "current_temperature",
+                  }
+                ],
+                hours_to_show = 96,
+                points_per_hour = 1,
+                hour24 = true,
+                min_bound_range = 6.0,
+                line_color = "#ff6b35",
+                line_width = 3,
+                show = {
+                  fill = "fade",
+                },
+              }
+            )
+          )
+    },
+  ],
+}
