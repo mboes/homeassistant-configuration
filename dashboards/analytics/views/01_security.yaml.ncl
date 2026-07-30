@@ -14,7 +14,6 @@ in
   sections = [
     {
       type = "grid",
-      columns = 1,
       cards =
         with_separator
           "Contacts"
@@ -27,6 +26,23 @@ in
                 |> lib.sort_by_floor
                 |> std.array.filter (fun e => std.string.is_match "/Contact$" e.name)
                 |> std.array.map (fun e => lib.entity_id "binary_sensor" e.name),
+            }
+          ]
+    },
+    {
+      type = "grid",
+      cards =
+        with_separator
+          "Locks"
+          [
+            {
+              type = "history-graph",
+              hours_to_show = 96,
+              entities =
+                knx.switch
+                |> lib.sort_by_floor
+                |> std.array.filter (fun e => std.string.is_match "/Lock$" e.name)
+                |> std.array.map (fun e => lib.entity_id "lock" e.name),
             }
           ]
     },
