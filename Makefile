@@ -7,6 +7,9 @@ all: $(YAML_FILES)
 
 %.yaml: %.yaml.ncl
 	nickel export -fyaml -o $@ $<
+	@# Workaround Norway problem. See https://github.com/nickel-lang/nickel/issues/2481
+	@sed -i 's/: on$$/: "on"/' $@
+	@sed -i 's/: off$$/: "off"/' $@
 
 %.yaml: %.yaml.py
 	python3 $< -o $@
