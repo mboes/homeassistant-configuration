@@ -36,14 +36,16 @@ in
     |> std.array.map (fun e =>
       {
         alias = "Unlock if open - %{e.name}",
-        triggers = {
-          trigger = "state",
-          entity_id =
-            contacts_by_location."%{e.function.location}"
-            |> std.array.map (fun e => lib.entity_id "lock" e.name),
-          to = "on",
-          for.minutes = 1,
-        },
+        triggers = [
+          {
+            trigger = "state",
+            entity_id =
+              contacts_by_location."%{e.function.location}"
+              |> std.array.map (fun e => lib.entity_id "lock" e.name),
+            to = "on",
+            for.minutes = 1,
+          }
+        ],
         conditions = [
           {
             condition = "state",
