@@ -40,13 +40,14 @@ let lib = import "../lib.ncl" in
             alias = "Open blinds when %{source_roller.function.location} rollers are partially up",
             triggers = [
               {
-                trigger = "cover.shade_opened",
-                target.entity_id = lib.entity_id "cover" source_roller.name,
+                trigger = "state",
+                entity_id = lib.entity_id "cover" source_roller.name,
+                to = "opening",
               },
             ],
             actions = [
               {
-                action = "cover.set_cover_tilt",
+                action = "cover.set_cover_tilt_position",
                 target.entity_id = blinds |> std.array.map (fun e => lib.entity_id "cover" e.name),
                 data.tilt_position = 33,
               },
