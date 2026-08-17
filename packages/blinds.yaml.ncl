@@ -1,5 +1,7 @@
 let knx = import "../knx.yaml.ncl" in
 let lib = import "../lib.ncl" in
+# As measured.
+let blind_slats_open_position = 66 in
 {
   automation =
     knx.cover
@@ -49,7 +51,7 @@ let lib = import "../lib.ncl" in
               {
                 action = "cover.set_cover_tilt_position",
                 target.entity_id = blinds |> std.array.map (fun e => lib.entity_id "cover" e.name),
-                data.tilt_position = 66,
+                data.tilt_position = blind_slats_open_position,
               },
             ],
           },
