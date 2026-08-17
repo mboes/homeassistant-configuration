@@ -46,7 +46,7 @@ let lib = import "../lib.ncl" in
             ],
             actions = [
               {
-                action = "cover.close_cover_tilt",
+                action = "cover.set_cover_tilt",
                 target.entity_id = blinds |> std.array.map (fun e => lib.entity_id "cover" e.name),
                 data.tilt_position = 33,
               },
