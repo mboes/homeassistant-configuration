@@ -49,7 +49,7 @@ let lib = import "../lib.ncl" in
               {
                 action = "cover.set_cover_tilt_position",
                 target.entity_id = blinds |> std.array.map (fun e => lib.entity_id "cover" e.name),
-                data.tilt_position = 33,
+                data.tilt_position = 66,
               },
             ],
           },
