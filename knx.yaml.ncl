@@ -122,6 +122,7 @@ knx.merge [
             move_long_address = f.group_addresses.Movement,
             move_short_address = f.group_addresses."Step/Stop",
             position_address = f.group_addresses."blinds position",
+            device_class = "shade",
           }
         ),
   },
@@ -137,6 +138,7 @@ knx.merge [
             move_short_address = f.group_addresses."Step/Stop",
             position_address = f.group_addresses."blinds position",
             angle_address = f.group_addresses."slat position",
+            device_class = "blind",
           }
         ),
   },
@@ -215,6 +217,7 @@ knx.merge [
           {
             name = "//%{f.location}/%{f.name}/Contact",
             state_address = f.group_addresses.Status,
+            device_class = "window",
           }
         ),
   },
@@ -228,6 +231,7 @@ knx.merge [
           {
             name = "//%{f.location}/%{f.name}/Contact",
             state_address = f.group_addresses.Status,
+            device_class = "door",
           }
         ),
   },
@@ -241,6 +245,7 @@ knx.merge [
           {
             name = "//%{f.location}/%{f.name}/Contact",
             state_address = f.group_addresses.Status,
+            device_class = "window",
           }
         ),
     cover =
@@ -251,6 +256,7 @@ knx.merge [
             move_long_address = f.group_addresses.Movement,
             move_short_address = f.group_addresses."Step/Stop",
             position_address = f.group_addresses."Position",
+            device_class = "window",
           }
         ),
   },
@@ -264,6 +270,7 @@ knx.merge [
           {
             name = "//%{f.location}/%{f.name}/Contact",
             state_address = f.group_addresses.Status,
+            device_class = "window",
           }
         ),
     switch =
@@ -343,14 +350,17 @@ knx.merge [
             {
               name = "//Intrusion alarm",
               state_address = f.group_addresses."Intrusion alarm status",
+              device_class = "problem",
             },
             {
               name = "//Fire alarm",
               state_address = f.group_addresses."Fire alarm status",
+              device_class = "problem",
             },
             {
               name = "//Panic alarm",
               state_address = f.group_addresses."Panic alarm status",
+              device_class = "problem",
             },
           ]
         ),
@@ -365,6 +375,7 @@ knx.merge [
           {
             name = "//BMS Alarm",
             state_address = f.group_addresses."Alarm status",
+            device_class = "problem",
           }
         ),
   },
@@ -379,10 +390,12 @@ knx.merge [
             {
               name = "//UPS battery",
               state_address = f.group_addresses."Battery status",
+              device_class = "running",
             },
             {
               name = "//UPS alarm",
               state_address = f.group_addresses."Alarm status",
+              device_class = "problem",
             },
           ]
         ),
@@ -396,6 +409,7 @@ knx.merge [
         (fun f =>
           {
             state_address = f.group_addresses.Status,
+            device_class = "motion",
           }
         ),
   },
@@ -408,6 +422,7 @@ knx.merge [
         (fun f =>
           {
             state_address = f.group_addresses.Status,
+            device_class = "problem",
           }
         ),
   },
