@@ -31,3 +31,7 @@ lovelace:
       show_in_sidebar: true
       require_admin: true
       filename: dashboards/analytics/dashboard.yaml
+
+recorder:
+  purge_keep_days: 14
+  commit_interval: 10
