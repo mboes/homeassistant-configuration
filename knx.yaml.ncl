@@ -493,4 +493,21 @@ knx.merge [
           }
         ),
   },
+
+  # Irrigation
+  {
+    switch =
+      # XXX hardcoded addresses for now.
+      std.array.range 1 54
+      |> std.array.map (fun x =>
+        let switching_address = "1/5/%{x}" in
+        let status_address = "7/5/%{x}" in
+        {
+          name = "//Irrigation/%{x}/switch",
+          address = switching_address,
+          state_address = status_address,
+          function | not_exported = { location = "House", },
+        }
+      )
+  },
 ]
