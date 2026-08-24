@@ -2,7 +2,7 @@ let knx = import "../knx.yaml.ncl" in
 let lib = import "../lib.ncl" in
 {
   template =
-    std.array.range 1 53
+    std.array.range 1 54
     |> std.array.map (fun x =>
       let group_address = "1/5/%{x}" in
       {
