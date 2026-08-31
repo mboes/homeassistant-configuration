@@ -321,6 +321,19 @@ knx.merge [
         ),
   },
 
+  # Switchable sockets
+  {
+    switch =
+      select
+        (knx.name_contains "switchable socket")
+        (fun f =>
+          {
+            address = f.group_addresses.Switching,
+            state_address = f.group_addresses.Status,
+          }
+        ),
+  },
+
   # Alarm
   {
     switch =
@@ -402,7 +415,7 @@ knx.merge [
             {
               name = "//UPS battery",
               state_address = f.group_addresses."Battery status",
-              device_class = "running",
+              device_class = "battery",
             },
             {
               name = "//UPS alarm",
