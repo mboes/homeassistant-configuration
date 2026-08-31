@@ -13,7 +13,15 @@ let lib = import "../../../lib.ncl" in
         knx.switch
         |> std.array.filter (fun e => std.string.is_match "/Irrigation\\b" e.name)
         |> lib.sort_by_floor
-        |> lib.chunk (fun e => e.function.location)
+        |> lib.group (fun e =>
+          std.string.find "(Area [0-9]|gym)" e.function.name
+          |> match {
+            { index, .. } if index < 0 => e.function.location,
+            { matched, .. } => std.string.join " " [e.function.location, "(%{matched})"],
+          }
+        )
+        |> std.record.map (fun location => std.array.map (fun e => std.record.update "function" (std.record.update "location" location e.function) e))
+        |> std.record.values
         |> std.array.flat_map (fun taps =>
           let location = (std.array.first taps).function.location in
           let floor = (std.array.first taps).function.floor in
@@ -27,7 +35,7 @@ let lib = import "../../../lib.ncl" in
               show_icon = false,
               button_action.tap_action = {
                 action = "navigate",
-                navigation_path = "#%{std.string.replace_regex "\\s+" "_" location}",
+                navigation_path = "#%{std.string.replace_regex "(\\s|\\(|\\))+" "_" location}",
               },
               sub_button =
                 taps
@@ -42,7 +50,7 @@ let lib = import "../../../lib.ncl" in
             {
               type = "custom:bubble-card",
               card_type = "pop-up",
-              hash = "#%{std.string.replace_regex "\\s+" "_" location}",
+              hash = "#%{std.string.replace_regex "(\\s|\\(|\\))+" "_" location}",
               name = location,
               include floor | not_exported,
               icon = "mdi:sprinkler",
