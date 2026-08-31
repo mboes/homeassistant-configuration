@@ -516,6 +516,19 @@ knx.merge [
 
   # Irrigation
   {
+    switch =
+      select
+        (knx.name_contains "Irrigation")
+        (fun f =>
+          {
+            address = f.group_addresses.Switching,
+            state_address = f.group_addresses.Status,
+          }
+        ),
+  },
+
+  # Irrigation (tmp)
+  {
     # XXX Can't set sync_state on switch, so use binary_sensor for now
     binary_sensor =
       # XXX hardcoded addresses for now.
