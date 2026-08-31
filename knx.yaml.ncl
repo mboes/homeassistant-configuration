@@ -164,29 +164,14 @@ knx.merge [
 
   # Climate control mode
   {
-    switch =
-      select_flatten
-        (knx.name_is "Climate control mode")
-        (fun f =>
-          [
-            {
-              name = "//HVAC",
-              address = f.group_addresses.Switching,
-            },
-            {
-              name = "//Domestic hot water",
-              address = f.group_addresses."Domestic hot water",
-            },
-          ]
-        ),
     select =
       select_flatten
-        (knx.name_is "Climate control mode")
+        (knx.name_is "Heating/Cooling")
         (fun f =>
           [
             {
               name = "//HVAC heat cool",
-              address = f.group_addresses.Heating,
+              address = f.group_addresses.Mode,
               payload_length = 0,
               options = [
                 { option = "Heat", payload = 1 },
@@ -194,6 +179,19 @@ knx.merge [
               ],
             },
           ]
+        ),
+  },
+
+  # Domestic hot water
+  {
+    switch =
+      select
+        (knx.name_is "Domestic hot water")
+        (fun f =>
+          {
+            name = "//Domestic hot water",
+            address = f.group_addresses.Switching,
+          }
         ),
   },
 
@@ -373,6 +371,15 @@ knx.merge [
 
   # BMS
   {
+    switch =
+      select
+        (knx.name_is "BMS")
+        (fun f =>
+          {
+            name = "//BMS",
+            address = f.group_addresses.Switching
+          }
+        ),
     binary_sensor =
       select
         (knx.name_is "BMS")
