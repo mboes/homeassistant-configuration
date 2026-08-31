@@ -44,6 +44,11 @@ let lib = import "../../../lib.ncl" in
           entity = lib.entity_id "switch" "//Domestic hot water",
           icon = "mdi:water-thermometer",
         },
+        {
+          type = "tile",
+          name = "BMS",
+          entity = lib.entity_id "binary_sensor" "//BMS alarm",
+        },
       ]
     },
     {
