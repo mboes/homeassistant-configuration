@@ -45,7 +45,7 @@ let lib = import "../../../lib.ncl" in
               hash = "#%{std.string.replace_regex "\\s+" "_" location}",
               name = location,
               include floor | not_exported,
-              icon = "mdi:weather-sunny",
+              icon = "mdi:bug",
               cards =
                 nets
                 |> std.array.map (fun e =>
