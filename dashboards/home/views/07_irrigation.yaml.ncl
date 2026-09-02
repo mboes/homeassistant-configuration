@@ -14,10 +14,10 @@ let lib = import "../../../lib.ncl" in
         |> std.array.filter (fun e => std.string.is_match "/Irrigation\\b" e.name)
         |> lib.sort_by_floor
         |> lib.group (fun e =>
-          std.string.find "(Area [0-9]|gym)" e.function.name
+          std.string.find "(\\(Area [0-9] - .*\\))" e.function.name
           |> match {
             { index, .. } if index < 0 => e.function.location,
-            { matched, .. } => std.string.join " " [e.function.location, "(%{matched})"],
+            { matched, .. } => std.string.join " " [e.function.location, matched],
           }
         )
         |> std.record.map (fun location => std.array.map (fun e => std.record.update "function" (std.record.update "location" location e.function) e))
