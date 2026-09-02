@@ -47,6 +47,11 @@ let lib = import "../../../lib.ncl" in
         {
           type = "tile",
           name = "BMS",
+          entity = lib.entity_id "switch" "//BMS",
+        },
+        {
+          type = "tile",
+          name = "BMS alarm",
           entity = lib.entity_id "binary_sensor" "//BMS alarm",
         },
       ]
