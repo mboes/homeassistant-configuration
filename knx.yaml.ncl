@@ -124,9 +124,9 @@ knx.merge [
             move_long_address = f.group_addresses.Movement,
             move_short_address = f.group_addresses."Step/Stop",
             position_address = f.group_addresses."blinds position",
-            # Provisions should be considered instantanous.
-            travelling_time_down = if std.string.contains "(provision)" f.name then 0 else rollers_travelling_time,
-            travelling_time_up = if std.string.contains "(provision)" f.name then 0 else rollers_travelling_time,
+            # Provisions should be considered near instantanous.
+            travelling_time_down = if std.string.contains "(provision)" f.name then 1 else rollers_travelling_time,
+            travelling_time_up = if std.string.contains "(provision)" f.name then 1 else rollers_travelling_time,
             device_class = "shade",
           }
         ),
