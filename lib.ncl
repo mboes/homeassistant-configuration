@@ -54,7 +54,7 @@
       |> std.array.map (fun ys => { field = f (std.array.first ys), value = ys })
       |> std.record.from_array,
 
-  sort_by_floor =
+  sort_by_floor = fun entities =>
     let cfg = import "knx-model.yaml" in
     let floor_index = {
       "Basement" = -1,
@@ -80,11 +80,8 @@
         location_to_floor_index."%{e1.function.location}"
         location_to_floor_index."%{e2.function.location}"
     in
-    std.array.reduce_right
-      std.function.compose
-      [
-        std.array.sort compare_floors,
-        std.array.sort compare_locations,
-        std.array.map (fun e => e & { function.floor = location_to_floor."%{e.function.location}" }),
-      ]
+    entities
+    |> std.array.map (fun e => e & { function.floor = location_to_floor."%{e.function.location}" })
+    |> std.array.sort compare_locations
+    |> std.array.sort compare_floors
 }
