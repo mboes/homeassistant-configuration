@@ -5,7 +5,7 @@ PACKAGE_YAML_FILES := $(filter ./packages/%.yaml,$(YAML_FILES))
 
 all: $(YAML_FILES)
 
-%.yaml: %.yaml.ncl
+%.yaml: %.yaml.ncl lib.ncl
 	nickel export -fyaml -o $@ $<
 	@# Workaround Norway problem. See https://github.com/nickel-lang/nickel/issues/2481
 	@sed -i -E 's/: ([Oo]n|[Oo]ff)$$/: "\1"/g' $@
