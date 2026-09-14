@@ -1,3 +1,4 @@
+let cfg = import "knx-model.yaml" in
 {
   entity_id = fun domain name =>
     let slug =
@@ -55,7 +56,6 @@
       |> std.record.from_array,
 
   sort_by_floor = fun entities =>
-    let cfg = import "knx-model.yaml" in
     let floor_index = {
       "Basement" = -1,
       "Ground floor" = 0,
