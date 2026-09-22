@@ -41,7 +41,7 @@ in
             trigger = "state",
             entity_id =
               contacts_by_location."%{e.function.location}"
-              |> std.array.map (fun e => lib.entity_id "lock" e.name),
+              |> std.array.map (fun e => lib.entity_id "binary_sensor" e.name),
             to = "on",
             for.minutes = 1,
           }
