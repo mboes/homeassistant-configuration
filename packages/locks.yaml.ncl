@@ -2,7 +2,7 @@ let knx = import "../knx.yaml.ncl" in
 let lib = import "../lib.ncl" in
 let contacts_by_location =
   knx.binary_sensor
-  |> std.array.filter (fun e => std.string.is_match "/Contact$" e.name)
+  |> std.array.filter (fun e => std.string.is_match "/Sliding window.*/Contact$" e.name)
   |> lib.group (fun e => e.function.location)
 in
 let locks =
