@@ -526,21 +526,4 @@ knx.merge [
           }
         ),
   },
-
-  # Irrigation (tmp)
-  {
-    # XXX Can't set sync_state on switch, so use binary_sensor for now
-    binary_sensor =
-      # XXX hardcoded addresses for now.
-      std.array.range 1 54
-      |> std.array.map (fun x =>
-        let status_address = "7/5/%{x}" in
-        {
-          name = "//Irrigation/%{x}/status",
-          state_address = status_address,
-          sync_state = "every 1",
-          function | not_exported = { location = "House", },
-        }
-      )
-  },
 ]
