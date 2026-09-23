@@ -12,8 +12,10 @@ let lib = import "../../../lib.ncl" in
           type = "history-graph",
           hours_to_show = 96,
           entities =
-            std.array.range 1 54
-            |> std.array.map (fun x => lib.entity_id "binary_sensor" "//Irrigation/%{x}")
+            knx.switch
+            |> lib.sort_by_floor
+            |> std.array.filter (fun e => std.string.is_match "/Irrigation" e.name)
+            |> std.array.map (fun e => lib.entity_id "switch" e.name),
         }
       ]
     },
