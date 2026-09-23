@@ -47,10 +47,10 @@ let buttons = import "buttons.ncl" in
             'None
           else
             'Some [
-              buttons.dashboard_button {
+              buttons.dashboard_button & {
                 include location,
                 include floor,
-                sub_buttons =
+                sub_button =
                   relays
                   |> std.array.map (fun e =>
                     {
@@ -60,14 +60,14 @@ let buttons = import "buttons.ncl" in
                     }
                   ),
               },
-              buttons.dashboard_popup {
+              buttons.dashboard_popup & {
                 include location,
                 include floor,
                 icon = "mdi:lightning-bolt",
                 cards =
                   relays
                   |> std.array.map (fun e =>
-                    buttons.popup_button {
+                    buttons.popup_button & {
                       name = e.function.name,
                       icon = e.icon,
                       entity = lib.entity_id "switch" e.name,
