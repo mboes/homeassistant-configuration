@@ -30,17 +30,21 @@ let lib = import "../../../lib.ncl" in
         |> lib.chunk (fun e => e.function.location)
         |> std.array.filter_map (fun entities =>
           let sockets =
-            entities |> std.array.filter (fun e => std.string.is_match "/Switchable socket\\b" e.name)
+            entities
+            |> std.array.filter (fun e => std.string.is_match "/Switchable socket\\b" e.name)
+            |> std.array.map (fun e => e & { icon = "mdi:power-socket-fr" })
           in
           let towel_heaters =
-            entities |> std.array.filter (fun e => std.string.is_match "/Towel heater\\b" e.name)
+            entities
+            |> std.array.filter (fun e => std.string.is_match "/Towel heater\\b" e.name)
+            |> std.array.map (fun e => e & { icon = "mdi:heat-wave" })
           in
           let relays = sockets @ towel_heaters in
+          let location = (std.array.first relays).function.location in
+          let floor = (std.array.first relays).function.floor in
           if relays == [] then
             'None
           else
-            let location = (std.array.first relays).function.location in
-            let floor = (std.array.first relays).function.floor in
             'Some [
               {
                 type = "custom:bubble-card",
@@ -54,27 +58,14 @@ let lib = import "../../../lib.ncl" in
                   navigation_path = "#%{std.string.replace_regex "\\s+" "_" location}",
                 },
                 sub_button =
-                  std.array.concat
-                    (
-                      towel_heaters
-                      |> std.array.map (fun e =>
-                        {
-                          name = e.function.name,
-                          icon = "mdi:heat-wave",
-                          entity = lib.entity_id "switch" e.name,
-                        }
-                      )
-                    )
-                    (
-                      sockets
-                      |> std.array.map (fun e =>
-                        {
-                          name = e.function.name,
-                          icon = "mdi:power-socket-fr",
-                          entity = lib.entity_id "switch" e.name,
-                        }
-                      )
-                    )
+                  relays
+                  |> std.array.map (fun e =>
+                    {
+                      name = e.function.name,
+                      icon = e.icon,
+                      entity = lib.entity_id "switch" e.name,
+                    }
+                  )
               },
               {
                 type = "custom:bubble-card",
@@ -84,33 +75,17 @@ let lib = import "../../../lib.ncl" in
                 include floor | not_exported,
                 icon = "mdi:lightning-bolt",
                 cards =
-                  std.array.concat
-                    (
-                      towel_heaters
-                      |> std.array.map (fun e =>
-                        {
-                          type = "custom:bubble-card",
-                          card_type = "button",
-                          name = e.function.name,
-                          icon = "mdi:heat-wave",
-                          entity = lib.entity_id "switch" e.name,
-                          button_action.tap_action.action = "more-info",
-                        }
-                      )
-                    )
-                    (
-                      sockets
-                      |> std.array.map (fun e =>
-                        {
-                          type = "custom:bubble-card",
-                          card_type = "button",
-                          name = e.function.name,
-                          icon = "mdi:power-socket-fr",
-                          entity = lib.entity_id "switch" e.name,
-                          button_action.tap_action.action = "more-info",
-                        }
-                      )
-                    )
+                  relays
+                  |> std.array.map (fun e =>
+                    {
+                      type = "custom:bubble-card",
+                      card_type = "button",
+                      name = e.function.name,
+                      icon = e.icon,
+                      entity = lib.entity_id "switch" e.name,
+                      button_action.tap_action.action = "more-info",
+                    }
+                  )
               },
             ]
         )

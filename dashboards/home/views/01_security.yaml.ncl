@@ -58,8 +58,9 @@ let lib = import "../../../lib.ncl" in
               entities
               |> std.array.filter (fun e => std.string.is_match "/Lock$" e.name),
           in
-          let location = (std.array.first contacts).function.location in
-          let floor = (std.array.first contacts).function.floor in
+          let security_entities = contacts @ locks in
+          let location = (std.array.first security_entities).function.location in
+          let floor = (std.array.first security_entities).function.floor in
           if contacts == [] then
             'None
           else
@@ -68,7 +69,7 @@ let lib = import "../../../lib.ncl" in
                 type = "custom:bubble-card",
                 card_type = "button",
                 button_type = "name",
-                name = (std.array.first contacts).function.location,
+                name = location,
                 include floor | not_exported,
                 show_icon = false,
                 button_action.tap_action = {
