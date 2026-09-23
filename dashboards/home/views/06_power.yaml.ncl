@@ -1,5 +1,6 @@
 let knx = import "../../../knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
+let buttons = import "buttons.ncl" in
 {
   title = "Power",
   icon = "mdi:lightning-bolt",
@@ -46,18 +47,10 @@ let lib = import "../../../lib.ncl" in
             'None
           else
             'Some [
-              {
-                type = "custom:bubble-card",
-                card_type = "button",
-                button_type = "name",
-                name = location,
-                include floor | not_exported,
-                show_icon = false,
-                button_action.tap_action = {
-                  action = "navigate",
-                  navigation_path = "#%{std.string.replace_regex "\\s+" "_" location}",
-                },
-                sub_button =
+              buttons.dashboard_button {
+                include location,
+                include floor,
+                sub_buttons =
                   relays
                   |> std.array.map (fun e =>
                     {
@@ -65,25 +58,19 @@ let lib = import "../../../lib.ncl" in
                       icon = e.icon,
                       entity = lib.entity_id "switch" e.name,
                     }
-                  )
+                  ),
               },
-              {
-                type = "custom:bubble-card",
-                card_type = "pop-up",
-                hash = "#%{std.string.replace_regex "\\s+" "_" location}",
-                name = location,
-                include floor | not_exported,
+              buttons.dashboard_popup {
+                include location,
+                include floor,
                 icon = "mdi:lightning-bolt",
                 cards =
                   relays
                   |> std.array.map (fun e =>
-                    {
-                      type = "custom:bubble-card",
-                      card_type = "button",
+                    buttons.popup_button {
                       name = e.function.name,
                       icon = e.icon,
                       entity = lib.entity_id "switch" e.name,
-                      button_action.tap_action.action = "more-info",
                     }
                   )
               },
