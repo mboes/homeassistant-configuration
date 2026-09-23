@@ -53,7 +53,7 @@ let buttons = import "buttons.ncl" in
                 sub_button =
                   relays
                   |> std.array.map (fun e =>
-                    {
+                    buttons.dashboard_sub_button & {
                       name = e.function.name,
                       icon = e.icon,
                       entity = lib.entity_id "switch" e.name,

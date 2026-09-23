@@ -15,6 +15,12 @@
     styles | optional,
   },
 
+  dashboard_sub_button = {
+    name,
+    icon,
+    entity,
+  },
+
   dashboard_popup = {
     location | not_exported,
     floor | not_exported,
