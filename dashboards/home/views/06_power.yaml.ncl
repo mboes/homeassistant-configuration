@@ -26,56 +26,67 @@ let lib = import "../../../lib.ncl" in
       type = "grid",
       cards =
         knx.switch
-        |> std.array.filter (fun e => std.string.is_match "/Switchable socket\\b" e.name)
         |> lib.sort_by_floor
         |> lib.chunk (fun e => e.function.location)
-        |> std.array.flat_map (fun sockets =>
-          let location = (std.array.first sockets).function.location in
-          let floor = (std.array.first sockets).function.floor in
-          [
-            {
-              type = "custom:bubble-card",
-              card_type = "button",
-              button_type = "name",
-              name = location,
-              include floor | not_exported,
-              show_icon = false,
-              button_action.tap_action = {
-                action = "navigate",
-                navigation_path = "#%{std.string.replace_regex "\\s+" "_" location}",
+        |> std.array.filter_map (fun entities =>
+          let sockets =
+            entities |> std.array.filter (fun e => std.string.is_match "/Switchable socket\\b" e.name)
+          in
+          let towel_heaters =
+            entities |> std.array.filter (fun e => std.string.is_match "/Towel heater\\b" e.name)
+          in
+          let relays = std.array.concat sockets towel_heaters in
+          if relays == [] then
+            'None
+          else
+            let location = (std.array.first relays).function.location in
+            let floor = (std.array.first relays).function.floor in
+            let entity_icon = "mdi:power-socket-fr" in
+            'Some [
+              {
+                type = "custom:bubble-card",
+                card_type = "button",
+                button_type = "name",
+                name = location,
+                include floor | not_exported,
+                show_icon = false,
+                button_action.tap_action = {
+                  action = "navigate",
+                  navigation_path = "#%{std.string.replace_regex "\\s+" "_" location}",
+                },
+                sub_button =
+                  relays
+                  |> std.array.map (fun e =>
+                    {
+                      name = e.function.name,
+                      icon = entity_icon,
+                      entity = lib.entity_id "switch" e.name,
+                    }
+                  )
               },
-              sub_button =
-                sockets
-                |> std.array.map (fun e =>
-                  {
-                    name = e.function.name,
-                    icon = "mdi:power-socket-fr",
-                    entity = lib.entity_id "switch" e.name,
-                  }
-                )
-            },
-            {
-              type = "custom:bubble-card",
-              card_type = "pop-up",
-              hash = "#%{std.string.replace_regex "\\s+" "_" location}",
-              name = location,
-              include floor | not_exported,
-              icon = "mdi:lightning-bolt",
-              cards =
-                sockets
-                |> std.array.map (fun e =>
-                  {
-                    type = "custom:bubble-card",
-                    card_type = "button",
-                    name = e.function.name,
-                    icon = "mdi:power-socket-fr",
-                    entity = lib.entity_id "switch" e.name,
-                    button_action.tap_action.action = "more-info",
-                  }
-                )
-            },
-          ]
+              {
+                type = "custom:bubble-card",
+                card_type = "pop-up",
+                hash = "#%{std.string.replace_regex "\\s+" "_" location}",
+                name = location,
+                include floor | not_exported,
+                icon = "mdi:lightning-bolt",
+                cards =
+                  relays
+                  |> std.array.map (fun e =>
+                    {
+                      type = "custom:bubble-card",
+                      card_type = "button",
+                      name = e.function.name,
+                      icon = "mdi:power-socket-fr",
+                      entity = lib.entity_id "switch" e.name,
+                      button_action.tap_action.action = "more-info",
+                    }
+                  )
+              },
+            ]
         )
+        |> std.array.flatten
         |> lib.chunk (fun card => card.floor)
         |> std.array.map (fun cards =>
           cards
