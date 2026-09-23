@@ -35,13 +35,12 @@ let lib = import "../../../lib.ncl" in
           let towel_heaters =
             entities |> std.array.filter (fun e => std.string.is_match "/Towel heater\\b" e.name)
           in
-          let relays = std.array.concat sockets towel_heaters in
+          let relays = sockets @ towel_heaters in
           if relays == [] then
             'None
           else
             let location = (std.array.first relays).function.location in
             let floor = (std.array.first relays).function.floor in
-            let entity_icon = "mdi:power-socket-fr" in
             'Some [
               {
                 type = "custom:bubble-card",
@@ -55,14 +54,27 @@ let lib = import "../../../lib.ncl" in
                   navigation_path = "#%{std.string.replace_regex "\\s+" "_" location}",
                 },
                 sub_button =
-                  relays
-                  |> std.array.map (fun e =>
-                    {
-                      name = e.function.name,
-                      icon = entity_icon,
-                      entity = lib.entity_id "switch" e.name,
-                    }
-                  )
+                  std.array.concat
+                    (
+                      towel_heaters
+                      |> std.array.map (fun e =>
+                        {
+                          name = e.function.name,
+                          icon = "mdi:heat-wave",
+                          entity = lib.entity_id "switch" e.name,
+                        }
+                      )
+                    )
+                    (
+                      sockets
+                      |> std.array.map (fun e =>
+                        {
+                          name = e.function.name,
+                          icon = "mdi:power-socket-fr",
+                          entity = lib.entity_id "switch" e.name,
+                        }
+                      )
+                    )
               },
               {
                 type = "custom:bubble-card",
@@ -72,17 +84,33 @@ let lib = import "../../../lib.ncl" in
                 include floor | not_exported,
                 icon = "mdi:lightning-bolt",
                 cards =
-                  relays
-                  |> std.array.map (fun e =>
-                    {
-                      type = "custom:bubble-card",
-                      card_type = "button",
-                      name = e.function.name,
-                      icon = "mdi:power-socket-fr",
-                      entity = lib.entity_id "switch" e.name,
-                      button_action.tap_action.action = "more-info",
-                    }
-                  )
+                  std.array.concat
+                    (
+                      towel_heaters
+                      |> std.array.map (fun e =>
+                        {
+                          type = "custom:bubble-card",
+                          card_type = "button",
+                          name = e.function.name,
+                          icon = "mdi:heat-wave",
+                          entity = lib.entity_id "switch" e.name,
+                          button_action.tap_action.action = "more-info",
+                        }
+                      )
+                    )
+                    (
+                      sockets
+                      |> std.array.map (fun e =>
+                        {
+                          type = "custom:bubble-card",
+                          card_type = "button",
+                          name = e.function.name,
+                          icon = "mdi:power-socket-fr",
+                          entity = lib.entity_id "switch" e.name,
+                          button_action.tap_action.action = "more-info",
+                        }
+                      )
+                    )
               },
             ]
         )
