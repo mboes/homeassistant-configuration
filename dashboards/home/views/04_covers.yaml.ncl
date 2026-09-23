@@ -1,5 +1,6 @@
 let knx = import "../../../knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
+let buttons = import "buttons.ncl" in
 {
   title = "Covers",
   icon = "mdi:weather-sunny",
@@ -26,22 +27,16 @@ let lib = import "../../../lib.ncl" in
           let location = (std.array.first covers).function.location in
           let floor = (std.array.first covers).function.floor in
           [
-            {
-              type = "custom:bubble-card",
-              card_type = "button",
-              button_type = "name",
-              name = location,
-              include floor | not_exported,
-              show_icon = false,
-              button_action.tap_action = {
-                action = "navigate",
-                navigation_path = "#%{std.string.replace_regex "\\s+" "_" location}",
-              },
+            buttons.dashboard_button
+            & {
+              include location,
+              include floor,
               sub_button =
                 let roller_buttons =
                   rollers
                   |> std.array.map (fun e =>
-                    {
+                    buttons.dashboard_sub_button
+                    & {
                       name = e.function.name,
                       icon = "mdi:roller-shade",
                       entity = lib.entity_id "cover" e.name,
@@ -51,7 +46,8 @@ let lib = import "../../../lib.ncl" in
                 let blind_buttons =
                   blinds
                   |> std.array.map (fun e =>
-                    {
+                    buttons.dashboard_sub_button
+                    & {
                       name = e.function.name,
                       icon = "mdi:blinds-horizontal",
                       entity = lib.entity_id "cover" e.name,
@@ -60,37 +56,33 @@ let lib = import "../../../lib.ncl" in
                 in
                 blind_buttons @ roller_buttons,
             },
-            {
-              type = "custom:bubble-card",
-              card_type = "pop-up",
-              hash = "#%{std.string.replace_regex "\\s+" "_" location}",
-              name = location,
-              include floor | not_exported,
+            buttons.dashboard_popup
+            & {
+              include location,
+              include floor,
               icon = "mdi:weather-sunny",
               cards =
                 let roller_buttons =
                   rollers
                   |> std.array.map (fun e =>
-                    {
-                      type = "custom:bubble-card",
+                    buttons.popup_button
+                    & {
                       card_type = "cover",
                       name = e.function.name,
                       icon = "mdi:roller-shade",
                       entity = lib.entity_id "cover" e.name,
-                      button_action.tap_action.action = "more-info",
                     }
                   )
                 in
                 let blind_buttons =
                   blinds
                   |> std.array.map (fun e =>
-                    {
-                      type = "custom:bubble-card",
+                    buttons.popup_button
+                    & {
                       card_type = "cover",
                       name = e.function.name,
                       icon = "mdi:blinds-horizontal",
                       entity = lib.entity_id "cover" e.name,
-                      button_action.tap_action.action = "more-info",
                     }
                   )
                 in

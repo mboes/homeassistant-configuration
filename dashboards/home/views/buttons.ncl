@@ -17,7 +17,7 @@
 
   dashboard_sub_button = {
     name,
-    icon,
+    icon | optional,
     entity,
   },
 
@@ -34,9 +34,9 @@
 
   popup_button = {
     type = "custom:bubble-card",
-    card_type = "button",
+    card_type | default = "button",
     name,
-    icon,
+    icon | optional,
     entity,
     button_action.tap_action.action = "more-info",
   },

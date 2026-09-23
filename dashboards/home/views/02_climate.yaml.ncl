@@ -1,5 +1,6 @@
 let knx = import "../../../knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
+let buttons = import "buttons.ncl" in
 {
   title = "Climate",
   icon = "mdi:home-thermometer",
@@ -75,22 +76,16 @@ let lib = import "../../../lib.ncl" in
           let location = (std.array.first controllers).function.location in
           let floor = (std.array.first controllers).function.floor in
           [
-            {
-              type = "custom:bubble-card",
-              card_type = "button",
-              button_type = "name",
-              name = location,
-              include floor | not_exported,
-              show_icon = false,
-              button_action.tap_action = {
-                action = "navigate",
-                navigation_path = "#%{std.string.replace_regex "\\s+" "_" location}",
-              },
+            buttons.dashboard_button
+            & {
+              include floor,
+              include location,
               sub_button =
                 let floor_heating_buttons =
                   floor_heating
                   |> std.array.map (fun e =>
-                    {
+                    buttons.dashboard_sub_button
+                    & {
                       name = "Floor heating",
                       icon = "mdi:heating-coil",
                       entity = lib.entity_id "climate" e.name,
@@ -100,61 +95,60 @@ let lib = import "../../../lib.ncl" in
                 let fcu_buttons =
                   fcus
                   |> std.array.map (fun e =>
-                    {
+                    buttons.dashboard_sub_button
+                    & {
                       name = e.function.name,
                       icon = "mdi:air-conditioner",
                       entity = lib.entity_id "climate" e.name,
                     }
                   )
                 in
-                let current_temperature = {
-                  name = "Current temperature",
-                  icon = "mdi:thermometer",
-                  entity =
-                    floor_heating
-                    |> std.array.at_or 0 (std.array.first fcus)
-                    |> std.record.get "name"
-                    |> lib.entity_id "climate",
-                  show_name = false,
-                  show_icon = true,
-                  show_background = false,
-                  show_attribute = true,
-                  attribute = "current_temperature",
-                }
+                let current_temperature =
+                  buttons.dashboard_sub_button
+                  & {
+                    name = "Current temperature",
+                    icon = "mdi:thermometer",
+                    entity =
+                      floor_heating
+                      |> std.array.at_or 0 (std.array.first fcus)
+                      |> std.record.get "name"
+                      |> lib.entity_id "climate",
+                    show_name = false,
+                    show_icon = true,
+                    show_background = false,
+                    show_attribute = true,
+                    attribute = "current_temperature",
+                  }
                 in
                 fcu_buttons @ floor_heating_buttons @ [current_temperature],
             },
-            {
-              type = "custom:bubble-card",
-              card_type = "pop-up",
-              hash = "#%{std.string.replace_regex "\\s+" "_" location}",
-              name = location,
-              include floor | not_exported,
+            buttons.dashboard_popup
+            & {
+              include floor,
+              include location,
               icon = "mdi:home-thermometer",
               cards =
                 let fcus_buttons =
                   fcus
                   |> std.array.map (fun e =>
-                    {
-                      type = "custom:bubble-card",
+                    buttons.popup_button
+                    & {
                       card_type = "climate",
                       name = e.function.name,
                       icon = "mdi:air-conditioner",
                       entity = lib.entity_id "climate" e.name,
-                      button_action.tap_action.action = "more-info",
                     }
                   )
                 in
                 let floor_heating_buttons =
                   floor_heating
                   |> std.array.map (fun e =>
-                    {
-                      type = "custom:bubble-card",
+                    buttons.popup_button
+                    & {
                       card_type = "climate",
                       name = e.function.name,
                       icon = "mdi:heating-coil",
                       entity = lib.entity_id "climate" e.name,
-                      button_action.tap_action.action = "more-info",
                     }
                   )
                 in

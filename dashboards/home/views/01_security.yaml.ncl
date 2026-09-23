@@ -1,5 +1,6 @@
 let knx = import "../../../knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
+let buttons = import "buttons.ncl" in
 {
   title = "Security",
   icon = "mdi:shield",
@@ -65,23 +66,17 @@ let lib = import "../../../lib.ncl" in
             'None
           else
             'Some [
-              {
-                type = "custom:bubble-card",
-                card_type = "button",
-                button_type = "name",
-                name = location,
-                include floor | not_exported,
-                show_icon = false,
-                button_action.tap_action = {
-                  action = "navigate",
-                  navigation_path = "#%{std.string.replace_regex "\\s+" "_" location}",
-                },
+              buttons.dashboard_button
+              & {
+                include location,
+                include floor,
                 sub_button =
                   let
                     contact_buttons =
                       contacts
                       |> std.array.map (fun e =>
-                        {
+                        buttons.dashboard_sub_button
+                        & {
                           name = e.function.name,
                           icon =
                             if std.string.contains "Sliding" e.function.name then
@@ -99,7 +94,8 @@ let lib = import "../../../lib.ncl" in
                     lock_buttons =
                       locks
                       |> std.array.map (fun e =>
-                        {
+                        buttons.dashboard_sub_button
+                        & {
                           name = "Lock",
                           entity = lib.entity_id "lock" e.name,
                           tap_action = {
@@ -118,20 +114,17 @@ let lib = import "../../../lib.ncl" in
                 }
               "%,
               },
-              {
-                type = "custom:bubble-card",
-                card_type = "pop-up",
-                hash = "#%{std.string.replace_regex "\\s+" "_" location}",
-                name = location,
-                include floor | not_exported,
+              buttons.dashboard_popup
+              & {
+                include location,
+                include floor,
                 icon = "mdi:shield",
                 cards =
                   let contact_buttons =
                     contacts
                     |> std.array.map (fun e =>
-                      {
-                        type = "custom:bubble-card",
-                        card_type = "button",
+                      buttons.popup_button
+                      & {
                         name = e.function.name,
                         icon =
                           if std.string.contains "Sliding" e.function.name then
@@ -141,19 +134,16 @@ let lib = import "../../../lib.ncl" in
                           else
                             "mdi:window-closed-variant",
                         entity = lib.entity_id "binary_sensor" e.name,
-                        button_action.tap_action.action = "more-info",
                       }
                     )
                   in
                   let lock_buttons =
                     locks
                     |> std.array.map (fun e =>
-                      {
-                        type = "custom:bubble-card",
-                        card_type = "button",
+                      buttons.popup_button
+                      & {
                         name = e.function.name,
                         entity = lib.entity_id "lock" e.name,
-                        button_action.tap_action.action = "more-info",
                       }
                     )
                   in
