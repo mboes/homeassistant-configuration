@@ -49,7 +49,7 @@ let buttons = import "buttons.ncl" in
         |> lib.sort_by_floor
         # Already accounted for in garage section.
         |> std.array.filter (fun e => e.name != "//Garage/Door/Contact")
-        |> lib.chunk (fun e => e.function.location)
+        |> std.array.chunk (fun e => e.function.location)
         |> std.array.filter_map (fun entities =>
           let
             contacts =
@@ -152,7 +152,7 @@ let buttons = import "buttons.ncl" in
             ]
         )
         |> std.array.flatten
-        |> lib.chunk (fun card => card.floor)
+        |> std.array.chunk (fun card => card.floor)
         |> std.array.map (fun cards =>
           cards
           |> std.array.prepend {

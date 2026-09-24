@@ -11,50 +11,6 @@ let cfg = import "knx-model.yaml" in
     in
     "%{domain}.%{slug}",
 
-  chunk
-    : forall a k. (a -> k) -> Array a -> Array (Array a)
-    | Dyn -> Dyn -> Array std.array.NonEmpty
-    = fun f xs =>
-      xs
-      |> match {
-        [] => [],
-        _ =>
-          let op = fun { chunks, current_key, start, end } x =>
-            let x_key = f x in
-            if x_key != current_key then
-              let chunks = chunks |> std.array.append (%array/slice% start end xs) in
-              let start = end in
-              let end = end + 1 in
-              let current_key = x_key in
-              { include [chunks, current_key, start, end] }
-            else
-              let end = end + 1 in
-              { include [chunks, current_key, start, end] }
-          in
-          let init = {
-            chunks = [],
-            current_key = f (std.array.first xs),
-            start = 0,
-            end = 1,
-          }
-          in
-          std.array.fold_left op init (std.array.drop_first xs)
-          |> match {
-            { chunks, start, end, .. } =>
-              chunks |> std.array.append (%array/slice% start end xs)
-          }
-      },
-
-  group
-    : forall a. (a -> String) -> Array a -> { _ : Array a }
-    | Dyn -> Dyn -> { _ | std.array.NonEmpty }
-    = fun f xs =>
-      xs
-      |> std.array.sort (fun x y => std.string.compare (f x) (f y))
-      |> chunk f
-      |> std.array.map (fun ys => { field = f (std.array.first ys), value = ys })
-      |> std.record.from_array,
-
   sort_by_floor = fun entities =>
     let floor_index = {
       "Basement" = -1,

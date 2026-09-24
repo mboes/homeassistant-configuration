@@ -8,7 +8,7 @@ let blind_slats_open_position = 66 in
   automation =
     knx.cover
     |> lib.sort_by_floor
-    |> lib.chunk (fun e => e.function.location)
+    |> std.array.chunk (fun e => e.function.location)
     |> std.array.flat_map (fun covers =>
       let filter_by_word = fun word =>
         std.array.filter (fun e => std.string.is_match "\\b%{word}s?\\b" e.function.name)

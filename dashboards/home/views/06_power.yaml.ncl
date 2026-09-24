@@ -28,7 +28,7 @@ let buttons = import "buttons.ncl" in
       cards =
         knx.switch
         |> lib.sort_by_floor
-        |> lib.chunk (fun e => e.function.location)
+        |> std.array.chunk (fun e => e.function.location)
         |> std.array.filter_map (fun entities =>
           let appliances =
             entities
@@ -86,7 +86,7 @@ let buttons = import "buttons.ncl" in
             ]
         )
         |> std.array.flatten
-        |> lib.chunk (fun card => card.floor)
+        |> std.array.chunk (fun card => card.floor)
         |> std.array.map (fun cards =>
           cards
           |> std.array.prepend {

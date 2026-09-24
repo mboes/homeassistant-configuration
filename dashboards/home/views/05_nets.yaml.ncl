@@ -14,7 +14,7 @@ let buttons = import "buttons.ncl" in
         knx.cover
         |> std.array.filter (fun e => std.string.is_match "/Net\\b" e.name)
         |> lib.sort_by_floor
-        |> lib.chunk (fun e => e.function.location)
+        |> std.array.chunk (fun e => e.function.location)
         |> std.array.flat_map (fun nets =>
           let location = (std.array.first nets).function.location in
           let floor = (std.array.first nets).function.floor in
@@ -53,7 +53,7 @@ let buttons = import "buttons.ncl" in
             },
           ]
         )
-        |> lib.chunk (fun card => card.floor)
+        |> std.array.chunk (fun card => card.floor)
         |> std.array.map (fun cards =>
           cards
           |> std.array.prepend {

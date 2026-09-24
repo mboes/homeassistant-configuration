@@ -13,7 +13,7 @@ let lib = import "../../../lib.ncl" in
         knx.switch
         |> std.array.filter (fun e => std.string.is_match "/Irrigation\\b" e.name)
         |> lib.sort_by_floor
-        |> lib.group (fun e =>
+        |> std.array.group (fun e =>
           std.string.find "(\\(Area [0-9] - .*\\))" e.function.name
           |> match {
             { index, .. } if index < 0 => e.function.location,
@@ -69,7 +69,7 @@ let lib = import "../../../lib.ncl" in
             },
           ]
         )
-        |> lib.chunk (fun card => card.floor)
+        |> std.array.chunk (fun card => card.floor)
         |> std.array.map (fun cards =>
           cards
           |> std.array.prepend {

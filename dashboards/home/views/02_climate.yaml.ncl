@@ -63,7 +63,7 @@ let buttons = import "buttons.ncl" in
       cards =
         knx.climate
         |> lib.sort_by_floor
-        |> lib.chunk (fun e => e.function.location)
+        |> std.array.chunk (fun e => e.function.location)
         |> std.array.flat_map (fun controllers =>
           let floor_heating =
             controllers
@@ -184,7 +184,7 @@ let buttons = import "buttons.ncl" in
             },
           ]
         )
-        |> lib.chunk (fun card => card.floor)
+        |> std.array.chunk (fun card => card.floor)
         |> std.array.map (fun cards =>
           cards
           |> std.array.prepend {

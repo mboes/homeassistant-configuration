@@ -5,7 +5,7 @@ let lib = import "../lib.ncl" in
     knx.binary_sensor
     |> std.array.filter (fun e => std.record.has_field "device_class" e && e.device_class == "motion")
     |> std.array.filter (fun e => std.string.is_match "Basement corridor" e.function.location)
-    |> lib.group (fun e => e.function.location)
+    |> std.array.group (fun e => e.function.location)
     |> std.record.map (fun location sensors =>
       {
         alias = "Turn on %{location} lights on motion",

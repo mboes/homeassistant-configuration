@@ -43,7 +43,7 @@ let lib = import "../../../lib.ncl" in
         knx.light
         |> std.array.filter (fun e => !std.string.is_match "^All lights" e.function.name)
         |> lib.sort_by_floor
-        |> lib.chunk (fun e => e.function.location)
+        |> std.array.chunk (fun e => e.function.location)
         |> std.array.map (fun lights =>
           let location = (std.array.first lights).function.location in
           let floor = (std.array.first lights).function.floor in
@@ -69,7 +69,7 @@ let lib = import "../../../lib.ncl" in
             styles = "${subButtonIcon[0].setAttribute('icon', state === 'on' ? 'mdi:lightbulb-multiple' : 'mdi:lightbulb-off-outline')}",
           }
         )
-        |> lib.chunk (fun card => card.floor)
+        |> std.array.chunk (fun card => card.floor)
         |> std.array.map (fun cards =>
           cards
           |> std.array.prepend {
