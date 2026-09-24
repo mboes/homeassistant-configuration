@@ -367,7 +367,7 @@ knx.merge [
   {
     switch =
       select
-        (knx.name_is "Appliances")
+        (knx.name_matches "^(Appliances|Equipment)$")
         (fun f =>
           {
             address = f.group_addresses.Switching,
