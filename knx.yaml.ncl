@@ -363,6 +363,19 @@ knx.merge [
         ),
   },
 
+  # Appliances that can be controlled by a relay
+  {
+    switch =
+      select
+        (knx.name_is "Appliances")
+        (fun f =>
+          {
+            address = f.group_addresses.Switching,
+            state_address = std.record.get_or "Status" null f.group_addresses,
+          }
+        ),
+  },
+
   # Alarm
   {
     switch =

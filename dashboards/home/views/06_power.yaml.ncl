@@ -30,6 +30,11 @@ let buttons = import "buttons.ncl" in
         |> lib.sort_by_floor
         |> lib.chunk (fun e => e.function.location)
         |> std.array.filter_map (fun entities =>
+          let appliances =
+            entities
+            |> std.array.filter (fun e => e.name == "//Main kitchen/Appliances")
+            |> std.array.map (fun e => e & { icon = "mdi:stove" })
+          in
           let sockets =
             entities
             |> std.array.filter (fun e => std.string.is_match "/Switchable socket\\b" e.name)
@@ -40,7 +45,7 @@ let buttons = import "buttons.ncl" in
             |> std.array.filter (fun e => std.string.is_match "/Towel heater\\b" e.name)
             |> std.array.map (fun e => e & { icon = "mdi:heat-wave" })
           in
-          let relays = sockets @ towel_heaters in
+          let relays = appliances @ sockets @ towel_heaters in
           let location = (std.array.first relays).function.location in
           let floor = (std.array.first relays).function.floor in
           if relays == [] then
