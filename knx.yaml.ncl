@@ -5,7 +5,7 @@
 # through the database to find matching KNX functions.
 
 # A model of the ETS configuration.
-let cfg = import "knx-model.yaml" in
+let cfg = import "knx-model.ncl" in
 
 # As measured.
 let rollers_travelling_time = 33 in
@@ -101,7 +101,7 @@ knx.merge [
     light =
       std.array.flatten [
         select
-          (knx.type_is "dimmable light")
+          (knx.type_is '"dimmable light")
           (fun f =>
             {
               address = f.group_addresses.Switching,
@@ -111,7 +111,7 @@ knx.merge [
             }
           ),
         select
-          (knx.type_is "switchable light")
+          (knx.type_is '"switchable light")
           (fun f =>
             {
               address = f.group_addresses.Switching,
@@ -125,7 +125,7 @@ knx.merge [
     button =
       std.array.flatten [
         select
-          (knx.and (knx.type_is "dimmable light") (knx.name_matches "^All "))
+          (knx.and (knx.type_is '"dimmable light") (knx.name_matches "^All "))
           (fun f =>
             {
               address = f.group_addresses.Switching,
@@ -133,7 +133,7 @@ knx.merge [
             }
           ),
         select
-          (knx.and (knx.type_is "switchable light") (knx.name_matches "^All "))
+          (knx.and (knx.type_is '"switchable light") (knx.name_matches "^All "))
           (fun f =>
             {
               address = f.group_addresses.Switching,
@@ -147,7 +147,7 @@ knx.merge [
   {
     cover =
       select
-        (knx.and (knx.type_is "sun protection") (knx.name_contains "roller"))
+        (knx.and (knx.type_is '"sun protection") (knx.name_contains "roller"))
         (fun f =>
           {
             move_long_address = f.group_addresses.Movement,
@@ -165,7 +165,7 @@ knx.merge [
   {
     cover =
       select
-        (knx.and (knx.type_is "sun protection") (knx.name_contains "blind"))
+        (knx.and (knx.type_is '"sun protection") (knx.name_contains "blind"))
         (fun f =>
           {
             move_long_address = f.group_addresses.Movement,
@@ -307,7 +307,7 @@ knx.merge [
         ),
     switch =
       select
-        (knx.and (knx.name_is "All sliding windows") (knx.location_type_is "room"))
+        (knx.and (knx.name_is "All sliding windows") (knx.location_type_is 'room))
         (fun f =>
           {
             name = "//%{f.location}/Sliding windows/Lock",

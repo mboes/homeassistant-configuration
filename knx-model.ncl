@@ -31,4 +31,13 @@ let Function = {
 }
 in
 
-{ functions : Array Function, locations : Array Location }
+let schema = {
+  functions | Array Function,
+  locations | Array Location,
+}
+in
+
+let cfg = import "knx-model.yaml"
+in
+
+cfg & schema
