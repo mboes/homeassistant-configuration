@@ -6,7 +6,7 @@ let Nullable = fun Contract =>
       std.contract.check Contract label value
   )
 in
-let LocationType = [| 'building, 'floor, 'room |] in
+let LocationType = [| 'building, 'floor, 'room, 'stairway |] in
 let Location = {
   name | String,
   type | std.enum.TagOrString | LocationType,
