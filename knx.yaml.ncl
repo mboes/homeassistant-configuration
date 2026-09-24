@@ -57,26 +57,44 @@ in
 # The names of generated entities have a special form, to
 # distinguish them from automatically or manually created entities.
 let GeneratedEntityName = std.contract.from_predicate (std.string.is_match "^//") in
-let base_entity = fun f =>
-  {
-    function | not_exported = f,
-    name
-      | GeneratedEntityName
-      | default
-      = "//%{f.location}/%{f.name}",
-  }
+
+let Entity = { function, name | GeneratedEntityName, .. } in
+
+# Entities have a location-qualified name. We track as an input the
+# ETS function they were generated from.
+let base_entity | Entity = {
+  function | not_exported,
+  name
+    | GeneratedEntityName
+    | default
+    = "//%{function.location}/%{function.name}",
+}
 in
-let select_flatten = fun pred mk =>
-  cfg.functions
-  |> std.array.filter pred
-  |> std.array.map (fun f => mk f |> std.array.map (fun r => r & base_entity f))
-  |> std.array.flatten
-  |> std.array.map (std.record.filter (fun _ v => v != null))
-  # XXX Workaround https://github.com/nickel-lang/nickel/issues/2633
-  |> std.array.map (fun r => r & base_entity r.function)
-    | std.array.NonEmpty
+
+# Filter through the list of functions in the ETS configuration and
+# pass the matches to an entity construction function. In this
+# variant, the entity construction function is allowed to return
+# multiple entities.
+let select_flatten
+  | (Dyn -> Bool) -> (Dyn -> Array Entity) -> Array Entity
+  = fun pred mk =>
+    cfg.functions
+    |> std.array.filter pred
+    |> std.array.map (fun f => mk f |> std.array.map (fun r => r & base_entity & { function = f }))
+    |> std.array.flatten
+    |> std.array.map (std.record.filter (fun _ v => v != null))
+    # XXX Workaround https://github.com/nickel-lang/nickel/issues/2633
+    |> std.array.map (fun r => r & base_entity & { function = r.function })
+      | std.array.NonEmpty
 in
-let select = fun pred mk => select_flatten pred (fun f => [mk f]) in
+
+# Filter through the list of functions in the ETS configuration and
+# pass the matches to an entity construction function.
+let select
+  | (Dyn -> Bool) -> (Dyn -> Entity) -> Array Entity
+  = fun pred mk => select_flatten pred (fun f => [mk f])
+in
+
 knx.merge [
   # Lights
   {
