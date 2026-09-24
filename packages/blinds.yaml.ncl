@@ -1,7 +1,9 @@
 let knx = import "../knx.yaml.ncl" in
 let lib = import "../lib.ncl" in
+
 # As measured.
 let blind_slats_open_position = 66 in
+
 {
   automation =
     knx.cover

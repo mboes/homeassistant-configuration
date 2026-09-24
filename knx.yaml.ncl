@@ -1,6 +1,16 @@
+# Entities provided by the KNX integration
+#
+# Defines Home Assistant entities, using the ETS configuration as
+# a database. For each family of entities we want to define, we filter
+# through the database to find matching KNX functions.
+
+# A model of the ETS configuration.
 let cfg = import "knx-model.yaml" in
+
 # As measured.
 let rollers_travelling_time = 33 in
+
+# A small DSL for expressing what KNX functions to select.
 let knx = {
   type_is = fun type f => f.type == type,
   name_is = fun name f => f.name == name,
@@ -43,6 +53,7 @@ let knx = {
     in std.array.reduce_left f
 }
 in
+
 # The names of generated entities have a special form, to
 # distinguish them from automatically or manually created entities.
 let GeneratedEntityName = std.contract.from_predicate (std.string.is_match "^//") in

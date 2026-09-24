@@ -1,3 +1,8 @@
+# A bespoke library of UI elements
+#
+# A dashboard view consists of mostly buttons, optionally containing
+# sub buttons. Each button typically has an associated popup. The sub
+# buttons of a button should be the buttons of the associated popup.
 {
   dashboard_button = {
     location | not_exported,
