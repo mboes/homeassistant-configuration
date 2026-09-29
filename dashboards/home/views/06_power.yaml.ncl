@@ -13,7 +13,7 @@ let buttons = import "buttons.ncl" in
       cards = [
         {
           type = "tile",
-          name = "UPS status",
+          name = "UPS battery",
           entity = lib.entity_id "sensor" "UPS battery charge",
         },
         {
@@ -23,12 +23,12 @@ let buttons = import "buttons.ncl" in
         },
         {
           type = "tile",
-          name = "Real power",
+          name = "Power usage",
           entity = lib.entity_id "sensor" "UPS real power",
         },
         {
           type = "tile",
-          name = "Real power",
+          name = "UPS load",
           entity = lib.entity_id "sensor" "UPS load",
         },
       ]
