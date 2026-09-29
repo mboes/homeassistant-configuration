@@ -1,0 +1,43 @@
+automation:
+- alias: "UPS power status alerts"
+  description: "Notifies users on UPS power loss."
+  mode: single
+  triggers:
+    - trigger: template
+      id: power_outage
+      value_template: "{{ 'OB' in states('sensor.ups_status_data') }}"
+
+    - trigger: template
+      id: power_restored
+      value_template: "{{ 'OL' in states('sensor.ups_status_data') }}"
+  actions:
+    - choose:
+        # Power outage event
+        - conditions:
+            - condition: trigger
+              id: power_outage
+          actions:
+            - action: notify.send_message
+              target:
+                entity_id:
+                  - notify.owners
+              data:
+                title: "⚠️️ Power Outage Detected"
+                message: >-
+                  Utility power lost! UPS is running on battery.
+                  Battery Level: {{ states('sensor.ups_battery_charge') }}%
+                  Estimated Runtime: {{ (states('sensor.ups_battery_runtime') | float(0) / 60) | round(0) }} minutes.
+        # Power restored event
+        - conditions:
+            - condition: trigger
+              id: power_restored
+            - condition: template
+              value_template: "{{ 'OB' in trigger.from_state.state }}"
+          actions:
+            - action: notify.send_message
+              target:
+                entity_id:
+                  - notify.owners
+              data:
+                title: "✅ Power Restored"
+                message: "Utility power has returned. The UPS is back online."
