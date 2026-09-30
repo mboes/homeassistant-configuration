@@ -24,13 +24,13 @@ lovelace:
       show_in_sidebar: true
       require_admin: false
       filename: dashboards/overview/dashboard.yaml
-    devices:
+    home-equipment:
       mode: yaml
-      title: Devices
+      title: Equipment
       icon: mdi:details
       show_in_sidebar: true
       require_admin: false
-      filename: dashboards/devices/dashboard.yaml
+      filename: dashboards/equipment/dashboard.yaml
     house-analytics:
       mode: yaml
       title: Analytics
