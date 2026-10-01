@@ -53,13 +53,6 @@ sections:
         grid_options:
           columns: 6
 
-      - type: picture-entity
-        entity: camera.doorstation_last_motion
-        name: Last motion
-        show_state: false
-        grid_options:
-          columns: 6
-
       - type: tile
         entity: event.doorstation_doorbell
         name: Doorbell
