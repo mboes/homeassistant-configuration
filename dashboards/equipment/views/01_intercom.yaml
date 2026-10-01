@@ -1,0 +1,76 @@
+title: Intercom
+path: intercom
+icon: mdi:doorbell-video
+type: sections
+max_columns: 2
+sections:
+  - type: grid
+    cards:
+      - type: heading
+        heading: Live
+        icon: mdi:cctv
+
+      - type: picture-entity
+        entity: camera.doorstation_live
+        camera_view: live
+        show_name: false
+        show_state: false
+        grid_options:
+          columns: full
+
+      - type: tile
+        entity: button.doorstation_relay_1
+        name: Open door
+        icon: mdi:door-open
+        hide_state: true
+        tap_action:
+          action: perform-action
+          perform_action: button.press
+          target:
+            entity_id: button.doorstation_relay_1
+
+      - type: tile
+        entity: button.doorstation_ir
+        name: Night light
+        icon: mdi:lightbulb-night
+        hide_state: true
+        tap_action:
+          action: perform-action
+          perform_action: button.press
+          target:
+            entity_id: button.doorstation_ir
+
+  - type: grid
+    cards:
+      - type: heading
+        heading: Recent
+        icon: mdi:history
+
+      - type: picture-entity
+        entity: camera.doorstation_last_ring
+        name: Last ring
+        show_state: false
+        grid_options:
+          columns: 6
+
+      - type: picture-entity
+        entity: camera.doorstation_last_motion
+        name: Last motion
+        show_state: false
+        grid_options:
+          columns: 6
+
+      - type: tile
+        entity: event.doorstation_doorbell
+        name: Doorbell
+        icon: mdi:doorbell
+
+      - type: logbook
+        title: Last 24 hours
+        hours_to_show: 24
+        target:
+          entity_id:
+            - event.doorstation_doorbell
+            - button.doorstation_relay_1
+        grid_options:
+          columns: full
