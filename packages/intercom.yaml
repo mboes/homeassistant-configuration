@@ -25,6 +25,6 @@ automation:
           clickAction: /home-equipment/intercom
           tag: doorbell         # replaces the previous ring
           push:
-            interruption-level: time-sensitive  # iOS: breaks through Focus
+            interruption-level: critical  # iOS: breaks through Focus
     
     - delay: "00:00:30"        # Ignore repeat presses for 30 seconds.
