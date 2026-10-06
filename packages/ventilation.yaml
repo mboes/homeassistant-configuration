@@ -1,7 +1,7 @@
 modbus:
 - name: VAM
   type: tcp
-  host: 192.168.25.58
+  host: 192.168.1.27
   port: 502
 
   sensors:
