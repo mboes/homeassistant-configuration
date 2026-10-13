@@ -1,1 +1,1 @@
-views: !include_dir_list /config/dashboards/equipment/views/
+views: !include_dir_list /config/dashboards/devices/views/
