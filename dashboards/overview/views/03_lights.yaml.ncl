@@ -5,7 +5,7 @@ let lib = import "../../../lib.ncl" in
   icon = "mdi:lightbulb-variant",
   path = "lights",
   type = "sections",
-  max_columns = 2,
+  max_columns = 1,
   sections = [
     {
       type = "grid",

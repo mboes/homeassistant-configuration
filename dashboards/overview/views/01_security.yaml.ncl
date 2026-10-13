@@ -6,7 +6,7 @@ let buttons = import "buttons.ncl" in
   icon = "mdi:shield",
   path = "security",
   type = "sections",
-  max_columns = 2,
+  max_columns = 1,
   sections = [
     {
       type = "grid",

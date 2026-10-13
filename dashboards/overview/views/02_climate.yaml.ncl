@@ -6,7 +6,7 @@ let buttons = import "buttons.ncl" in
   icon = "mdi:home-thermometer",
   path = "climate",
   type = "sections",
-  max_columns = 2,
+  max_columns = 1,
   sections = [
     {
       type = "custom:vertical-stack-in-card",

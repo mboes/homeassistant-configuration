@@ -6,7 +6,7 @@ let buttons = import "buttons.ncl" in
   icon = "mdi:bug",
   path = "nets",
   type = "sections",
-  max_columns = 2,
+  max_columns = 1,
   sections = [
     {
       type = "grid",
