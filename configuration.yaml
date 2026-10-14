@@ -19,8 +19,8 @@ notify:
   - name: owners
     platform: group
     services:
-      - action: mathieu_iphone
-      - action: theo_iphone
+      - action: mobile_app_mathieus_iphone
+      - action: mobile_app_theos_iphone
 
 lovelace:
   resource_mode: yaml
