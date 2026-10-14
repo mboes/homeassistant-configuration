@@ -13,6 +13,15 @@ scene: !include scenes.yaml
 
 knx: !include knx.yaml
 
+# XXX Legacy notification group, until the new interface supports
+# attaching data to notifications.
+notify:
+  - name: owners
+    platform: group
+    services:
+      - action: mathieu_iphone
+      - action: theo_iphone
+
 lovelace:
   resource_mode: yaml
   resources: !include dashboards/resources.yaml
