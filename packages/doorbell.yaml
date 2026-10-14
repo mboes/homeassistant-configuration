@@ -21,8 +21,8 @@ automation:
         message: Someone rang the doorbell.
         data:
           image: /api/camera_proxy/camera.doorstation_last_ring
-          url: /home-equipment/intercom
-          clickAction: /home-equipment/intercom
+          url: /home-devices/intercom
+          clickAction: /home-devices/intercom
           tag: doorbell         # replaces the previous ring
           push:
             interruption-level: critical  # iOS: breaks through Focus
