@@ -18,7 +18,7 @@ automation:
         title: Entrance
         message: Someone rang the doorbell.
         data:
-          image: /api/camera_proxy/camera.doorstation_last_ring
+          image: /api/camera_proxy/camera.garden_door_station_last_ring
           url: /home-devices/intercom
           clickAction: /home-devices/intercom
           tag: doorbell
