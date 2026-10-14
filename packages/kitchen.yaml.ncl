@@ -35,9 +35,7 @@ in
                       message = alarm,
                       data = {
                         tag = lib.slug alarm,
-                        push = {
-                          sound = { name = "default", critical = 1, volume = 1.0 },
-                        },
+                        push.interruption-level = "critical",
                       },
                     },
                   },
