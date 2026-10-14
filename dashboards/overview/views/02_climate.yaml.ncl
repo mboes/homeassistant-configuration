@@ -13,7 +13,7 @@ let buttons = import "buttons.ncl" in
       cards = [
         {
           type = "custom:clock-weather-card",
-          entity = lib.entity_id "weather" "forecast_home",
+          entity = lib.entity_id "weather" "forecast",
           temperature_sensor = lib.entity_id "sensor" "//Outdoor temperature",
           weather_icon_type = "fill",
           hide_clock = true,
@@ -25,7 +25,7 @@ let buttons = import "buttons.ncl" in
         {
           type = "custom:hourly-weather",
           name = "Next 12 hours",
-          entity = lib.entity_id "weather" "forecast_home",
+          entity = lib.entity_id "weather" "forecast",
           icons = true,
           round_temperatures = true,
         },
