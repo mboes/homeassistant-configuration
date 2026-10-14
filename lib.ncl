@@ -1,15 +1,14 @@
 let cfg = import "knx-model.yaml" in
 {
-  entity_id = fun domain name =>
-    let slug =
-      name
-      |> std.string.replace_regex "[^a-zA-Z0-9]" " "
-      |> std.string.replace_regex "\\s+" "_"
-      |> std.string.replace_regex "^_" ""
-      |> std.string.replace_regex "_$" ""
-      |> std.string.lowercase
-    in
-    "%{domain}.%{slug}",
+  slug = fun name =>
+    name
+    |> std.string.replace_regex "[^a-zA-Z0-9]" " "
+    |> std.string.replace_regex "\\s+" "_"
+    |> std.string.replace_regex "^_" ""
+    |> std.string.replace_regex "_$" ""
+    |> std.string.lowercase,
+
+  entity_id = fun domain name => "%{domain}.%{slug name}",
 
   sort_by_floor = fun entities =>
     let floor_index = {
