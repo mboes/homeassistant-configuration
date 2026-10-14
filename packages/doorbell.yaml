@@ -1,12 +1,12 @@
 automation:
-- alias: Doorbell – notify owners
+- alias: Notify owners of //Garden/Door station/Doorbell
   description: Push a notification when the doorbell rings.
   mode: single
   max_exceeded: silent
 
   triggers:
     - trigger: state
-      entity_id: event.front_door_doorbell
+      entity_id: event.garden_door_station_doorbell
       not_from:
         - unavailable
         - unknown
