@@ -20,8 +20,8 @@ in
         description = "Critical alert while the %{alarm} is active",
         mode = "single",
         triggers = [
-          { trigger = "state", entity_id = lib.entity_id "binary_sensor" alarm, to = "on", id = "alarm_on" },
-          { trigger = "state", entity_id = lib.entity_id "binary_sensor" alarm, to = "off", id = "alarm_off" },
+          { trigger = "state", entity_id = lib.entity_id "sensor" alarm, to = "on", id = "alarm_on" },
+          { trigger = "state", entity_id = lib.entity_id "sensor" alarm, to = "off", id = "alarm_off" },
         ],
         actions = [
           {
