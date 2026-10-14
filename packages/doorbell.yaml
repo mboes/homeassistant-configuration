@@ -3,7 +3,6 @@ automation:
   description: Push a notification when the doorbell rings.
   mode: single
   max_exceeded: silent
-
   triggers:
     - trigger: state
       entity_id: event.garden_door_station_doorbell
@@ -13,7 +12,6 @@ automation:
       not_to:
         - unavailable
         - unknown
-
   actions:
     - action: notify.owners
       data:
@@ -23,8 +21,7 @@ automation:
           image: /api/camera_proxy/camera.doorstation_last_ring
           url: /home-devices/intercom
           clickAction: /home-devices/intercom
-          tag: doorbell         # replaces the previous ring
+          tag: doorbell
           push:
-            interruption-level: critical  # iOS: breaks through Focus
-    
+            interruption-level: critical
     - delay: "00:00:30"        # Ignore repeat presses for 30 seconds.
