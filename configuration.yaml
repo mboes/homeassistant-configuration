@@ -22,6 +22,11 @@ notify:
       - action: mobile_app_mathieus_iphone
       - action: mobile_app_theos_iphone
 
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.1.1
+
 lovelace:
   resource_mode: yaml
   resources: !include dashboards/resources.yaml
