@@ -3,7 +3,7 @@ let lib = import "../../../lib.ncl" in
 let buttons = import "buttons.ncl" in
 {
   title = "Security",
-  icon = "mdi:shield",
+  icon = "mdi:security",
   path = "security",
   type = "sections",
   max_columns = 1,

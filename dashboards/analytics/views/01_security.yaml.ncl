@@ -9,7 +9,7 @@ let with_separator = fun name =>
 in
 {
   title = "Security",
-  icon = "mdi:shield",
+  icon = "mdi:security",
   show_icon_and_title = true,
   sections = [
     {
