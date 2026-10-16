@@ -36,7 +36,7 @@ lovelace:
     home-devices:
       mode: yaml
       title: Devices
-      icon: mdi:details
+      icon: mdi:desktop-tower
       show_in_sidebar: true
       require_admin: false
       filename: dashboards/devices/dashboard.yaml
