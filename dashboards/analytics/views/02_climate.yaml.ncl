@@ -4,6 +4,7 @@ let lib = import "../../../lib.ncl" in
   title = "Climate",
   icon = "mdi:home-thermometer",
   show_icon_and_title = true,
+  max_columns = 3,
   sections =
     knx.climate
     |> lib.sort_by_floor
