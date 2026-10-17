@@ -13,6 +13,7 @@ template:
 - cover:
   - name: //Garage/Door
     device_class: garage
+    state: "{{ states('switch.garage_door') | bool(none) }}"
     open_cover:
       action: switch.turn_on
       target:
