@@ -4,24 +4,24 @@ automation:
   mode: single
   max_exceeded: silent
   triggers:
-    - trigger: state
-      entity_id: event.garden_door_station_doorbell
-      not_from:
-        - unavailable
-        - unknown
-      not_to:
-        - unavailable
-        - unknown
+  - trigger: state
+    entity_id: event.garden_door_station_doorbell
+    not_from:
+    - unavailable
+    - unknown
+    not_to:
+    - unavailable
+    - unknown
   actions:
-    - action: notify.owners
+  - action: notify.owners
+    data:
+      title: Entrance
+      message: Someone rang the doorbell.
       data:
-        title: Entrance
-        message: Someone rang the doorbell.
-        data:
-          image: /api/camera_proxy/camera.garden_door_station_last_ring
-          url: /home-devices/intercom
-          clickAction: /home-devices/intercom
-          tag: doorbell
-          push:
-            interruption-level: critical
-    - delay: "00:00:30"        # Ignore repeat presses for 30 seconds.
+        image: /api/camera_proxy/camera.garden_door_station_last_ring
+        url: /home-devices/intercom
+        clickAction: /home-devices/intercom
+        tag: doorbell
+        push:
+          interruption-level: critical
+  - delay: "00:00:30"        # Ignore repeat presses for 30 seconds.

@@ -6,7 +6,7 @@ modbus:
 
   sensors:
   # Temperature sensors
-  - name: VAM outdoor temperature # T-ODA
+  - name: VAM outdoor temperature        # T-ODA
     address: 10211
     input_type: input
     data_type: int16
@@ -16,7 +16,7 @@ modbus:
     state_class: measurement
     device_class: temperature
     scan_interval: 60
-  - name: VAM supply temperature # T-SUP
+  - name: VAM supply temperature        # T-SUP
     address: 10212
     input_type: input
     data_type: int16
@@ -26,7 +26,7 @@ modbus:
     state_class: measurement
     device_class: temperature
     scan_interval: 60
-  - name: VAM extract temperature # T-ETA
+  - name: VAM extract temperature        # T-ETA
     address: 10213
     input_type: input
     data_type: int16
@@ -36,7 +36,7 @@ modbus:
     state_class: measurement
     device_class: temperature
     scan_interval: 60
-  - name: VAM exhaust temperature # T-EHA
+  - name: VAM exhaust temperature        # T-EHA
     address: 10214
     input_type: input
     data_type: int16
@@ -58,7 +58,7 @@ modbus:
     scan_interval: 600
 
   # State sensors
-  - name: VAM season raw          # 0 heating, 1 non-heating
+  - name: VAM season raw        # 0 heating, 1 non-heating
     address: 11401
     input_type: input
     scan_interval: 600
@@ -111,7 +111,7 @@ modbus:
 
   climates:
   - name: VAM
-    address: 10215 # T-IDA, indoor temp
+    address: 10215        # T-IDA, indoor temp
     input_type: input
     data_type: int16
     scale: 0.1
@@ -126,7 +126,7 @@ modbus:
         state_off: 0
         state_auto: 1
         state_fan_only: [2, 3, 4, 6, 7]
-        state_cool: 5           # Night pre-cooling
+        state_cool: 5        # Night pre-cooling
     fan_mode_register:
       address: 10708
       values:
@@ -136,62 +136,61 @@ modbus:
     scan_interval: 60
 
 template:
-  - sensor:
-      - name: VAM heat recovery efficiency
-        unit_of_measurement: "%"
-        state_class: measurement
-        # Meaningful only with a real indoor/outdoor difference and the bypass closed.
-        availability: >
-          {% set o = states('sensor.vam_outdoor_temperature') | float(none) %}
-          {% set e = states('sensor.vam_extract_temperature') | float(none) %}
-          {% set s = states('sensor.vam_supply_temperature') | float(none) %}
-          {{ o is not none and e is not none and s is not none
-             and (e - o) | abs >= 5 }}
-        state: >
-          {% set o = states('sensor.vam_outdoor_temperature') | float %}
-          {% set e = states('sensor.vam_extract_temperature') | float %}
-          {% set s = states('sensor.vam_supply_temperature') | float %}
-          {{ ((s - o) / (e - o) * 100) | round(0) }}
- 
-      - name: VAM season
-        state: >
-          {{ {'0': 'Heating', '1': 'Non-heating'}
-             .get(states('sensor.vam_season_raw'), 'Unknown') }}
- 
-      - name: VAM forced mode
-        state: >
-          {% set v = states('sensor.vam_forced_mode_raw') | int(-1) %}
-          {% set names = {0: 'None', 1: 'Start-up', 2: 'Run-down',
-               3: 'Input D1', 4: 'Input D2', 5: 'Input D3', 6: 'Input D4',
-               7: 'Input IN1', 8: 'Input IN2'} %}
-          {{ names.get(v, 'Other (' ~ v ~ ')') }}
- 
-      - name: VAM required mode
-        state: >
-          {% set v = states('sensor.vam_required_mode_raw') | int(-1) %}
-          {% set names = {0: 'Off', 1: 'Automatic', 2: 'Ventilation',
-               3: 'Circulation + ventilation', 4: 'Circulation',
-               5: 'Night precooling', 6: 'Disbalance', 7: 'Overpressure'} %}
-          {{ names.get(v, 'Unknown') }}
- 
+- sensor:
+  - name: VAM heat recovery efficiency
+    unit_of_measurement: "%"
+    state_class: measurement
+    # Meaningful only with a real indoor/outdoor difference and the bypass closed.
+    availability: >
+      {% set o = states('sensor.vam_outdoor_temperature') | float(none) %}
+      {% set e = states('sensor.vam_extract_temperature') | float(none) %}
+      {% set s = states('sensor.vam_supply_temperature') | float(none) %}
+      {{ o is not none and e is not none and s is not none
+         and (e - o) | abs >= 5 }}
+    state: >
+      {% set o = states('sensor.vam_outdoor_temperature') | float %}
+      {% set e = states('sensor.vam_extract_temperature') | float %}
+      {% set s = states('sensor.vam_supply_temperature') | float %}
+      {{ ((s - o) / (e - o) * 100) | round(0) }}
+
+  - name: VAM season
+    state: >
+      {{ {'0': 'Heating', '1': 'Non-heating'}
+         .get(states('sensor.vam_season_raw'), 'Unknown') }}
+
+  - name: VAM forced mode
+    state: >
+      {% set v = states('sensor.vam_forced_mode_raw') | int(-1) %}
+      {% set names = {0: 'None', 1: 'Start-up', 2: 'Run-down',
+           3: 'Input D1', 4: 'Input D2', 5: 'Input D3', 6: 'Input D4',
+           7: 'Input IN1', 8: 'Input IN2'} %}
+      {{ names.get(v, 'Other (' ~ v ~ ')') }}
+
+  - name: VAM required mode
+    state: >
+      {% set v = states('sensor.vam_required_mode_raw') | int(-1) %}
+      {% set names = {0: 'Off', 1: 'Automatic', 2: 'Ventilation',
+           3: 'Circulation + ventilation', 4: 'Circulation',
+           5: 'Night precooling', 6: 'Disbalance', 7: 'Overpressure'} %}
+      {{ names.get(v, 'Unknown') }}
+
 automation:
-  - alias: VAM alarm notification
-    id: vam_alarm_notification
-    triggers:
-      - trigger: state
-        entity_id:
-          - binary_sensor.vam_filter_clogged
-          - binary_sensor.vam_filter_replacement_due
-          - binary_sensor.vam_heat_exchanger_frost
-          - binary_sensor.vam_insufficient_airflow
-          - binary_sensor.vam_frost_protection
-        to: "on"
-        for: "00:05:00"
-    actions:
-      - action: notify.send_message
-        target:
-          entity_id: notify.owners
-        data:
-          title: Ventilation
-          message: "{{ trigger.to_state.name }}"
- 
+- alias: VAM alarm notification
+  id: vam_alarm_notification
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.vam_filter_clogged
+    - binary_sensor.vam_filter_replacement_due
+    - binary_sensor.vam_heat_exchanger_frost
+    - binary_sensor.vam_insufficient_airflow
+    - binary_sensor.vam_frost_protection
+    to: "on"
+    for: "00:05:00"
+  actions:
+  - action: notify.send_message
+    target:
+      entity_id: notify.owners
+    data:
+      title: Ventilation
+      message: "{{ trigger.to_state.name }}"

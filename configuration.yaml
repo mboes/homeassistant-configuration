@@ -16,11 +16,11 @@ knx: !include knx.yaml
 # XXX Legacy notification group, until the new interface supports
 # attaching data to notifications.
 notify:
-  - name: owners
-    platform: group
-    services:
-      - action: mobile_app_mathieus_iphone
-      - action: mobile_app_theos_iphone
+- name: owners
+  platform: group
+  services:
+  - action: mobile_app_mathieus_iphone
+  - action: mobile_app_theos_iphone
 
 lovelace:
   resource_mode: yaml

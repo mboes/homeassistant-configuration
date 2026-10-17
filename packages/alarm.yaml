@@ -1,24 +1,24 @@
 template:
-  - alarm_control_panel:
-      - name: Intrusion alarm
-        code_arm_required: false
-        code_format: no_code
-        state: >
-          {% if is_state('binary_sensor.intrusion_alarm', 'on') %} triggered
-          {% elif is_state('binary_sensor.intrusion_alarm_arm', 'on') %} armed_away
-          {% elif is_state('binary_sensor.intrusion_alarm_partial_arm', 'on') %} armed_home
-          {% elif is_state('binary_sensor.intrusion_alarm_disarm', 'on') %} disarmed
-          {% else %} disarmed
-          {% endif %}
-        arm_away:
-          - action: button.press
-            target:
-              entity_id: button.intrusion_alarm_arm
-        arm_home:
-          - action: button.press
-            target:
-              entity_id: button.intrusion_alarm_partial_arm
-        disarm:
-          - action: button.press
-            target:
-              entity_id: button.intrusion_alarm_disarm
+- alarm_control_panel:
+  - name: Intrusion alarm
+    code_arm_required: false
+    code_format: no_code
+    state: >
+      {% if is_state('binary_sensor.intrusion_alarm', 'on') %} triggered
+      {% elif is_state('binary_sensor.intrusion_alarm_arm', 'on') %} armed_away
+      {% elif is_state('binary_sensor.intrusion_alarm_partial_arm', 'on') %} armed_home
+      {% elif is_state('binary_sensor.intrusion_alarm_disarm', 'on') %} disarmed
+      {% else %} disarmed
+      {% endif %}
+    arm_away:
+    - action: button.press
+      target:
+        entity_id: button.intrusion_alarm_arm
+    arm_home:
+    - action: button.press
+      target:
+        entity_id: button.intrusion_alarm_partial_arm
+    disarm:
+    - action: button.press
+      target:
+        entity_id: button.intrusion_alarm_disarm
