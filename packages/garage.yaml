@@ -10,3 +10,14 @@ template:
       action: button.press
       target:
         entity_id: button.garage_gate_close
+- cover:
+  - name: //Garage/Door
+    device_class: garage
+    open_cover:
+      action: switch.turn_on
+      target:
+        entity_id: switch.garage_door
+    close_cover:
+      action: switch.turn_off
+      target:
+        entity_id: switch.garage_door

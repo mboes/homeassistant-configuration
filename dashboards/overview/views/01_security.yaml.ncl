@@ -36,10 +36,9 @@ let buttons = import "buttons.ncl" in
         },
         {
           type = "custom:bubble-card",
-	  card_type = "button",
+	  card_type = "cover",
           name = "Garage door",
-          entity = lib.entity_id "switch" "//Garage/Door",
-          icon = "mdi:garage-variant",
+          entity = lib.entity_id "cover" "//Garage/Door",
           button_action.tap_action.action = "more-info",
         },
       ]
