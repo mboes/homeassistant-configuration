@@ -528,7 +528,7 @@ knx.merge [
         (fun f => # Can't sense the state so have two buttons instead of a switch.
           [
             {
-              name = "//Garage/Gate/CLOSED",
+              name = "//Garage/Gate/CLOSE",
               address = f.group_addresses.Switching,
               payload = 0,
             },

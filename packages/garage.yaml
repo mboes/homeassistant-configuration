@@ -1,0 +1,12 @@
+template:
+- cover:
+  - name: //Garage/Gate
+    device_class: gate
+    open_cover:
+      action: button.press
+      target:
+        entity_id: button.garage_gate_open
+    close_cover:
+      action: button.press
+      target:
+        entity_id: button.garage_gate_close

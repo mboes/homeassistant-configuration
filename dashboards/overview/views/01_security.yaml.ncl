@@ -22,22 +22,25 @@ let buttons = import "buttons.ncl" in
       type = "grid",
       cards = [
         {
-          type = "tile",
-          name = "Garage gate CLOSED",
-          entity = lib.entity_id "button" "//Garage/Gate/CLOSED",
+          type = "custom:bubble-card",
+          card_type = "separator",
+          name = "Garage",
+        },
+        {
+          type = "custom:bubble-card",
+          card_type = "cover",
+          name = "Garage gate",
+          entity = lib.entity_id "cover" "//Garage/Gate",
           icon = "mdi:gate",
+          button_action.tap_action.action = "more-info",
         },
         {
-          type = "tile",
-          name = "Garage gate OPEN",
-          entity = lib.entity_id "button" "//Garage/Gate/OPEN",
-          icon = "mdi:gate-open",
-        },
-        {
-          type = "tile",
+          type = "custom:bubble-card",
+	  card_type = "button",
           name = "Garage door",
           entity = lib.entity_id "switch" "//Garage/Door",
           icon = "mdi:garage-variant",
+          button_action.tap_action.action = "more-info",
         },
       ]
     },
