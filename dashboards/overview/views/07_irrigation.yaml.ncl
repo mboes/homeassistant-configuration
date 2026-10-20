@@ -69,6 +69,7 @@ let lib = import "../../../lib.ncl" in
             },
           ]
         )
+        |> std.array.sort (std.record.apply_on "floor" std.string.compare)
         |> std.array.chunk (fun card => card.floor)
         |> std.array.map (fun cards =>
           cards
