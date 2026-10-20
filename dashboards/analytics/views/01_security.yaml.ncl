@@ -1,4 +1,4 @@
-let knx = import "../../../knx.yaml.ncl" in
+let knx = import "../../../integrations/knx.yaml.ncl" in
 let lib = import "../../../lib.ncl" in
 let with_separator = fun name =>
   std.array.prepend {

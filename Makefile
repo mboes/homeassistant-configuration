@@ -3,6 +3,7 @@ NCL_LIB_FILES := $(filter-out %.yaml.ncl,$(shell find . -name '*.ncl'))
 YAML_FILES := $(NCL_FILES:.yaml.ncl=.yaml)
 DASHBOARD_YAML_FILES := $(filter ./dashboards/%.yaml,$(YAML_FILES))
 PACKAGE_YAML_FILES := $(filter ./packages/%.yaml,$(YAML_FILES))
+INTEGRATION_YAML_FILES := $(filter ./integrations/%.yaml,$(YAML_FILES))
 
 all: $(YAML_FILES)
 
@@ -16,8 +17,8 @@ all: $(YAML_FILES)
 
 knx-model.yaml: 0.xml
 
-knx.yaml: knx-model.yaml
+integrations/knx.yaml: knx-model.yaml
 
-$(DASHBOARD_YAML_FILES): knx.yaml
+$(DASHBOARD_YAML_FILES): $(INTEGRATION_YAML_FILES)
 
-$(PACKAGE_YAML_FILES): knx.yaml
+$(PACKAGE_YAML_FILES): $(INTEGRATION_YAML_FILES)

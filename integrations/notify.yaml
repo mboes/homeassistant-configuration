@@ -1,0 +1,7 @@
+# XXX Legacy notification group, until the new interface supports
+# attaching data to notifications.
+- name: owners
+  platform: group
+  services:
+  - action: mobile_app_mathieus_iphone
+  - action: mobile_app_theos_iphone

@@ -1,0 +1,24 @@
+resource_mode: yaml
+resources: !include /config/dashboards/resources.yaml
+dashboards:
+  lovelace:
+    mode: yaml
+    title: Overview
+    icon: mdi:view-dashboard
+    show_in_sidebar: true
+    require_admin: false
+    filename: /config/dashboards/overview/dashboard.yaml
+  home-devices:
+    mode: yaml
+    title: Devices
+    icon: mdi:desktop-tower
+    show_in_sidebar: true
+    require_admin: false
+    filename: /config/dashboards/devices/dashboard.yaml
+  house-analytics:
+    mode: yaml
+    title: Analytics
+    icon: mdi:chart-line
+    show_in_sidebar: true
+    require_admin: true
+    filename: /config/dashboards/analytics/dashboard.yaml

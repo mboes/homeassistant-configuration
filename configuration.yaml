@@ -1,53 +1,9 @@
-# Loads default set of integrations. Do not remove.
-default_config:
-
 homeassistant:
   packages: !include_dir_named packages/
 
-frontend:
-  themes: !include_dir_merge_named themes
-
-automation: !include automations.yaml
-script: !include scripts.yaml
-scene: !include scenes.yaml
-
-knx: !include knx.yaml
-
-# XXX Legacy notification group, until the new interface supports
-# attaching data to notifications.
-notify:
-- name: owners
-  platform: group
-  services:
-  - action: mobile_app_mathieus_iphone
-  - action: mobile_app_theos_iphone
-
-lovelace:
-  resource_mode: yaml
-  resources: !include dashboards/resources.yaml
-  dashboards:
-    lovelace:
-      mode: yaml
-      title: Overview
-      icon: mdi:view-dashboard
-      show_in_sidebar: true
-      require_admin: false
-      filename: dashboards/overview/dashboard.yaml
-    home-devices:
-      mode: yaml
-      title: Devices
-      icon: mdi:desktop-tower
-      show_in_sidebar: true
-      require_admin: false
-      filename: dashboards/devices/dashboard.yaml
-    house-analytics:
-      mode: yaml
-      title: Analytics
-      icon: mdi:chart-line
-      show_in_sidebar: true
-      require_admin: true
-      filename: dashboards/analytics/dashboard.yaml
-
-recorder:
-  purge_keep_days: 14
-  commit_interval: 10
+default_config: !include integrations/default_config.yaml
+frontend: !include integrations/frontend.yaml
+knx: !include integrations/knx.yaml
+lovelace: !include integrations/lovelace.yaml
+notify: !include integrations/notify.yaml
+recorder: !include integrations/recorder.yaml
