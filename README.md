@@ -32,26 +32,39 @@ Generate YAML files to be copied to `/config/` in Home Assistant:
 ```
 $ direnv allow    # Optionally, to pull in all required dependencies
 $ make
-
 ```
 
-For convenience deploying to Home Assistant, which doesn't have
-a Nickel interpreter installed, the YAML is typically checked in
-together with the code that generated it.
+A convenient method to deploy to Home Assistant is to check in the
+YAML generated artefacts together with the code in this repository,
+and to use Git to pull any new changes to the configuration. The
+content of `/config` in Home Assistant is then a checkout of this
+repository.
 
-## Notable files
+## Project structure
 
-- **`configuration.yaml`:** The top-level Home Assistant configuration
-  file.
-- **`0.xml`:** For the KNX integration. Found inside unzipped
-  [ETS6][knx-ets] `.knxproj` exports.
-- **`models/knx.yaml`:** For the KNX integration. Distillation
-  of `0.xml` in YAML form.
-- **`integrations/knx.yaml`:** The configuration for the KNX
-  integration of Home Assistant, derived from the KNX model.
+*Models* are the ground truth describing the world, or distillations
+thereof. As much of the Home Assistant configuration as possible is
+derived from these models. Our biggest model is the KNX model, itself
+derived from the `0.xml` extracted from [ETS6][knx-ets] `.knxproj`
+exports.
 
-`*.yaml.*` files are scripts that generate the corresponding `*.yaml`
-file, usually in [Nickel][nickel] or in [Python][python].
+*Integrations* define entities, using models as inputs.
+
+*Packages* define templates, automations and other helpers atop the
+entities defined by the integrations.
+
+*Dashboards* present entities defined in integrations and packages.
+
+Integrations in Nickel can provide ancillary entity metadata to
+downstream consumers (packages and dashboards) that is not serialized
+to YAML.
+
+## The build system
+
+Home Assistant only understands YAML files. There are `Makefile` rules
+to generate these YAML files from their corresponding `*.yaml.ncl`
+([Nickel][] expression) or `*.yaml.py` ([Python][] script), when they
+exist.
 
 [ha]: https://www.home-assistant.io/
 [ha-areas]: https://www.home-assistant.io/getting-started/concepts-terminology/#areas
