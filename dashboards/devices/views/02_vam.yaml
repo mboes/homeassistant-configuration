@@ -1,93 +1,93 @@
-title: Ventilation
-path: ventilation
-icon: mdi:hvac
-type: sections
-max_columns: 3
-sections:
-- type: grid
-  cards:
-  - type: heading
-    heading: Control
-  - type: thermostat
-    entity: climate.vam
-    features:
-    - type: climate-hvac-modes
-      hvac_modes:
-      - "off"
-      - auto
-      - fan_only
-      - cool
-    - type: climate-fan-modes
-      style: icons
-      fan_modes:
-      - low
-      - medium
-      - high
-  - type: tile
-    entity: sensor.vam_required_mode
-    name: Mode
-  - type: tile
-    entity: sensor.vam_required_power
-    name: Power
-  - type: tile
-    entity: sensor.vam_season
-    name: Season
-  - type: tile
-    entity: sensor.vam_forced_mode
-    name: Forced mode
+- title: VAM
+  path: vam
+  icon: mdi:hvac
+  type: sections
+  max_columns: 3
+  sections:
+  - type: grid
+    cards:
+    - type: heading
+      heading: Control
+    - type: thermostat
+      entity: climate.vam
+      features:
+      - type: climate-hvac-modes
+        hvac_modes:
+        - "off"
+        - auto
+        - fan_only
+        - cool
+      - type: climate-fan-modes
+        style: icons
+        fan_modes:
+        - low
+        - medium
+        - high
+    - type: tile
+      entity: sensor.vam_required_mode
+      name: Mode
+    - type: tile
+      entity: sensor.vam_required_power
+      name: Power
+    - type: tile
+      entity: sensor.vam_season
+      name: Season
+    - type: tile
+      entity: sensor.vam_forced_mode
+      name: Forced mode
 
-- type: grid
-  cards:
-  - type: heading
-    heading: Temperatures
-  - type: tile
-    entity: sensor.vam_outdoor_temperature
-    name: Outdoor
-  - type: tile
-    entity: sensor.vam_supply_temperature
-    name: Supply
-  - type: tile
-    entity: sensor.vam_extract_temperature
-    name: Extract
-  - type: tile
-    entity: sensor.vam_exhaust_temperature
-    name: Exhaust
-  - type: tile
-    entity: sensor.vam_average_outdoor_temperature
-    name: Outdoor average
-  - type: tile
-    entity: sensor.vam_heat_recovery_efficiency
-    name: Heat recovery
-  - type: history-graph
-    title: Last 24 hours
-    hours_to_show: 24
-    entities:
-    - entity: sensor.vam_outdoor_temperature
+  - type: grid
+    cards:
+    - type: heading
+      heading: Temperatures
+    - type: tile
+      entity: sensor.vam_outdoor_temperature
       name: Outdoor
-    - entity: sensor.vam_supply_temperature
+    - type: tile
+      entity: sensor.vam_supply_temperature
       name: Supply
-    - entity: sensor.vam_extract_temperature
+    - type: tile
+      entity: sensor.vam_extract_temperature
       name: Extract
-    - entity: sensor.vam_exhaust_temperature
+    - type: tile
+      entity: sensor.vam_exhaust_temperature
       name: Exhaust
+    - type: tile
+      entity: sensor.vam_average_outdoor_temperature
+      name: Outdoor average
+    - type: tile
+      entity: sensor.vam_heat_recovery_efficiency
+      name: Heat recovery
+    - type: history-graph
+      title: Last 24 hours
+      hours_to_show: 24
+      entities:
+      - entity: sensor.vam_outdoor_temperature
+        name: Outdoor
+      - entity: sensor.vam_supply_temperature
+        name: Supply
+      - entity: sensor.vam_extract_temperature
+        name: Extract
+      - entity: sensor.vam_exhaust_temperature
+        name: Exhaust
 
-- type: grid
-  cards:
-  - type: heading
-    heading: Alarms
-  - type: entities
-    title: Alarms
-    state_color: true
-    entities:
-    - entity: binary_sensor.vam_filter_clogged
-      name: Filter clogged
-    - entity: binary_sensor.vam_filter_replacement_due
-      name: Filter replacement due
-    - entity: binary_sensor.vam_heat_exchanger_frost
-      name: Heat exchanger frost
-    - entity: binary_sensor.vam_defrosting
-      name: Defrosting
-    - entity: binary_sensor.vam_insufficient_airflow
-      name: Insufficient airflow
-    - entity: binary_sensor.vam_frost_protection
-      name: Frost protection
+  - type: grid
+    cards:
+    - type: heading
+      heading: Alarms
+    - type: entities
+      title: Alarms
+      state_color: true
+      entities:
+      - entity: binary_sensor.vam_filter_clogged
+        name: Filter clogged
+      - entity: binary_sensor.vam_filter_replacement_due
+        name: Filter replacement due
+      - entity: binary_sensor.vam_heat_exchanger_frost
+        name: Heat exchanger frost
+      - entity: binary_sensor.vam_defrosting
+        name: Defrosting
+      - entity: binary_sensor.vam_insufficient_airflow
+        name: Insufficient airflow
+      - entity: binary_sensor.vam_frost_protection
+        name: Frost protection
