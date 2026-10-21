@@ -1,7 +1,7 @@
 let schema = {
   ancillary_rooms
-  | { _ : Array String }
-  | doc "Map of locations to related locations",
+    | { _ : Array String }
+    | doc "Map of locations to related locations",
 }
 in
 
