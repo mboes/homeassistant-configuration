@@ -68,7 +68,8 @@ exist.
 
 [ha]: https://www.home-assistant.io/
 [ha-areas]: https://www.home-assistant.io/getting-started/concepts-terminology/#areas
-[ha-packages]: https://www.home-assistant.io/docs/configuration/packages/
+[ha-knx]: https://www.home-assistant.io/integrations/knx
+[ha-modbus]: https://www.home-assistant.io/integrations/modbus
 [knx-ets]: https://www.knx.org/what-is-ets
 [nickel]: https://nickel-lang.org/
 [python]: https://www.python.org/
