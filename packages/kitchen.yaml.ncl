@@ -1,18 +1,9 @@
 let lib = import "../lib.ncl" in
-
-let alarm_entities = [
-  "//Main kitchen/Freezer/Freezer door alarm",
-  "//Main kitchen/Freezer/Freezer temperature alarm",
-  "//Main kitchen/Refrigerator/Refrigerator door alarm",
-  "//Main kitchen pantry/Fridge freezer/Freezer door alarm",
-  "//Main kitchen pantry/Fridge freezer/Freezer temperature alarm",
-  "//Main kitchen pantry/Fridge freezer/Refrigerator door alarm",
-]
-in
+let cfg = import "../models/home-connect.ncl" in
 
 {
   automation =
-    alarm_entities
+    cfg.alarm_entities
     |> std.array.map (fun alarm =>
       let tag = "fridge-door" in
       {
