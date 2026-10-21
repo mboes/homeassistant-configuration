@@ -5,7 +5,7 @@
 # through the database to find matching KNX functions.
 
 # A model of the ETS configuration.
-let cfg = import "../knx-model.ncl" in
+let cfg = import "../models/knx.ncl" in
 
 # As measured.
 let rollers_travelling_time = 33 in

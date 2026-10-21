@@ -37,7 +37,7 @@ let schema = {
 }
 in
 
-let cfg = import "knx-model.yaml"
+let cfg = import "knx.yaml"
 in
 
 cfg & schema

@@ -1,4 +1,4 @@
-let cfg = import "knx-model.yaml" in
+let cfg = import "models/knx.yaml" in
 
 let floor_index = {
   "Basement" = -1,

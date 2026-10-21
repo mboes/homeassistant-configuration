@@ -45,10 +45,10 @@ together with the code that generated it.
   file.
 - **`0.xml`:** For the KNX integration. Found inside unzipped
   [ETS6][knx-ets] `.knxproj` exports.
-- **`knx-model.yaml`:** For the KNX integration. Distillation of
-  `0.xml` in YAML form.
-- **`knx.yaml`:** The configuration for the KNX integration of Home
-  Assistant, derived from the KNX model.
+- **`models/knx.yaml`:** For the KNX integration. Distillation
+  of `0.xml` in YAML form.
+- **`integrations/knx.yaml`:** The configuration for the KNX
+  integration of Home Assistant, derived from the KNX model.
 
 `*.yaml.*` files are scripts that generate the corresponding `*.yaml`
 file, usually in [Nickel][nickel] or in [Python][python].
