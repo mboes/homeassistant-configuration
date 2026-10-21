@@ -9,8 +9,8 @@ Notable features:
 - **Your home is your private space:** ...I don't hand over the floor
   plans and electrical plans of my home to agents for them to hammer
   out the boilerplate. I define abstractions in Nickel and instantiate
-  them many times. Agents can do so as well, again with no knowledge
-  of your house.
+  them many times. Agents can do so as well, again without being given
+  any knowledge of your house.
 - **Keep things modular:** related templates and automations are
   defined using the [packages][ha-packages] pattern of Home Assistant.
 - **Code, don't click:** configure as much as possible using YAML or
