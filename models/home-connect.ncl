@@ -1,3 +1,5 @@
+# Describe Home Connect devices
+
 let schema = {
   alarm_entities | Array String,
 }

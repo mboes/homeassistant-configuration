@@ -1,3 +1,8 @@
+# Describe KNX functions and their locations
+#
+# Dashboards group entities by room and by floor using the metadata
+# found in this KNX model.
+
 let Nullable = fun Contract =>
   std.contract.custom (fun label value =>
     if value == null then
