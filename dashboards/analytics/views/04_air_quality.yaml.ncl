@@ -16,6 +16,7 @@ in
 {
   title = "Air quality",
   icon = "mdi:cards-heart",
+  path = "air_quality",
   show_icon_and_title = true,
   max_columns = 3,
   sections = [
