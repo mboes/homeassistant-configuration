@@ -1,5 +1,5 @@
 let lib = import "../../../lib.ncl" in
-let cfg = import "../../../models/printers.ncl" in
+let cfg = import "../../../models/devices.ncl" in
 
 let badge = fun printer name =>
   {
@@ -79,23 +79,23 @@ cfg.printers
     max_columns = 1,
 
     badges = [
-      badge printer "Paper jam",
-      badge printer "No paper",
-      badge printer "Door open",
-      badge printer "No toner",
-      badge printer "Low toner",
+      badge printer.name "Paper jam",
+      badge printer.name "No paper",
+      badge printer.name "Door open",
+      badge printer.name "No toner",
+      badge printer.name "Low toner",
     ],
 
     sections = [
       {
         type = "grid",
         cards = [
-          tile printer "Status" & { grid_options.columns = 12 },
-          tile printer "Message" & { grid_options.columns = 12 },
-          tile printer "Paper jam" & { domain = "binary_sensor" },
-          tile printer "No paper" & { domain = "binary_sensor" },
-          tile printer "Door open" & { domain = "binary_sensor" },
-          tile printer "low toner" & { domain = "binary_sensor" },
+          tile printer.name "Status" & { grid_options.columns = 12 },
+          tile printer.name "Message" & { grid_options.columns = 12 },
+          tile printer.name "Paper jam" & { domain = "binary_sensor" },
+          tile printer.name "No paper" & { domain = "binary_sensor" },
+          tile printer.name "Door open" & { domain = "binary_sensor" },
+          tile printer.name "low toner" & { domain = "binary_sensor" },
         ],
       },
       {
@@ -119,14 +119,14 @@ cfg.printers
             [heading "Toner" & { icon = "mdi:printer-3d-nozzle" }],
             colours
             |> std.array.map (fun colour =>
-              slider printer "%{colour.name} toner" & slider_style colour
+              slider printer.name "%{colour.name} toner" & slider_style colour
             ),
             [heading "Drum" & { icon = "mdi:cylinder" }],
             colours
             |> std.array.map (fun colour =>
-              slider printer "%{colour.name} drum life"
+              slider printer.name "%{colour.name} drum life"
               & slider_style colour
-              & annotation printer "%{colour.name} drum pages left"
+              & annotation printer.name "%{colour.name} drum pages left"
             ),
           ],
       },
@@ -134,12 +134,12 @@ cfg.printers
         type = "grid",
         cards = [
           heading "Usage" & { icon = "mdi:counter" },
-          tile printer "B/W pages",
-          tile printer "Colour pages",
-          tile printer "Black drum pages",
-          tile printer "Cyan drum pages",
-          tile printer "Magenta drum pages",
-          tile printer "Yellow drum pages",
+          tile printer.name "B/W pages",
+          tile printer.name "Colour pages",
+          tile printer.name "Black drum pages",
+          tile printer.name "Cyan drum pages",
+          tile printer.name "Magenta drum pages",
+          tile printer.name "Yellow drum pages",
         ],
       },
     ],

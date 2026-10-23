@@ -1,21 +1,21 @@
 let knx = import "../integrations/knx.yaml.ncl" in
 let lib = import "../lib.ncl" in
-let cfg = import "../models/matter.ncl" in
+let cfg = import "../models/devices.ncl" in
 
 let lock_button = fun device => "%{device} button bottom" in
 let unlock_button = fun device => "%{device} button top" in
 
 {
   automation =
-    cfg.lock_button_devices
-    |> std.array.flat_map (fun { location, device } =>
+    cfg.lock_buttons
+    |> std.array.flat_map (fun { location, name } =>
       [
         {
-          alias = "Unlock %{location} from %{device}",
+          alias = "Unlock %{location} from %{name}",
           triggers = [
             {
               trigger = "event.received",
-              target.entity_id = lib.entity_id "event" (unlock_button device),
+              target.entity_id = lib.entity_id "event" (unlock_button name),
               options.event_type = "initial_press",
             },
           ],
@@ -32,11 +32,11 @@ let unlock_button = fun device => "%{device} button top" in
           ],
         },
         {
-          alias = "Lock %{location} from %{device}",
+          alias = "Lock %{location} from %{name}",
           triggers = [
             {
               trigger = "event.received",
-              target.entity_id = lib.entity_id "event" (lock_button device),
+              target.entity_id = lib.entity_id "event" (lock_button name),
               options.event_type = "initial_press",
             },
           ],

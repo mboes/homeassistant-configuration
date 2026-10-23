@@ -1,9 +1,11 @@
 let lib = import "../lib.ncl" in
-let cfg = import "../models/home-connect.ncl" in
+let cfg = import "../models/devices.ncl" in
 
 {
   automation =
-    cfg.alarm_entities
+    cfg.kitchen_appliances
+    |> std.array.flat_map (fun device => device.entities)
+    |> std.array.filter (std.string.is_match "alarm")
     |> std.array.map (fun alarm =>
       let tag = "fridge-door" in
       {
