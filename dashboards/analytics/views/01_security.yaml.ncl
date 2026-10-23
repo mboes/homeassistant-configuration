@@ -10,7 +10,6 @@ in
 {
   title = "Security",
   icon = "mdi:security",
-  path = "security",
   show_icon_and_title = true,
   sections = [
     {

@@ -3,7 +3,6 @@ let lib = import "../../../lib.ncl" in
 {
   title = "Climate",
   icon = "mdi:home-thermometer",
-  path = "climate",
   show_icon_and_title = true,
   max_columns = 3,
   sections =
