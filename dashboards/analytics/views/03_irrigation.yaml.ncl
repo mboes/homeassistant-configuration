@@ -3,6 +3,7 @@ let lib = import "../../../lib.ncl" in
 {
   title = "Irrigation",
   icon = "mdi:sprinkler",
+  path = "irrigation",
   show_icon_and_title = true,
   sections = [
     {
