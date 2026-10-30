@@ -384,20 +384,17 @@ knx.merge [
         (fun f =>
           [
             {
-	      # TODO stop hard coding location
-              name = "//Alarm room/Intrusion alarm/Arm",
+              name = "//%{f.location}/Intrusion alarm/Arm",
               address = f.group_addresses.Arm,
               state_address = f.group_addresses."Arm status",
             },
             {
-	      # TODO stop hard coding location
-              name = "//Alarm room/Intrusion alarm/Partial arm",
+              name = "//%{f.location}/Intrusion alarm/Partial arm",
               address = f.group_addresses."Partial arm",
               state_address = f.group_addresses."Partial arm status",
             },
             {
-	      # TODO stop hard coding location
-              name = "//Alarm room/Intrusion alarm/Disarm",
+              name = "//%{f.location}/Intrusion alarm/Disarm",
               address = f.group_addresses.Disarm,
               state_address = f.group_addresses."Disarm status",
             },
@@ -409,20 +406,17 @@ knx.merge [
         (fun f =>
           [
             {
-	      # TODO stop hard coding location
-              name = "//Alarm room/Intrusion alarm",
+              name = "//%{f.location}/Intrusion alarm",
               state_address = f.group_addresses."Intrusion alarm status",
               device_class = "problem",
             },
             {
-	      # TODO stop hard coding location
-              name = "//Alarm room/Fire alarm",
+              name = "//%{f.location}/Fire alarm",
               state_address = f.group_addresses."Fire alarm status",
               device_class = "problem",
             },
             {
-	      # TODO stop hard coding location
-              name = "//Alarm room/Panic alarm",
+              name = "//%{f.location}/Panic alarm",
               state_address = f.group_addresses."Panic alarm status",
               device_class = "problem",
             },

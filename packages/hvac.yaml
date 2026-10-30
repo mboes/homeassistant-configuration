@@ -6,22 +6,22 @@ template:
           'Heat': 'mdi:fire',
           'Cool': 'mdi:snowflake'}.get(this.state, 'mdi:hvac') }}
     state: >
-      {{ 'Off' if is_state('switch.mechanical_room_bms', 'off') else states('select.mechanical_room_hvac_heat_cool') }}
+      {{ 'Off' if is_state('switch.house_bms', 'off') else states('select.house_hvac_heat_cool') }}
     availability: >
-      {{ has_value('switch.mechanical_room_bms') and has_value('select.mechanical_room_hvac_heat_cool') }}
+      {{ has_value('switch.house_bms') and has_value('select.house_hvac_heat_cool') }}
     options: "{{ ['Off', 'Heat', 'Cool'] }}"
     select_option:
     - if: "{{ option == 'Off' }}"
       then:
       - action: switch.turn_off
         target:
-          entity_id: switch.mechanical_room_bms
+          entity_id: switch.house_bms
       else:
       - action: select.select_option
         target:
-          entity_id: select.mechanical_room_hvac_heat_cool
+          entity_id: select.house_hvac_heat_cool
         data:
           option: "{{ option }}"
       - action: switch.turn_on
         target:
-          entity_id: switch.mechanical_room_bms
+          entity_id: switch.house_bms

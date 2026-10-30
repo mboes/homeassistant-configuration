@@ -42,18 +42,18 @@ let buttons = import "buttons.ncl" in
         {
           type = "tile",
           name = "Domestic hot water",
-          entity = lib.entity_id "switch" "//Mechanical room/Domestic hot water",
+          entity = lib.entity_id "switch" "//House/Domestic hot water",
           icon = "mdi:water-thermometer",
         },
         {
           type = "tile",
           name = "BMS",
-          entity = lib.entity_id "switch" "//Mechanical room/BMS",
+          entity = lib.entity_id "switch" "//House/BMS",
         },
         {
           type = "tile",
           name = "BMS alarm",
-          entity = lib.entity_id "binary_sensor" "//Mechanical room/BMS alarm",
+          entity = lib.entity_id "binary_sensor" "//House/BMS/alarm",
         },
       ]
     },
