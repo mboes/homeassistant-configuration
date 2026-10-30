@@ -218,7 +218,7 @@ knx.merge [
         (knx.name_is "Domestic hot water")
         (fun f =>
           {
-            name = "//Domestic hot water",
+            name = "//%{f.location}/Domestic hot water",
             address = f.group_addresses.Switching,
           }
         ),
@@ -437,7 +437,7 @@ knx.merge [
         (knx.name_is "BMS")
         (fun f =>
           {
-            name = "//BMS",
+            name = "//%{f.location}/BMS",
             address = f.group_addresses.Switching
           }
         ),
@@ -446,7 +446,7 @@ knx.merge [
         (knx.name_is "BMS")
         (fun f =>
           {
-            name = "//BMS Alarm",
+            name = "//%{f.location}/BMS/Alarm",
             state_address = f.group_addresses."Alarm status",
             device_class = "problem",
           }
@@ -461,12 +461,12 @@ knx.merge [
         (fun f =>
           [
             {
-              name = "//UPS battery",
+              name = "//%{f.location}/UPS/battery",
               state_address = f.group_addresses."Battery status",
               device_class = "battery",
             },
             {
-              name = "//UPS alarm",
+              name = "//%{f.location}/UPS/alarm",
               state_address = f.group_addresses."Alarm status",
               device_class = "problem",
             },
@@ -534,12 +534,12 @@ knx.merge [
         (fun f => # Can't sense the state so have two buttons instead of a switch.
           [
             {
-              name = "//Garage/Gate/CLOSE",
+              name = "//%{f.location}/Gate/CLOSE",
               address = f.group_addresses.Switching,
               payload = 0,
             },
             {
-              name = "//Garage/Gate/OPEN",
+              name = "//%{f.location}/Gate/OPEN",
               address = f.group_addresses.Switching,
               payload = 1,
             },
@@ -554,7 +554,7 @@ knx.merge [
         (knx.name_is "Weather")
         (fun f =>
           {
-            name = "//Weather station",
+            name = "//%{f.location}/Weather station",
             address_temperature = f.group_addresses.Temp,
             address_wind_speed = f.group_addresses.Wind,
             address_rain_alarm = f.group_addresses.Rain,

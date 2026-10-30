@@ -5,8 +5,8 @@ let lib = import "../lib.ncl" in
     sensor = [
       {
         name = "//Outdoor temperature",
-        state = "{{ state_attr('weather.weather_station', 'temperature') }}",
-        availability = "{{ state_attr('weather.weather_station', 'temperature') is not none }}",
+        state = "{{ state_attr('weather.garden_weather_station', 'temperature') }}",
+        availability = "{{ state_attr('weather.garden_weather_station', 'temperature') is not none }}",
         unit_of_measurement = "°C",
         device_class = "temperature",
         state_class = "measurement",
