@@ -14,7 +14,7 @@ let buttons = import "buttons.ncl" in
         {
           type = "alarm-panel",
           name = "Intrusion alarm",
-          entity = "alarm_control_panel.intrusion_alarm",
+          entity = lib.entity_id "alarm_control_panel" "//Alarm room/Intrusion_alarm",
         }
       ],
     },
