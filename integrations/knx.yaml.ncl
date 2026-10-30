@@ -54,18 +54,18 @@ let knx = {
 }
 in
 
-# The names of generated entities have a special form, to
-# distinguish them from automatically or manually created entities.
-let GeneratedEntityName = std.contract.from_predicate (std.string.is_match "^//") in
+# In lieu of areas, which are a UI-only feature, we introduce
+# a location-qualified naming scheme for all entities.
+let EntityName = std.contract.from_predicate (std.string.is_match "^/(/[A-Z0-9].*[^/]){2,}$") in
 
-let Entity = { function, name | GeneratedEntityName, .. } in
+let Entity = { function, name | EntityName, .. } in
 
 # Entities have a location-qualified name. We track as an input the
 # ETS function they were generated from.
 let base_entity | Entity = {
   function | not_exported,
   name
-    | GeneratedEntityName
+    | EntityName
     | default
     = "//%{function.location}/%{function.name}",
 }
