@@ -199,7 +199,7 @@ knx.merge [
         (fun f =>
           [
             {
-              name = "//HVAC heat cool",
+              name = "//Mechanical room/HVAC/heat cool",
               address = f.group_addresses.Mode,
               payload_length = 0,
               options = [
