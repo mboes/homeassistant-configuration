@@ -2,7 +2,7 @@ NCL_FILES := $(shell find . -name '*.yaml.ncl')
 NCL_LIB_FILES := $(filter-out %.yaml.ncl,$(shell find . -name '*.ncl'))
 YAML_FILES := $(NCL_FILES:.yaml.ncl=.yaml)
 
-MODEL_YAML_FILES := $(filter ./models/%.yaml,$(YAML_FILES))
+MODEL_YAML_FILES := $(shell find ./models -name '*.yaml')
 INTEGRATION_YAML_FILES := $(filter ./integrations/%.yaml,$(YAML_FILES))
 DASHBOARD_YAML_FILES := $(filter ./dashboards/%.yaml,$(YAML_FILES))
 PACKAGE_YAML_FILES := $(filter ./packages/%.yaml,$(YAML_FILES))
