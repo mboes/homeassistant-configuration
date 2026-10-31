@@ -6,6 +6,7 @@
 
 # A model of the ETS configuration.
 let cfg = import "../models/knx.ncl" in
+let lib = import "../lib.ncl" in
 
 # As measured.
 let rollers_travelling_time = 33 in
@@ -28,29 +29,6 @@ let knx = {
     let is_match = std.string.is_match (std.string.lowercase pat) in
     fun f => f.name |> std.string.lowercase |> is_match,
   name_contains = fun word => name_matches "\\b%{word}s?\\b",
-  merge =
-    let f = fun r1 r2 =>
-      {
-        binary_sensor = std.record.get_or "binary_sensor" [] r1 @ std.record.get_or "binary_sensor" [] r2,
-        button = std.record.get_or "button" [] r1 @ std.record.get_or "button" [] r2,
-        climate = std.record.get_or "climate" [] r1 @ std.record.get_or "climate" [] r2,
-        cover = std.record.get_or "cover" [] r1 @ std.record.get_or "cover" [] r2,
-        date = std.record.get_or "date" [] r1 @ std.record.get_or "date" [] r2,
-        datetime = std.record.get_or "datetime" [] r1 @ std.record.get_or "datetime" [] r2,
-        fan = std.record.get_or "fan" [] r1 @ std.record.get_or "fan" [] r2,
-        light = std.record.get_or "light" [] r1 @ std.record.get_or "light" [] r2,
-        notify = std.record.get_or "notify" [] r1 @ std.record.get_or "notify" [] r2,
-        number = std.record.get_or "number" [] r1 @ std.record.get_or "number" [] r2,
-        scene = std.record.get_or "scene" [] r1 @ std.record.get_or "scene" [] r2,
-        select = std.record.get_or "select" [] r1 @ std.record.get_or "select" [] r2,
-        sensor = std.record.get_or "sensor" [] r1 @ std.record.get_or "sensor" [] r2,
-        switch = std.record.get_or "switch" [] r1 @ std.record.get_or "switch" [] r2,
-        text = std.record.get_or "text" [] r1 @ std.record.get_or "text" [] r2,
-        time = std.record.get_or "time" [] r1 @ std.record.get_or "time" [] r2,
-        weather = std.record.get_or "weather" [] r1 @ std.record.get_or "weather" [] r2,
-      }
-      |> std.record.filter (fun k v => v != [])
-    in std.array.reduce_left f
 }
 in
 
@@ -74,32 +52,36 @@ in
 # Filter through the list of functions in the ETS configuration and
 # pass the matches to an entity construction function. In this
 # variant, the entity construction function is allowed to return
-# multiple entities.
+# multiple entities. The entities are returned as a set, i.e. a record
+# keyed by the entity name, rather than an array, because records are
+# mergeable whereas arrays are not.
 let select_flatten
-  | (Dyn -> Bool) -> (Dyn -> Array Entity) -> Array Entity
+  : (Dyn -> Bool) -> (Dyn -> Array Entity) -> { _ : Entity }
   = fun pred mk =>
     cfg.functions
     |> std.array.filter pred
-    |> std.array.map (fun f => mk f |> std.array.map (fun r => r & base_entity & { function = f }))
+    |> std.array.map (fun f => mk f |> std.array.map (fun e => e & base_entity & { function = f }))
     |> std.array.flatten
     |> std.array.map (std.record.filter (fun _ v => v != null))
     # XXX Workaround https://github.com/nickel-lang/nickel/issues/2633
-    |> std.array.map (fun r => r & base_entity & { function = r.function })
-      | std.array.NonEmpty
+    |> std.array.map (fun e => e & base_entity & { function = e.function })
+    |> lib.array.index (fun e => e.name)
+      | { _ : Entity }
+      | lib.record.NonEmpty
 in
 
 # Filter through the list of functions in the ETS configuration and
 # pass the matches to an entity construction function.
 let select
-  | (Dyn -> Bool) -> (Dyn -> Entity) -> Array Entity
+  : (Dyn -> Bool) -> (Dyn -> Entity) -> { _ : Entity }
   = fun pred mk => select_flatten pred (fun f => [mk f])
 in
 
-knx.merge [
+[
   # Lights
   {
     light =
-      std.array.flatten [
+      std.record.merge_all [
         select
           (knx.type_is '"dimmable light")
           (fun f =>
@@ -123,7 +105,7 @@ knx.merge [
     # Central functions don't have a state address, so buttons are the
     # better abstraction than lights. They only turn off.
     button =
-      std.array.flatten [
+      std.record.merge_all [
         select
           (knx.and (knx.type_is '"dimmable light") (knx.name_matches "^All "))
           (fun f =>
@@ -569,3 +551,9 @@ knx.merge [
         ),
   },
 ]
+|> std.record.merge_all
+# Unindex the values of all record fields to recover arrays.
+|> std.record.to_array
+|> std.array.fold_right
+  (fun { field, value } => std.record.insert field (std.record.values value))
+  {}

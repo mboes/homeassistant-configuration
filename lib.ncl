@@ -39,5 +39,26 @@ in
     entities
     |> std.array.map (fun e => e & { function.floor = location_to_floor."%{e.function.location}" })
     |> std.array.sort compare_function_locations
-    |> std.array.sort compare_function_floors
+    |> std.array.sort compare_function_floors,
+
+  record.NonEmpty
+    | doc "A dictionary with at least one field."
+    = std.contract.from_predicate (fun s => !std.record.is_empty s),
+
+  array.index
+    : (Dyn -> String) -> Array Dyn -> { _ : Dyn }
+    | doc m%"
+	Compute the set of elements of an array, indexed by the given
+	key.
+
+        A set is a dictionary mapping each distinct key to an elements
+        of the array with that key.
+
+        `index` is a restricted form of `group` where each group can
+        only be the singleton group.
+      "%
+    = fun key xs =>
+      xs
+      |> std.array.map (fun x => { "%{key x}" = x })
+      |> std.record.merge_all,
 }
